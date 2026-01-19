@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TENDERCARE Teacher Portal - Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-bg: #0a0a19;
+      --secondary-bg: rgba(20, 20, 40, 0.7);
+      --accent-blue: rgba(59, 130, 246, 0.5);
+      --accent-green: rgba(34, 197, 94, 0.5);
+      --accent-purple: rgba(139, 92, 246, 0.5);
+      --accent-orange: rgba(249, 115, 22, 0.5);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-active: rgba(255, 255, 255, 0.2);
+      --success-bg: rgba(22, 163, 74, 0.15);
+      --success-border: rgba(34, 197, 94, 0.3);
+      --error-bg: rgba(220, 38, 38, 0.15);
+      --error-border: rgba(239, 68, 68, 0.3);
+      --warning-bg: rgba(234, 179, 8, 0.15);
+      --warning-border: rgba(250, 204, 21, 0.3);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(30, 30, 60, 0.3) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(40, 40, 80, 0.2) 0%, transparent 20%);
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== AUTHENTICATION VIEW ===== */
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(10, 10, 25, 0.95) 0%, rgba(20, 20, 45, 0.95) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+      animation: pulse 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(5%, 5%) scale(1.1); }
+    }
+
+    .auth-card {
+      background: var(--secondary-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 10;
+      box-shadow: var(--shadow);
+      transform: translateY(0);
+      transition: var(--transition);
+    }
+
+    .auth-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-active);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo i {
+      font-size: 2.5rem;
+      color: var(--accent-blue);
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .logo h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .logo p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon i {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .input-with-icon input {
+      width: 100%;
+      padding: 1.1rem 1.25rem 1.1rem 3.5rem;
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .input-with-icon input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .button-primary {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-blue), rgba(139, 92, 246, 0.7));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .button-primary:active {
+      transform: translateY(0);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ===== DASHBOARD VIEW ===== */
+    .dashboard-header {
+      background: var(--secondary-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .teacher-info h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .teacher-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .teacher-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .teacher-meta i {
+      font-size: 0.8rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .logout-btn {
+      padding: 0.75rem 1.5rem;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-sm);
+      color: #fca5a5;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .welcome-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--secondary-bg), rgba(30, 30, 60, 0.7));
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .welcome-section h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-section p {
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-content h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-card {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), transparent);
+    }
+
+    .feature-card:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--accent-green), transparent);
+    }
+
+    .feature-card:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--accent-purple), transparent);
+    }
+
+    .feature-card:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--accent-orange), transparent);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-header h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .progress-ring {
+      width: 40px;
+      height: 40px;
+    }
+
+    .progress-ring-circle {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    /* ===== SELECTION VIEW ===== */
+    .selection-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .selection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .selection-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .selection-header p {
+      color: var(--text-secondary);
+    }
+
+    .back-button {
+      padding: 0.875rem 1.75rem;
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(-3px);
+    }
+
+    .form-card {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-card h2 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .select-wrapper {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .select-wrapper label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .styled-select {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.5rem center;
+      padding-right: 3.5rem;
+      transition: var(--transition);
+    }
+
+    .styled-select:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .styled-select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ===== ENTRY VIEW ===== */
+    .entry-view {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 25, 0.98);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      overflow-y: auto;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .entry-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .entry-title h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .entry-title p {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .entry-controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .config-section {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .config-section h3 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .config-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .config-item label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .config-item input {
+      width: 100%;
+      padding: 0.875rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .config-item input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-box:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-active);
+    }
+
+    .stat-box h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .stat-box p {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .scores-table-container {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table-header h3 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .scores-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+
+    .scores-table thead {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .scores-table th {
+      padding: 1.25rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .scores-table tbody tr {
+      transition: var(--transition);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .scores-table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .scores-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .scores-table input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 0.95rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .scores-table input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .scores-table input.invalid {
+      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .grade-a { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .grade-b { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .grade-c { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .grade-d { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .grade-f { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .entry-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* ===== NOTIFICATIONS ===== */
+    .notification {
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      animation: slideIn 0.3s ease-out;
+      display: none;
+    }
+
+    .notification.show {
+      display: flex;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notification.success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #86efac;
+    }
+
+    .notification.error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: #fca5a5;
+    }
+
+    .notification.warning {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: #fde047;
+    }
+
+    .notification i {
+      font-size: 1.25rem;
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 1024px) {
+      .config-grid,
+      .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container,
+      .selection-container,
+      .entry-container {
+        padding: 1rem;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .teacher-meta {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .config-grid,
+      .stats-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .entry-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .entry-controls {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .entry-actions {
+        flex-direction: column;
+      }
+
+      .entry-actions button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
+
+      .selection-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    /* ===== LOADING STATES ===== */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #60a5fa;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ===== SCROLLBAR STYLING ===== */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <!-- AUTHENTICATION VIEW -->
+  <div id="authView" class="view active">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="logo">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <h1>Teacher Portal</h1>
+          <p>Access your teaching dashboard</p>
+        </div>
+
+        <form id="loginForm" onsubmit="login(event)">
+          <div class="form-group">
+            <label>Teacher ID</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user"></i>
+              <input type="text" id="teacherId" placeholder="Enter your teacher ID" value="T001" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-with-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" placeholder="Enter your password" value="password" required>
+            </div>
+          </div>
+
+          <button type="submit" class="button-primary" id="loginBtn">
+            <span id="loginText">Sign In</span>
+            <span id="loginLoading" class="loading" style="display: none;"></span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p><i class="fas fa-shield-alt"></i> Secure login with end-to-end encryption</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView" class="view">
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="teacher-info">
+          <h1 id="teacherName">Mr. WISDOM</h1>
+          <div class="teacher-meta">
+            <span><i class="fas fa-id-card"></i> ID: <strong>T001</strong></span>
+            <span><i class="fas fa-calendar-alt"></i> Term: <strong>2024/2025 Term 1</strong></span>
+            <span><i class="fas fa-graduation-cap"></i> Dept: <strong>Mathematics</strong></span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      <section class="welcome-section">
+        <h2>Welcome back, <span id="teacherFirstName">WISDOM</span>!</h2>
+        <p>You have <strong>4 pending results</strong> to grade. Check your progress below and access teaching materials.</p>
+      </section>
+
+      <div class="stats-grid">
+        <div class="stat-card" onclick="goToScoreEntry()">
+          <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">
+            <i class="fas fa-edit"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Pending Grading</h3>
+            <div class="stat-value">4</div>
+          </div>
+        </div>
+
+        <div class="stat-card" onclick="viewLessonNotes()">
+          <div class="stat-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Lesson Notes</h3>
+            <div class="stat-value">24</div>
+          </div>
+        </div>
+
+        <div class="stat-card" onclick="viewProfiles()">
+          <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Staff Members</h3>
+            <div class="stat-value">48</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Completion Rate</h3>
+            <div class="stat-value">75%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card" onclick="goToScoreEntry()">
+          <div class="feature-header">
+            <div class="feature-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">
+              <i class="fas fa-table"></i>
+            </div>
+            <h3>Score Entry</h3>
+          </div>
+          <p>Enter and submit student assessment scores for your assigned subjects and classes. Track submission deadlines.</p>
+          <div class="feature-meta">
+            <span><i class="fas fa-clock"></i> Due in 3 days</span>
+            <span><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </div>
+
+        <div class="feature-card" onclick="viewLessonNotes()">
+          <div class="feature-header">
+            <div class="feature-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <h3>Lesson Notes</h3>
+          </div>
+          <p>Access teaching materials, curriculum guides, and downloadable lesson plans for all subjects and classes.</p>
+          <div class="feature-meta">
+            <span><i class="fas fa-download"></i> Updated weekly</span>
+            <span><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </div>
+
+        <div class="feature-card" onclick="viewProfiles()">
+          <div class="feature-header">
+            <div class="feature-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">
+              <i class="fas fa-address-book"></i>
+            </div>
+            <h3>Staff Directory</h3>
+          </div>
+          <p>View profiles and contact information for other teachers and administrators. Schedule meetings and collaborate.</p>
+          <div class="feature-meta">
+            <span><i class="fas fa-user-friends"></i> 48 active</span>
+            <span><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <h3>Progress Analytics</h3>
+          </div>
+          <p>Track your result submission progress for the current term. Visualize completion rates and pending tasks.</p>
+          <div class="feature-meta">
+            <div>
+              <svg class="progress-ring" viewBox="0 0 40 40">
+                <circle class="progress-ring-circle" stroke="#fb923c" stroke-width="4" fill="transparent"
+                  r="18" cx="20" cy="20" stroke-dasharray="113" stroke-dashoffset="28">
+                </circle>
+              </svg>
+            </div>
+            <div>
+              <div class="metric-value">75%</div>
+              <div class="metric-label">Completed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- SELECTION VIEW -->
+  <div id="selectionView" class="view">
+    <div class="selection-container">
+      <div class="selection-header">
+        <div>
+          <h1>Score Entry</h1>
+          <p>Select subject and class to begin entering scores</p>
+        </div>
+        <button class="back-button" onclick="backToDashboard()">
+          <i class="fas fa-arrow-left"></i>
+          Back to Dashboard
+        </button>
+      </div>
+
+      <div class="form-card">
+        <h2><i class="fas fa-tasks"></i> Assignment Selection</h2>
+
+        <div class="select-wrapper">
+          <label>Subject</label>
+          <select id="subjectSelect" class="styled-select" onchange="updateClasses()">
+            <option value="">Select a subject</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="English Language">English Language</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
+            <option value="Computer Science">Computer Science</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label>Class</label>
+          <select id="classSelect" class="styled-select" disabled>
+            <option value="">Select a class</option>
+          </select>
+        </div>
+
+        <button class="button-primary" id="openEntryBtn" onclick="openEntry()" disabled>
+          <i class="fas fa-external-link-alt"></i>
+          Open Score Entry Sheet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRY VIEW -->
+  <div id="entryView" class="view entry-view">
+    <div class="entry-container">
+      <div class="entry-header">
+        <div class="entry-title">
+          <h2 id="entryTitle">Mathematics - JSS1A</h2>
+          <p><i class="fas fa-calendar-alt"></i> 2024/2025 Term 1 • <i class="fas fa-clock"></i> Due: Dec 15, 2024</p>
+        </div>
+        <div class="entry-controls">
+          <button class="back-button" onclick="closeEntry()">
+            <i class="fas fa-arrow-left"></i>
+            Back to Selection
+          </button>
+        </div>
+      </div>
+
+      <div id="entryNotification" class="notification"></div>
+
+      <div class="config-section">
+        <h3><i class="fas fa-sliders-h"></i> Maximum Scores Configuration</h3>
+        <div class="config-grid">
+         
+          <div class="config-item">
+            <label>CA3 Maximum</label>
+            <input type="number" id="maxCA3" value="40" min="0" step="1" onchange="recalculate()">
+          </div>
+          <div class="config-item">
+            <label>Exam Maximum</label>
+            <input type="number" id="maxExam" value="60" min="0" step="1" onchange="recalculate()">
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-summary">
+        <div class="stat-box">
+          <h4>Total Students</h4>
+          <p id="totalStudents">0</p>
+        </div>
+        <div class="stat-box">
+          <h4>Class Average</h4>
+          <p id="classAvg">0.0</p>
+        </div>
+        <div class="stat-box">
+          <h4>Highest Score</h4>
+          <p id="highest">0</p>
+        </div>
+        <div class="stat-box">
+          <h4>Lowest Score</h4>
+          <p id="lowest">0</p>
+        </div>
+      </div>
+
+      <div class="scores-table-container">
+        <div class="table-header">
+          <h3><i class="fas fa-table"></i> Student Scores Sheet</h3>
+          <div class="table-actions">
+            <button class="button-secondary" onclick="validateAllScores()">
+              <i class="fas fa-check-circle"></i>
+              Validate All
+            </button>
+            <button class="button-secondary" onclick="clearAllScores()">
+              <i class="fas fa-eraser"></i>
+              Clear All
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="scores-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+              
+                <th>CA3</th>
+                <th>Exam</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="scoresBody">
+              <!-- Scores will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="entry-actions">
+        <button class="button-secondary" onclick="closeEntry()">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+        <button class="button-primary" onclick="submitScores()">
+          <i class="fas fa-paper-plane"></i>
+          Submit Scores
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Application State
+    const state = {
+      teacher: null,
+      subjects: {
+        'Mathematics': ['JSS1A', 'JSS2B', 'SSS1A', 'SSS2C'],
+        'English Language': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS3A'],
+        'Physics': ['SSS2A', 'SSS2B', 'SSS3A', 'SSS3B'],
+        'Chemistry': ['SSS2A', 'SSS2B', 'SSS3A'],
+        'Biology': ['SSS1A', 'SSS1B', 'SSS2A'],
+        'Computer Science': ['SSS1A', 'SSS2A', 'SSS3A']
+      },
+      students: [],
+      scores: {},
+      maxValues: { CA3: 20, exam: 60 },
+      currentSubject: null,
+      currentClass: null,
+      isAuthenticated: false
+    };
+
+    // Mock teacher data (in real app, this would come from API)
+    const mockTeachers = {
+      'T001': {
+        id: 'T001',
+        name: 'Mr. Wisdom',
+        firstName: 'John',
+        department: 'Mathematics',
+        email: 'wisdom@school.edu',
+        phone: '+2348012345678',
+        currentTerm: '2024/2025 Term 1',
+        token: 'mock_jwt_token_12345'
+      },
+      'T002': {
+        id: 'T002',
+        name: 'Mrs. shukurat',
+        firstName: 'Sarah',
+        department: 'English Language',
+        email: 'shukurat@school.edu',
+        phone: '+2348023456789',
+        currentTerm: '2024/2025 Term 1',
+        token: 'mock_jwt_token_67890'
+      }
+    };
+
+    // Initialize application
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthStatus();
+      setupEventListeners();
+    });
+
+    function checkAuthStatus() {
+      const token = localStorage.getItem('teacherToken');
+      const teacherData = localStorage.getItem('teacherData');
+      
+      if (token && teacherData) {
+        try {
+          state.teacher = JSON.parse(teacherData);
+          state.isAuthenticated = true;
+          showDashboard();
+        } catch (e) {
+          clearAuth();
+        }
+      }
+    }
+
+    function setupEventListeners() {
+      // Auto-enable submit button when class is selected
+      document.getElementById('classSelect').addEventListener('change', function() {
+        const btn = document.getElementById('openEntryBtn');
+        btn.disabled = !this.value;
+      });
+
+      // Enter key submits login form
+      document.getElementById('password').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('loginForm').requestSubmit();
+        }
+      });
+    }
+
+    // Authentication Functions
+    async function login(e) {
+      e.preventDefault();
+      
+      const teacherId = document.getElementById('teacherId').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+      const loginText = document.getElementById('loginText');
+      const loginLoading = document.getElementById('loginLoading');
+
+      // Show loading state
+      loginText.style.display = 'none';
+      loginLoading.style.display = 'inline-block';
+      loginBtn.disabled = true;
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      try {
+        // In a real app, this would be an API call
+        if (teacherId in mockTeachers && password === 'password') {
+          state.teacher = mockTeachers[teacherId];
+          state.isAuthenticated = true;
+
+          // Store auth data
+          localStorage.setItem('teacherToken', state.teacher.token);
+          localStorage.setItem('teacherData', JSON.stringify(state.teacher));
+
+          showDashboard();
+          showNotification('success', `Welcome back, ${state.teacher.firstName}!`);
+        } else {
+          throw new Error('Invalid credentials');
+        }
+      } catch (error) {
+        showNotification('error', 'Invalid teacher ID or password. Please try again.');
+      } finally {
+        // Reset button state
+        loginText.style.display = 'inline';
+        loginLoading.style.display = 'none';
+        loginBtn.disabled = false;
+      }
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        clearAuth();
+        showView('authView');
+        showNotification('success', 'Logged out successfully');
+      }
+    }
+
+    function clearAuth() {
+      localStorage.removeItem('teacherToken');
+      localStorage.removeItem('teacherData');
+      state.teacher = null;
+      state.isAuthenticated = false;
+    }
+
+    // Navigation Functions
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => {
+        v.classList.remove('active');
+      });
+      document.getElementById(viewId).classList.add('active');
+    }
+
+    function goToScoreEntry() {
+      showView('selectionView');
+    }
+
+    function backToDashboard() {
+      showView('dashboardView');
+    }
+
+    function closeEntry() {
+      if (confirm('Are you sure you want to leave? Any unsaved changes will be lost.')) {
+        showView('selectionView');
+      }
+    }
+
+    function viewLessonNotes() {
+      showNotification('info', 'Lesson Notes feature is coming soon!', 3000);
+    }
+
+    function viewProfiles() {
+      showNotification('info', 'Staff Directory is coming soon!', 3000);
+    }
+
+    // Dashboard Functions
+    function showDashboard() {
+      if (!state.teacher) return;
+
+      // Update UI with teacher data
+      document.getElementById('teacherName').textContent = state.teacher.name;
+      document.getElementById('teacherFirstName').textContent = state.teacher.firstName;
+      
+      showView('dashboardView');
+    }
+
+    // Selection Functions
+    function updateClasses() {
+      const subject = document.getElementById('subjectSelect').value;
+      const classSelect = document.getElementById('classSelect');
+      const btn = document.getElementById('openEntryBtn');
+
+      if (!subject) {
+        classSelect.disabled = true;
+        classSelect.innerHTML = '<option value="">Select a class</option>';
+        btn.disabled = true;
+        return;
+      }
+
+      classSelect.disabled = false;
+      classSelect.innerHTML = '<option value="">Select a class</option>' +
+        state.subjects[subject].map(c => `<option value="${c}">${c}</option>`).join('');
+      
+      btn.disabled = true;
+    }
+
+    function generateStudents(count = 30) {
+      const firstNames = ['John', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'James', 'Olivia', 'Robert', 'Sophia'];
+      const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+      
+      return Array.from({ length: count }, (_, i) => ({
+        id: `STU${String(i + 1).padStart(4, '0')}`,
+        name: `${firstNames[i % firstNames.length]} ${lastNames[i % lastNames.length]}`
+      }));
+    }
+
+    // Entry View Functions
+    async function openEntry() {
+      const subject = document.getElementById('subjectSelect').value;
+      const className = document.getElementById('classSelect').value;
+
+      if (!subject || !className) return;
+
+      state.currentSubject = subject;
+      state.currentClass = className;
+      state.students = generateStudents(30);
+
+      // Update UI
+      document.getElementById('entryTitle').textContent = `${subject} - ${className}`;
+      
+      // Load or initialize scores
+      await loadScores();
+      renderTable();
+      recalculate();
+
+      showView('entryView');
+    }
+
+    async function loadScores() {
+      const key = `teacher:${state.teacher.id}:term:${state.teacher.currentTerm}:${state.currentSubject}:${state.currentClass}`;
+      
+      try {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          state.scores = JSON.parse(saved);
+        } else {
+          initializeScores();
+        }
+      } catch (e) {
+        initializeScores();
+      }
+    }
+
+    function initializeScores() {
+      state.scores = {};
+      state.students.forEach(s => {
+        state.scores[s.id] = { 
+          
+          CA3: 0, 
+          exam: 0 
+        };
+      });
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('scoresBody');
+      tbody.innerHTML = state.students.map((s, index) => {
+        const sc = state.scores[s.id] || { CA3: 0, exam: 0 };
+        const total = sc.CA3 + sc.exam;
+        const grade = getGrade(total);
+        const status = total > 0 ? 'Entered' : 'Pending';
+
+        return `
+          <tr>
+            <td>
+              <strong>${s.id}</strong><br>
+              <small style="color: var(--text-muted);">${s.name}</small>
+            </td>
+            
+            <td>
+              <input type="number" min="0" max="${state.maxValues.CA3}" 
+                     value="${sc.CA3}" 
+                     data-student="${s.id}" 
+                     data-field="CA3"
+                     onchange="updateScore('${s.id}', 'CA3', this.value)"
+                     onfocus="highlightRow(${index})">
+            </td>
+            <td>
+              <input type="number" min="0" max="${state.maxValues.exam}" 
+                     value="${sc.exam}" 
+                     data-student="${s.id}" 
+                     data-field="exam"
+                     onchange="updateScore('${s.id}', 'exam', this.value)"
+                     onfocus="highlightRow(${index})">
+            </td>
+            <td class="computed-cell" style="font-weight: 600; font-size: 1.1rem;">${total}</td>
+            <td>
+              <span class="grade-badge grade-${grade.toLowerCase()}">${grade}</span>
+            </td>
+            <td>
+              <span style="color: ${status === 'Entered' ? '#4ade80' : '#f87171'}; 
+                           font-size: 0.85rem; font-weight: 500;">
+                ${status}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function highlightRow(index) {
+      const rows = document.querySelectorAll('#scoresBody tr');
+      rows.forEach((row, i) => {
+        row.style.backgroundColor = i === index ? 'rgba(59, 130, 246, 0.1)' : '';
+      });
+    }
+
+    function updateScore(studentId, field, value) {
+      const num = parseFloat(value) || 0;
+      const max = state.maxValues[field];
+      
+      state.scores[studentId][field] = num;
+      
+      const input = event.target;
+      if (num > max) {
+        input.classList.add('invalid');
+        showNotification('error', `Score exceeds maximum (${max}) for ${field}`, 3000);
+      } else {
+        input.classList.remove('invalid');
+      }
+
+      recalculate();
+    }
+
+    function recalculate() {
+      // Update max values from config
+      state.maxValues = {
+        
+        CA3: parseFloat(document.getElementById('maxCA3').value) || 0,
+        exam: parseFloat(document.getElementById('maxExam').value) || 0
+      };
+
+      // Calculate statistics
+      const totals = state.students.map(s => {
+        const sc = state.scores[s.id] || { CA3: 0, exam: 0 };
+        return sc.CA3 + sc.exam;
+      });
+
+      const validTotals = totals.filter(t => t > 0);
+      const avg = validTotals.length > 0 
+        ? validTotals.reduce((a, b) => a + b, 0) / validTotals.length 
+        : 0;
+
+      const maxTotal =  
+                       state.maxValues.CA3 + state.maxValues.exam;
+      const percentages = totals.map(t => (t / maxTotal) * 100);
+
+      // Update UI
+      document.getElementById('totalStudents').textContent = state.students.length;
+      document.getElementById('classAvg').textContent = avg.toFixed(1);
+      document.getElementById('highest').textContent = validTotals.length > 0 ? Math.max(...validTotals) : 0;
+      document.getElementById('lowest').textContent = validTotals.length > 0 ? Math.min(...validTotals) : 0;
+
+      // Update table with recalculated totals and grades
+      const rows = document.querySelectorAll('#scoresBody tr');
+      rows.forEach((row, i) => {
+        const totalCell = row.querySelector('.computed-cell');
+        const gradeCell = row.querySelector('.grade-badge');
+        
+        if (totalCell && gradeCell) {
+          const total = totals[i];
+          const grade = getGrade(total);
+          
+          totalCell.textContent = total;
+          gradeCell.className = `grade-badge grade-${grade.toLowerCase()}`;
+          gradeCell.textContent = grade;
+        }
+      });
+    }
+
+    function getGrade(total) {
+      const maxTotal =  
+                       state.maxValues.CA3 + state.maxValues.exam;
+      const pct = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
+      
+      if (pct >= 70) return 'A';
+      if (pct >= 60) return 'B';
+      if (pct >= 50) return 'C';
+      if (pct >= 40) return 'D';
+      return 'F';
+    }
+
+    function validateAllScores() {
+      const inputs = document.querySelectorAll('#scoresBody input');
+      let hasErrors = false;
+
+      inputs.forEach(input => {
+        const val = parseFloat(input.value) || 0;
+        const field = input.dataset.field;
+        const max = state.maxValues[field];
+        
+        if (val > max) {
+          hasErrors = true;
+          input.classList.add('invalid');
+        } else {
+          input.classList.remove('invalid');
+        }
+      });
+
+      if (hasErrors) {
+        showNotification('error', 'Some scores exceed maximum limits. Please fix them.', 5000);
+      } else {
+        showNotification('success', 'All scores are valid!', 3000);
+      }
+    }
+
+    function clearAllScores() {
+      if (confirm('Are you sure you want to clear all scores?')) {
+        state.students.forEach(s => {
+          state.scores[s.id] = { CA3: 0, exam: 0 };
+        });
+        renderTable();
+        recalculate();
+        showNotification('warning', 'All scores have been cleared', 3000);
+      }
+    }
+
+    async function submitScores() {
+      // Validate before submission
+      validateAllScores();
+      
+      const invalidInputs = document.querySelectorAll('#scoresBody input.invalid');
+      if (invalidInputs.length > 0) {
+        showNotification('error', 'Please fix validation errors before submitting', 5000);
+        return;
+      }
+
+      // Check if all scores are zero (empty submission)
+      const allZero = state.students.every(s => {
+        const sc = state.scores[s.id];
+        return sc.CA3 === 0 && sc.exam === 0;
+      });
+
+      if (allZero) {
+        showNotification('warning', 'All scores are zero. Are you sure you want to submit?', 5000);
+        if (!confirm('All scores are set to zero. Do you want to proceed with submission?')) {
+          return;
+        }
+      }
+
+      // Simulate API submission
+      showNotification('info', 'Submitting scores...', 2000);
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      try {
+        // Save to localStorage (simulating API call)
+        const key = `teacher:${state.teacher.id}:term:${state.teacher.currentTerm}:${state.currentSubject}:${state.currentClass}`;
+        localStorage.setItem(key, JSON.stringify(state.scores));
+
+        // Update completion status
+        updateCompletionStatus();
+
+        showNotification('success', 'Scores submitted successfully!', 3000);
+
+        // Return to dashboard after delay
+        setTimeout(() => {
+          showView('dashboardView');
+          showNotification('success', 'Your scores have been saved.', 3000);
+        }, 2000);
+
+      } catch (error) {
+        showNotification('error', 'Failed to submit scores. Please try again.', 5000);
+      }
+    }
+
+    function updateCompletionStatus() {
+      // In a real app, this would update the completion percentage
+      const progressElement = document.querySelector('.metric-value');
+      if (progressElement) {
+        // Simulate progress increase
+        const current = parseInt(progressElement.textContent) || 0;
+        const newValue = Math.min(current + 5, 100);
+        progressElement.textContent = `${newValue}%`;
+        
+        // Update progress ring
+        const circle = document.querySelector('.progress-ring-circle');
+        if (circle) {
+          const circumference = 2 * Math.PI * 18;
+          const offset = circumference - (newValue / 100) * circumference;
+          circle.style.strokeDashoffset = offset;
+        }
+      }
+    }
+
+    // Notification System
+    function showNotification(type, message, duration = 5000) {
+      const notif = document.getElementById('entryNotification');
+      notif.className = `notification ${type} show`;
+      notif.innerHTML = `
+        <i class="fas fa-${getNotificationIcon(type)}"></i>
+        <span>${message}</span>
+      `;
+
+      if (duration) {
+        setTimeout(() => {
+          notif.classList.remove('show');
+        }, duration);
+      }
+    }
+
+    function getNotificationIcon(type) {
+      switch (type) {
+        case 'success': return 'check-circle';
+        case 'error': return 'exclamation-circle';
+        case 'warning': return 'exclamation-triangle';
+        case 'info': return 'info-circle';
+        default: return 'bell';
+      }
+    }
+
+    // Export/Import Functions (for future enhancement)
+    function exportScores() {
+      const data = {
+        subject: state.currentSubject,
+        class: state.currentClass,
+        term: state.teacher.currentTerm,
+        maxScores: state.maxValues,
+        scores: state.scores,
+        exportedAt: new Date().toISOString()
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `scores_${state.currentSubject}_${state.currentClass}_${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showNotification('success', 'Scores exported successfully', 3000);
+    }
+
+    function importScores() {
+      // This would handle file upload and parsing
+      showNotification('info', 'Import feature coming soon!', 3000);
+    }
+
+    // Initialize the application
+    window.addEventListener('load', () => {
+      // Check if user was already logged in
+      const savedTeacher = localStorage.getItem('teacherData');
+      if (savedTeacher) {
+        try {
+          state.teacher = JSON.parse(savedTeacher);
+          showDashboard();
+        } catch (e) {
+          localStorage.removeItem('teacherData');
+          localStorage.removeItem('teacherToken');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
