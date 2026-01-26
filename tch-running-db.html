@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Database - Tendercare School</title>
+<link rel="stylesheet" href="tch_system_complete.css">
+<style>
+/* Additional custom styles for the archive feel */
+:root {
+  --archive-border: rgba(150, 150, 150, 0.15);
+  --archive-bg: rgba(245, 245, 247, 0.95);
+}
+
+body {
+  background-color: var(--ios-system-background);
+  color: var(--ios-label-primary);
+}
+
+.archive-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--ios-space-4);
+}
+
+.archive-header {
+  margin-top: var(--ios-space-6);
+  margin-bottom: var(--ios-space-6);
+  padding: 0 var(--ios-space-4);
+}
+
+.archive-title {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ios-label-primary);
+  margin-bottom: var(--ios-space-2);
+  line-height: 1.1;
+}
+
+.archive-subtitle {
+  font-size: 17px;
+  color: var(--ios-label-secondary);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.archive-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--ios-space-3);
+  margin: 0 var(--ios-space-4) var(--ios-space-6);
+}
+
+.archive-stat-card {
+  background-color: var(--ios-secondary-background);
+  border-radius: var(--ios-radius-medium);
+  padding: var(--ios-space-5);
+  border: 0.5px solid var(--archive-border);
+  box-shadow: var(--ios-shadow-subtle);
+}
+
+.archive-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ios-label-primary);
+  margin-bottom: var(--ios-space-1);
+  line-height: 1;
+}
+
+.archive-stat-label {
+  font-size: 14px;
+  color: var(--ios-label-tertiary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.archive-controls {
+  display: flex;
+  gap: var(--ios-space-3);
+  margin: 0 var(--ios-space-4) var(--ios-space-5);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.archive-search-container {
+  flex: 1;
+  min-width: 280px;
+}
+
+.archive-search-input {
+  width: 100%;
+  padding: var(--ios-space-4);
+  font-size: 17px;
+  background-color: var(--ios-secondary-background);
+  border: 1px solid var(--ios-separator-opaque);
+  border-radius: var(--ios-radius-medium);
+  color: var(--ios-label-primary);
+  transition: all var(--ios-duration-normal) var(--ios-timing-smooth);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='m21 21-4.35-4.35'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--ios-space-4) center;
+  background-size: 20px;
+  padding-right: var(--ios-space-8);
+}
+
+.archive-search-input:focus {
+  outline: none;
+  border-color: var(--ios-tint-primary);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.archive-filter-group {
+  display: flex;
+  gap: var(--ios-space-2);
+  flex-wrap: wrap;
+}
+
+.archive-filter-btn {
+  padding: var(--ios-space-3) var(--ios-space-4);
+  background-color: var(--ios-tertiary-background);
+  border: 0.5px solid var(--archive-border);
+  border-radius: var(--ios-radius-full);
+  font-size: 15px;
+  color: var(--ios-label-secondary);
+  cursor: pointer;
+  transition: all var(--ios-duration-fast) var(--ios-timing-smooth);
+  font-weight: 500;
+}
+
+.archive-filter-btn:hover {
+  background-color: var(--ios-secondary-background);
+  transform: translateY(-1px);
+}
+
+.archive-filter-btn.active {
+  background-color: var(--ios-tint-primary);
+  color: white;
+  border-color: var(--ios-tint-primary);
+}
+
+.archive-export-btn {
+  padding: var(--ios-space-3) var(--ios-space-5);
+  background-color: var(--ios-success);
+  border: none;
+  border-radius: var(--ios-radius-full);
+  font-size: 15px;
+  color: white;
+  cursor: pointer;
+  transition: all var(--ios-duration-normal) var(--ios-timing-smooth);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--ios-space-2);
+  white-space: nowrap;
+}
+
+.archive-export-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.archive-table-container {
+  background-color: var(--ios-secondary-background);
+  border-radius: var(--ios-radius-large);
+  margin: 0 var(--ios-space-4) var(--ios-space-8);
+  overflow: hidden;
+  box-shadow: var(--ios-shadow-subtle);
+  border: 0.5px solid var(--archive-border);
+  overflow-x: auto;
+}
+
+.archive-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.archive-table-header {
+  background-color: var(--ios-tertiary-background);
+  border-bottom: 0.5px solid var(--ios-separator-non-opaque);
+}
+
+.archive-table th {
+  padding: var(--ios-space-4) var(--ios-space-5);
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ios-label-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--ios-duration-fast) var(--ios-timing-smooth);
+}
+
+.archive-table th:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.archive-table th.sorted {
+  color: var(--ios-label-secondary);
+}
+
+.archive-table th svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--ios-space-1);
+  opacity: 0.5;
+  transition: var(--ios-duration-fast) var(--ios-timing-smooth);
+}
+
+.archive-table th.sorted svg {
+  opacity: 1;
+}
+
+.archive-table td {
+  padding: var(--ios-space-4) var(--ios-space-5);
+  border-bottom: 0.5px solid var(--ios-separator-non-opaque);
+  font-size: 17px;
+  color: var(--ios-label-primary);
+}
+
+.archive-table tbody tr {
+  transition: background-color var(--ios-duration-fast) var(--ios-timing-smooth);
+}
+
+.archive-table tbody tr:hover {
+  background-color: var(--ios-tertiary-background);
+}
+
+.archive-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.archive-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--ios-radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge-science {
+  background-color: rgba(0, 122, 255, 0.1);
+  color: var(--ios-tint-primary);
+}
+
+.badge-humanities {
+  background-color: rgba(88, 86, 214, 0.1);
+  color: var(--ios-tint-secondary);
+}
+
+.badge-jss3a {
+  background-color: rgba(52, 199, 89, 0.1);
+  color: var(--ios-success);
+}
+
+.badge-jss3b {
+  background-color: rgba(255, 149, 0, 0.1);
+  color: var(--ios-warning);
+}
+
+.archive-role {
+  font-size: 15px;
+  color: var(--ios-label-secondary);
+  font-weight: 500;
+}
+
+.archive-role.leadership {
+  color: var(--ios-tint-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .archive-title {
+    font-size: 32px;
+  }
+  
+  .archive-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .archive-stat-value {
+    font-size: 28px;
+  }
+  
+  .archive-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .archive-search-container,
+  .archive-filter-group {
+    width: 100%;
+  }
+  
+  .archive-filter-group {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .archive-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .archive-table {
+    font-size: 15px;
+  }
+  
+  .archive-table th,
+  .archive-table td {
+    padding: var(--ios-space-3) var(--ios-space-4);
+  }
+}
+</style>
+</head>
+<body>
+<!-- iOS Navigation -->
+<nav class="ios-nav-large">
+  <div class="ios-nav-large-title">Student Database</div>
+  <div class="ios-nav-subtitle">Tendercare School • Academic Year 2025/26</div>
+</nav>
+
+<div class="archive-container">
+  <!-- Archive Header -->
+  <div class="archive-header">
+    <h1 class="archive-title">Student Records Archive</h1>
+    <p class="archive-subtitle">Official registry of all enrolled students with detailed academic profiles</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="archive-stats">
+    <div class="archive-stat-card">
+      <div class="archive-stat-value" id="totalStudents">0</div>
+      <div class="archive-stat-label">Total Students</div>
+    </div>
+    <div class="archive-stat-card">
+      <div class="archive-stat-value" id="ss3Count">0</div>
+      <div class="archive-stat-label">SS3 Students</div>
+    </div>
+    <div class="archive-stat-card">
+      <div class="archive-stat-value" id="jss3Count">0</div>
+      <div class="archive-stat-label">JSS3 Students</div>
+    </div>
+    <div class="archive-stat-card">
+      <div class="archive-stat-value" id="leadershipCount">0</div>
+      <div class="archive-stat-label">Leadership Roles</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="archive-controls">
+    <div class="archive-search-container">
+      <input type="text" 
+             class="archive-search-input" 
+             id="searchInput" 
+             placeholder="Search students by name or ID...">
+    </div>
+    
+    <div class="archive-filter-group">
+      <button class="archive-filter-btn active" onclick="filterClass('all')">All Students</button>
+      <button class="archive-filter-btn" onclick="filterClass('SS3 Science')">SS3 Science</button>
+      <button class="archive-filter-btn" onclick="filterClass('SS3 Humanities')">SS3 Humanities</button>
+      <button class="archive-filter-btn" onclick="filterClass('JSS3 A')">JSS3 A</button>
+      <button class="archive-filter-btn" onclick="filterClass('JSS3 B')">JSS3 B</button>
+    </div>
+    
+    <button class="archive-export-btn" onclick="exportToCSV()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Export Archive
+    </button>
+  </div>
+
+  <!-- Student Table -->
+  <div class="archive-table-container">
+    <table class="archive-table" id="studentTable">
+      <thead class="archive-table-header">
+        <tr>
+          <th onclick="sortTable(0)">
+            Student Name
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+            </svg>
+          </th>
+          <th onclick="sortTable(1)">
+            Student ID
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+            </svg>
+          </th>
+          <th onclick="sortTable(2)">
+            Class
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+            </svg>
+          </th>
+          <th onclick="sortTable(3)">
+            Role
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+            </svg>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// COMPLETE Student data from your original file
+const allStudents = [
+  // SS3 Science
+  { name: "Angel", id: "TCH020", class: "SS3 Science", role: "-" },
+  { name: "Bamise", id: "TCH014", class: "SS3 Science", role: "-" },
+  { name: "Bright", id: "TCH002", class: "SS3 Science", role: "Head Girl" },
+  { name: "Dorcas", id: "TCH016", class: "SS3 Science", role: "-" },
+  { name: "Enoch", id: "TCH012", class: "SS3 Science", role: "-" },
+  { name: "Famous", id: "TCH004", class: "SS3 Science", role: "-" },
+  { name: "Fauziyyah", id: "TCH007", class: "SS3 Science", role: "-" },
+  { name: "Fawaz", id: "TCH021", class: "SS3 Science", role: "-" },
+  { name: "Fiyin", id: "TCH011", class: "SS3 Science", role: "-" },
+  { name: "Habitat", id: "TCH022", class: "SS3 Science", role: "-" },
+  { name: "Kaosara", id: "TCH010", class: "SS3 Science", role: "-" },
+  { name: "Khadija", id: "TCH015", class: "SS3 Science", role: "-" },
+  { name: "Mercy", id: "TCH008", class: "SS3 Science", role: "-" },
+  { name: "Michael", id: "TCH006", class: "SS3 Science", role: "-" },
+  { name: "Moyin", id: "TCH017", class: "SS3 Science", role: "-" },
+  { name: "Prosper", id: "TCH003", class: "SS3 Science", role: "-" },
+  { name: "Rita", id: "TCH019", class: "SS3 Science", role: "-" },
+  { name: "Rokibat", id: "TCH018", class: "SS3 Science", role: "-" },
+  { name: "Samuel", id: "TCH005", class: "SS3 Science", role: "-" },
+  { name: "Taiwo", id: "TCH013", class: "SS3 Science", role: "-" },
+  { name: "Temi", id: "TCH001", class: "SS3 Science", role: "Head Boy" },
+  { name: "Zainab", id: "TCH009", class: "SS3 Science", role: "-" },
+  
+  // SS3 Humanities
+  { name: "Abdul Majeed Quadri", id: "TCH-H001", class: "SS3 Humanities", role: "-" },
+  { name: "Abdul Razak Kehinde", id: "TCH-H002", class: "SS3 Humanities", role: "-" },
+  { name: "Abuh God's Power", id: "TCH-H003", class: "SS3 Humanities", role: "-" },
+  { name: "Adebayo David", id: "TCH-H004", class: "SS3 Humanities", role: "-" },
+  { name: "Adeniran Moses", id: "TCH-H005", class: "SS3 Humanities", role: "-" },
+  { name: "Adesanya Emmanuel", id: "TCH-H006", class: "SS3 Humanities", role: "-" },
+  { name: "Adewale Aishat", id: "TCH-H007", class: "SS3 Humanities", role: "-" },
+  { name: "Adewumi Daniel", id: "TCH-H008", class: "SS3 Humanities", role: "-" },
+  { name: "Adewumi Gafar", id: "TCH-H009", class: "SS3 Humanities", role: "-" },
+  { name: "Adigun Aliyat", id: "TCH-H010", class: "SS3 Humanities", role: "-" },
+  { name: "Afolabi David", id: "TCH-H011", class: "SS3 Humanities", role: "-" },
+  { name: "Afolabi Dorcas", id: "TCH-H012", class: "SS3 Humanities", role: "-" },
+  { name: "Agbeniyi Christianah", id: "TCH-H013", class: "SS3 Humanities", role: "-" },
+  { name: "Aina Ibrahim", id: "TCH-H014", class: "SS3 Humanities", role: "-" },
+  { name: "Akindele Rodiat", id: "TCH-H015", class: "SS3 Humanities", role: "-" },
+  { name: "Akinola Israel", id: "TCH-H016", class: "SS3 Humanities", role: "-" },
+  { name: "Akinyemi Damola", id: "TCH-H017", class: "SS3 Humanities", role: "-" },
+  { name: "Alao Joseph", id: "TCH-H018", class: "SS3 Humanities", role: "-" },
+  { name: "Ameen Rukayat", id: "TCH-H019", class: "SS3 Humanities", role: "-" },
+  { name: "Amodu Maryam", id: "TCH-H020", class: "SS3 Humanities", role: "-" },
+  { name: "Ashiru Suliat", id: "TCH-H021", class: "SS3 Humanities", role: "-" },
+  { name: "Ayinde Kehinde", id: "TCH-H022", class: "SS3 Humanities", role: "-" },
+  { name: "Azeez Taofikat", id: "TCH-H023", class: "SS3 Humanities", role: "-" },
+  { name: "Badiru Favour", id: "TCH-H024", class: "SS3 Humanities", role: "-" },
+  { name: "Badiru Rasheedat", id: "TCH-H025", class: "SS3 Humanities", role: "-" },
+  { name: "Balogun Emmanuel", id: "TCH-H026", class: "SS3 Humanities", role: "-" },
+  { name: "Bamgboye Favour", id: "TCH-H027", class: "SS3 Humanities", role: "-" },
+  { name: "Bello Rofiat", id: "TCH-H028", class: "SS3 Humanities", role: "-" },
+  { name: "Busari Usman", id: "TCH-H029", class: "SS3 Humanities", role: "-" },
+  { name: "Daniel Michael", id: "TCH-H030", class: "SS3 Humanities", role: "-" },
+  { name: "David Grace", id: "TCH-H031", class: "SS3 Humanities", role: "-" },
+  { name: "David Precious", id: "TCH-H032", class: "SS3 Humanities", role: "-" },
+  { name: "Dawodu Alimot", id: "TCH-H033", class: "SS3 Humanities", role: "-" },
+  { name: "Dosunmu Anuoluwapo", id: "TCH-H034", class: "SS3 Humanities", role: "-" },
+  { name: "Ebenezer Olajumoke", id: "TCH-H035", class: "SS3 Humanities", role: "-" },
+  { name: "Egbeyale Promise", id: "TCH-H036", class: "SS3 Humanities", role: "-" },
+  { name: "Ekechukwu Daniel", id: "TCH-H037", class: "SS3 Humanities", role: "-" },
+  { name: "Emmanuel Jeremiah", id: "TCH-H038", class: "SS3 Humanities", role: "-" },
+  { name: "Fadipe Victoria", id: "TCH-H039", class: "SS3 Humanities", role: "-" },
+  { name: "Fasasi Ganiyat", id: "TCH-H040", class: "SS3 Humanities", role: "-" },
+  { name: "Fashina Hikmat", id: "TCH-H041", class: "SS3 Humanities", role: "-" },
+  { name: "Ganiyu Habeeb", id: "TCH-H042", class: "SS3 Humanities", role: "-" },
+  { name: "Hamzat Misturah", id: "TCH-H043", class: "SS3 Humanities", role: "-" },
+  { name: "Ibrahim Hikmah", id: "TCH-H044", class: "SS3 Humanities", role: "-" },
+  { name: "Ige Great", id: "TCH-H045", class: "SS3 Humanities", role: "-" },
+  { name: "Ige Idris", id: "TCH-H046", class: "SS3 Humanities", role: "-" },
+  { name: "Ilori Rodiat", id: "TCH-H047", class: "SS3 Humanities", role: "-" },
+  { name: "Jagun Victoria", id: "TCH-H048", class: "SS3 Humanities", role: "-" },
+  { name: "Jamiu Hammed", id: "TCH-H049", class: "SS3 Humanities", role: "-" },
+  { name: "Jimoh Teniola", id: "TCH-H050", class: "SS3 Humanities", role: "-" },
+  { name: "Jolaosho James", id: "TCH-H051", class: "SS3 Humanities", role: "-" },
+  { name: "Lukman Khalid", id: "TCH-H052", class: "SS3 Humanities", role: "-" },
+  { name: "Muhideen Rodiat", id: "TCH-H053", class: "SS3 Humanities", role: "-" },
+  { name: "Muyiwa Daniel", id: "TCH-H054", class: "SS3 Humanities", role: "-" },
+  { name: "Najeem Hammed", id: "TCH-H055", class: "SS3 Humanities", role: "-" },
+  { name: "Nurudeen Monsurat", id: "TCH-H056", class: "SS3 Humanities", role: "-" },
+  { name: "Obasa Zainab", id: "TCH-H057", class: "SS3 Humanities", role: "-" },
+  { name: "Obanla Habeeb", id: "TCH-H058", class: "SS3 Humanities", role: "-" },
+  { name: "Odeyemi David", id: "TCH-H059", class: "SS3 Humanities", role: "-" },
+  { name: "Odunsi Promise", id: "TCH-H060", class: "SS3 Humanities", role: "-" },
+  { name: "Ogunmola David", id: "TCH-H061", class: "SS3 Humanities", role: "-" },
+  { name: "Ojo Rebecca", id: "TCH-H062", class: "SS3 Humanities", role: "-" },
+  { name: "Okesola Barakat", id: "TCH-H063", class: "SS3 Humanities", role: "-" },
+  { name: "Okewoye Boluwatife", id: "TCH-H064", class: "SS3 Humanities", role: "-" },
+  { name: "Oladokun Sukurat", id: "TCH-H065", class: "SS3 Humanities", role: "-" },
+  { name: "Oladunjoye Samiat", id: "TCH-H066", class: "SS3 Humanities", role: "-" },
+  { name: "Olamide Roqeeb", id: "TCH-H067", class: "SS3 Humanities", role: "-" },
+  { name: "Olaniyi Samuel", id: "TCH-H068", class: "SS3 Humanities", role: "-" },
+  { name: "Olaniyi Taofikat", id: "TCH-H069", class: "SS3 Humanities", role: "-" },
+  { name: "Olarewaju Ifeoluwa", id: "TCH-H070", class: "SS3 Humanities", role: "-" },
+  { name: "Olasunkanmi Paul", id: "TCH-H071", class: "SS3 Humanities", role: "-" },
+  { name: "Olatunji Daniel", id: "TCH-H072", class: "SS3 Humanities", role: "-" },
+  { name: "Olayemi Israel", id: "TCH-H073", class: "SS3 Humanities", role: "-" },
+  { name: "Oloye Favour", id: "TCH-H074", class: "SS3 Humanities", role: "-" },
+  { name: "Olusola Rebecca", id: "TCH-H075", class: "SS3 Humanities", role: "-" },
+  { name: "Olusola Shalom", id: "TCH-H076", class: "SS3 Humanities", role: "-" },
+  { name: "Oluwagbemileke Iyanuoluwa", id: "TCH-H077", class: "SS3 Humanities", role: "-" },
+  { name: "Oluwatimilehin Moses", id: "TCH-H078", class: "SS3 Humanities", role: "-" },
+  { name: "Oluwayemisi Angel", id: "TCH-H079", class: "SS3 Humanities", role: "-" },
+  { name: "Omotosho Oluwadamilare", id: "TCH-H080", class: "SS3 Humanities", role: "-" },
+  { name: "Omowumi Mary", id: "TCH-H081", class: "SS3 Humanities", role: "-" },
+  { name: "Onabanjo Samuel", id: "TCH-H082", class: "SS3 Humanities", role: "-" },
+  { name: "Oni Oluwatoyin", id: "TCH-H083", class: "SS3 Humanities", role: "-" },
+  { name: "Onigbinde Gabriel", id: "TCH-H084", class: "SS3 Humanities", role: "-" },
+  { name: "Opara Samuel", id: "TCH-H085", class: "SS3 Humanities", role: "-" },
+  { name: "Opawale John", id: "TCH-H086", class: "SS3 Humanities", role: "-" },
+  { name: "Osho Daniel", id: "TCH-H087", class: "SS3 Humanities", role: "-" },
+  { name: "Oyeleye Eniola", id: "TCH-H088", class: "SS3 Humanities", role: "-" },
+  { name: "Oyewole Favour", id: "TCH-H089", class: "SS3 Humanities", role: "-" },
+  { name: "Salami Anjola", id: "TCH-H090", class: "SS3 Humanities", role: "-" },
+  { name: "Salami Barakat", id: "TCH-H091", class: "SS3 Humanities", role: "-" },
+  { name: "Sanni Joshua", id: "TCH-H092", class: "SS3 Humanities", role: "-" },
+  { name: "Sanni Oluwaseun", id: "TCH-H093", class: "SS3 Humanities", role: "-" },
+  { name: "Solomon Divine", id: "TCH-H094", class: "SS3 Humanities", role: "-" },
+  { name: "Sumbola Victory", id: "TCH-H095", class: "SS3 Humanities", role: "-" },
+  { name: "Tairu Boluwatife", id: "TCH-H096", class: "SS3 Humanities", role: "-" },
+  { name: "Usman Firdaus", id: "TCH-H097", class: "SS3 Humanities", role: "-" },
+  { name: "Yekini Qudus", id: "TCH-H098", class: "SS3 Humanities", role: "-" },
+  
+  // JSS3 A
+  { name: "Abdulbasit Nafisat", id: "J3A001", class: "JSS3 A", role: "-" },
+  { name: "Abdulsalam Hawau", id: "J3A002", class: "JSS3 A", role: "-" },
+  { name: "Abiona Jesutofunmi", id: "J3A003", class: "JSS3 A", role: "-" },
+  { name: "Abiona Muhammed", id: "J3A004", class: "JSS3 A", role: "-" },
+  { name: "Adebayo Barakat", id: "J3A005", class: "JSS3 A", role: "-" },
+  { name: "Adedokun Aliyat", id: "J3A006", class: "JSS3 A", role: "-" },
+  { name: "Adekoya Divine", id: "J3A007", class: "JSS3 A", role: "-" },
+  { name: "Adelakun Mary", id: "J3A008", class: "JSS3 A", role: "-" },
+  { name: "Adeniyi Ayomide", id: "J3A009", class: "JSS3 A", role: "-" },
+  { name: "Adeoye Favour", id: "J3A010", class: "JSS3 A", role: "-" },
+  { name: "Adesina Precious", id: "J3A011", class: "JSS3 A", role: "-" },
+  { name: "Afolabi Mariam", id: "J3A012", class: "JSS3 A", role: "-" },
+  { name: "Ajadi Solomon", id: "J3A013", class: "JSS3 A", role: "-" },
+  { name: "Ajala Pelumi", id: "J3A014", class: "JSS3 A", role: "-" },
+  { name: "Akinbobola Favour", id: "J3A015", class: "JSS3 A", role: "-" },
+  { name: "Akindele Ayomide", id: "J3A016", class: "JSS3 A", role: "-" },
+  { name: "Akintola Promise", id: "J3A017", class: "JSS3 A", role: "-" },
+  { name: "Akinwale Israel", id: "J3A018", class: "JSS3 A", role: "-" },
+  { name: "Alabi Samuel", id: "J3A019", class: "JSS3 A", role: "-" },
+  { name: "Amao Olamilekan", id: "J3A020", class: "JSS3 A", role: "-" },
+  { name: "Aroyewun Favour", id: "J3A021", class: "JSS3 A", role: "-" },
+  { name: "Asani Ajoke", id: "J3A022", class: "JSS3 A", role: "-" },
+  { name: "Ayeni Seyi", id: "J3A023", class: "JSS3 A", role: "-" },
+  { name: "Ayodele Glory", id: "J3A024", class: "JSS3 A", role: "-" },
+  { name: "Badmus Azeezat", id: "J3A025", class: "JSS3 A", role: "-" },
+  { name: "Bamigboye Barakat", id: "J3A026", class: "JSS3 A", role: "-" },
+  { name: "Dosunmu Aishat", id: "J3A027", class: "JSS3 A", role: "-" },
+  { name: "Durojaiye Testimony", id: "J3A028", class: "JSS3 A", role: "-" },
+  { name: "Egbedina Favour", id: "J3A029", class: "JSS3 A", role: "-" },
+  { name: "Famodimu Grace", id: "J3A030", class: "JSS3 A", role: "-" },
+  { name: "Fatola Ifeoluwa", id: "J3A031", class: "JSS3 A", role: "-" },
+  { name: "Gbadebo Barakat", id: "J3A032", class: "JSS3 A", role: "-" },
+  { name: "Gbadamosi Ayomide", id: "J3A033", class: "JSS3 A", role: "-" },
+  { name: "Ibrahim Boluwatife", id: "J3A034", class: "JSS3 A", role: "-" },
+  { name: "Idowu Ebunoluwa", id: "J3A035", class: "JSS3 A", role: "-" },
+  { name: "Ige Favour", id: "J3A036", class: "JSS3 A", role: "-" },
+  { name: "Ijaola Mary", id: "J3A037", class: "JSS3 A", role: "-" },
+  { name: "Ismail Abdulrahman", id: "J3A038", class: "JSS3 A", role: "-" },
+  { name: "Jaiyeola God's Power", id: "J3A039", class: "JSS3 A", role: "-" },
+  { name: "John Barakat", id: "J3A040", class: "JSS3 A", role: "-" },
+  { name: "Joseph Divine", id: "J3A041", class: "JSS3 A", role: "-" },
+  { name: "Kolawole Ayomide", id: "J3A042", class: "JSS3 A", role: "-" },
+  { name: "Lawal Basirat", id: "J3A043", class: "JSS3 A", role: "-" },
+  { name: "Lawal Firdaus", id: "J3A044", class: "JSS3 A", role: "-" },
+  { name: "Lawal Fiyinfoluwa", id: "J3A045", class: "JSS3 A", role: "-" },
+  { name: "Makanjuola Anuoluwapo", id: "J3A046", class: "JSS3 A", role: "-" },
+  { name: "Makinde Samiat", id: "J3A047", class: "JSS3 A", role: "-" },
+  { name: "Muhammed Barakat", id: "J3A048", class: "JSS3 A", role: "-" },
+  { name: "Mustapha Qudus", id: "J3A049", class: "JSS3 A", role: "-" },
+  { name: "Oba Abiodun", id: "J3A050", class: "JSS3 A", role: "-" },
+  { name: "Obadina Barakat", id: "J3A051", class: "JSS3 A", role: "-" },
+  { name: "Obanla Maryam", id: "J3A052", class: "JSS3 A", role: "-" },
+  { name: "Odumosu Victory", id: "J3A053", class: "JSS3 A", role: "-" },
+  { name: "Ogundare Emmanuel", id: "J3A054", class: "JSS3 A", role: "-" },
+  { name: "Ogunjobi Esther", id: "J3A055", class: "JSS3 A", role: "-" },
+  { name: "Ojo Ruth", id: "J3A056", class: "JSS3 A", role: "-" },
+  { name: "Ojo Samuel", id: "J3A057", class: "JSS3 A", role: "-" },
+  { name: "Olabode Faridat", id: "J3A058", class: "JSS3 A", role: "-" },
+  { name: "Olajide Favour", id: "J3A059", class: "JSS3 A", role: "-" },
+  { name: "Olaniran Divine", id: "J3A060", class: "JSS3 A", role: "-" },
+  { name: "Olatunji Michael", id: "J3A061", class: "JSS3 A", role: "-" },
+  { name: "Olayemi Favour", id: "J3A062", class: "JSS3 A", role: "-" },
+  { name: "Oloyede Azeezat", id: "J3A063", class: "JSS3 A", role: "-" },
+  { name: "Oloyede God's Power", id: "J3A064", class: "JSS3 A", role: "-" },
+  { name: "Oluwatoyin God's Power", id: "J3A065", class: "JSS3 A", role: "-" },
+  { name: "Onabanjo Barakat", id: "J3A066", class: "JSS3 A", role: "-" },
+  { name: "Onifade Favour", id: "J3A067", class: "JSS3 A", role: "-" },
+  { name: "Onifade Samuel", id: "J3A068", class: "JSS3 A", role: "-" },
+  { name: "Ope Barakat", id: "J3A069", class: "JSS3 A", role: "-" },
+  { name: "Opeyemi Testimony", id: "J3A070", class: "JSS3 A", role: "-" },
+  { name: "Opowale Barakat", id: "J3A071", class: "JSS3 A", role: "-" },
+  { name: "Orimolade Samuel", id: "J3A072", class: "JSS3 A", role: "-" },
+  { name: "Osibanjo Ayomide", id: "J3A073", class: "JSS3 A", role: "-" },
+  { name: "Oyeleye Israel", id: "J3A074", class: "JSS3 A", role: "-" },
+  { name: "Raji Favour", id: "J3A075", class: "JSS3 A", role: "-" },
+  { name: "Salau God's Power", id: "J3A076", class: "JSS3 A", role: "-" },
+  { name: "Samson Ayomide", id: "J3A077", class: "JSS3 A", role: "-" },
+  { name: "Samuel God's Power", id: "J3A078", class: "JSS3 A", role: "-" },
+  { name: "Sanusi Barakat", id: "J3A079", class: "JSS3 A", role: "-" },
+  { name: "Solomon Success", id: "J3A080", class: "JSS3 A", role: "-" },
+  { name: "Sulaiman Hassan", id: "J3A081", class: "JSS3 A", role: "-" },
+  { name: "Taiwo Mary", id: "J3A082", class: "JSS3 A", role: "-" },
+  { name: "Wasiu Habeeb", id: "J3A083", class: "JSS3 A", role: "-" },
+  { name: "Wasiu Oluwafikunmi", id: "J3A084", class: "JSS3 A", role: "-" },
+  { name: "Yusuf Barakat", id: "J3A085", class: "JSS3 A", role: "-" },
+  
+  // JSS3 B
+  { name: "Abiona Favour", id: "J3B001", class: "JSS3 B", role: "-" },
+  { name: "Abiona Mujeeb", id: "J3B002", class: "JSS3 B", role: "-" },
+  { name: "Adedokun Favour", id: "J3B003", class: "JSS3 B", role: "-" },
+  { name: "Adelakun Favour", id: "J3B004", class: "JSS3 B", role: "-" },
+  { name: "Adewale Favour", id: "J3B005", class: "JSS3 B", role: "-" },
+  { name: "Adewale Mary", id: "J3B006", class: "JSS3 B", role: "-" },
+  { name: "Afolabi Emmanuel", id: "J3B007", class: "JSS3 B", role: "-" },
+  { name: "Afolabi Habeeb", id: "J3B008", class: "JSS3 B", role: "-" },
+  { name: "Afolabi Mary", id: "J3B009", class: "JSS3 B", role: "-" },
+  { name: "Ajala Gbolahan", id: "J3B010", class: "JSS3 B", role: "-" },
+  { name: "Akinfenwa Eniola", id: "J3B011", class: "JSS3 B", role: "-" },
+  { name: "Akinola Barakat", id: "J3B012", class: "JSS3 B", role: "-" },
+  { name: "Akinola Solomon", id: "J3B013", class: "JSS3 B", role: "-" },
+  { name: "Akinpelu Samuel", id: "J3B014", class: "JSS3 B", role: "-" },
+  { name: "Alausa Aliyat", id: "J3B015", class: "JSS3 B", role: "-" },
+  { name: "Alausa Favour", id: "J3B016", class: "JSS3 B", role: "-" },
+  { name: "Amolegbe God's Power", id: "J3B017", class: "JSS3 B", role: "-" },
+  { name: "Amusan Daniel", id: "J3B018", class: "JSS3 B", role: "-" },
+  { name: "Aremu Michael", id: "J3B019", class: "JSS3 B", role: "-" },
+  { name: "Aremu Samuel", id: "J3B020", class: "JSS3 B", role: "-" },
+  { name: "Aroyewun Favour", id: "J3B021", class: "JSS3 B", role: "-" },
+  { name: "Awe Barakat", id: "J3B022", class: "JSS3 B", role: "-" },
+  { name: "Bakare Promise", id: "J3B023", class: "JSS3 B", role: "-" },
+  { name: "Balogun Dorcas", id: "J3B024", class: "JSS3 B", role: "-" },
+  { name: "Balogun Favour", id: "J3B025", class: "JSS3 B", role: "-" },
+  { name: "Bello Rukayat", id: "J3B026", class: "JSS3 B", role: "-" },
+  { name: "Dada Imole", id: "J3B027", class: "JSS3 B", role: "-" },
+  { name: "Durojaiye Barakat", id: "J3B028", class: "JSS3 B", role: "-" },
+  { name: "Durojaiye Precious", id: "J3B029", class: "JSS3 B", role: "-" },
+  { name: "Famuyiwa Barakat", id: "J3B030", class: "JSS3 B", role: "-" },
+  { name: "Fasola Favour", id: "J3B031", class: "JSS3 B", role: "-" },
+  { name: "Hassan Abdulhameed", id: "J3B032", class: "JSS3 B", role: "-" },
+  { name: "Ibrahim Barakat", id: "J3B033", class: "JSS3 B", role: "-" },
+  { name: "Idowu Barakat", id: "J3B034", class: "JSS3 B", role: "-" },
+  { name: "Ijaola Favour", id: "J3B035", class: "JSS3 B", role: "-" },
+  { name: "Isaac Ayomide", id: "J3B036", class: "JSS3 B", role: "-" },
+  { name: "Ismail Barakat", id: "J3B037", class: "JSS3 B", role: "-" },
+  { name: "John Promise", id: "J3B038", class: "JSS3 B", role: "-" },
+  { name: "Kazeem Eniola", id: "J3B039", class: "JSS3 B", role: "-" },
+  { name: "Lawal Rodiat", id: "J3B040", class: "JSS3 B", role: "-" },
+  { name: "Makanjuola Barakat", id: "J3B041", class: "JSS3 B", role: "-" },
+  { name: "Makinde Barakat", id: "J3B042", class: "JSS3 B", role: "-" },
+  { name: "Muhammed Barakat", id: "J3B043", class: "JSS3 B", role: "-" },
+  { name: "Mustapha Barakat", id: "J3B044", class: "JSS3 B", role: "-" },
+  { name: "Oba Favour", id: "J3B045", class: "JSS3 B", role: "-" },
+  { name: "Odebode Favour", id: "J3B046", class: "JSS3 B", role: "-" },
+  { name: "Odunsi Barakat", id: "J3B047", class: "JSS3 B", role: "-" },
+  { name: "Oduwole Barakat", id: "J3B048", class: "JSS3 B", role: "-" },
+  { name: "Ogunleye Favour", id: "J3B049", class: "JSS3 B", role: "-" },
+  { name: "Ogunleye Mary", id: "J3B050", class: "JSS3 B", role: "-" },
+  { name: "Ojo Michael", id: "J3B051", class: "JSS3 B", role: "-" },
+  { name: "Ojo Peter", id: "J3B052", class: "JSS3 B", role: "-" },
+  { name: "Ojo Samuel", id: "J3B053", class: "JSS3 B", role: "-" },
+  { name: "Oladepo Favour", id: "J3B054", class: "JSS3 B", role: "-" },
+  { name: "Olaniyan Samuel", id: "J3B055", class: "JSS3 B", role: "-" },
+  { name: "Olarewaju Samuel", id: "J3B056", class: "JSS3 B", role: "-" },
+  { name: "Olatunji Barakat", id: "J3B057", class: "JSS3 B", role: "-" },
+  { name: "Oloyede Favour", id: "J3B058", class: "JSS3 B", role: "-" },
+  { name: "Omotosho Favour", id: "J3B059", class: "JSS3 B", role: "-" },
+  { name: "Onabanjo Barakat", id: "J3B060", class: "JSS3 B", role: "-" },
+  { name: "Onifade Barakat", id: "J3B061", class: "JSS3 B", role: "-" },
+  { name: "Onifade Elizabeth", id: "J3B062", class: "JSS3 B", role: "-" },
+  { name: "Ope Mary", id: "J3B063", class: "JSS3 B", role: "-" },
+  { name: "Opowale Mary", id: "J3B064", class: "JSS3 B", role: "-" },
+  { name: "Opowale Samuel", id: "J3B065", class: "JSS3 B", role: "-" },
+  { name: "Osibanjo Israel", id: "J3B066", class: "JSS3 B", role: "-" },
+  { name: "Oyedokun Barakat", id: "J3B067", class: "JSS3 B", role: "-" },
+  { name: "Raimi Mary", id: "J3B068", class: "JSS3 B", role: "-" },
+  { name: "Raimi Samuel", id: "J3B069", class: "JSS3 B", role: "-" },
+  { name: "Raheem Barakat", id: "J3B070", class: "JSS3 B", role: "-" },
+  { name: "Raheem Samuel", id: "J3B071", class: "JSS3 B", role: "-" },
+  { name: "Salami Favour", id: "J3B072", class: "JSS3 B", role: "-" },
+  { name: "Sanusi Barakat", id: "J3B073", class: "JSS3 B", role: "-" },
+  { name: "Shittu Barakat", id: "J3B074", class: "JSS3 B", role: "-" },
+  { name: "Taiwo Barakat", id: "J3B075", class: "JSS3 B", role: "-" },
+  { name: "Taiwo Mary", id: "J3B076", class: "JSS3 B", role: "-" },
+  { name: "Tijani Barakat", id: "J3B077", class: "JSS3 B", role: "-" },
+  { name: "Usman Barakat", id: "J3B078", class: "JSS3 B", role: "-" },
+  { name: "Wasiu Barakat", id: "J3B079", class: "JSS3 B", role: "-" }
+];
+
+let filteredStudents = [...allStudents];
+let currentSortColumn = null;
+let sortDirection = 1;
+
+// Initialize the table
+function initializeTable() {
+  renderTable();
+  updateStats();
+  setupSearch();
+  setupFilterButtons();
+}
+
+// Render table with student data
+function renderTable() {
+  const tableBody = document.getElementById('tableBody');
+  tableBody.innerHTML = '';
+  
+  filteredStudents.forEach(student => {
+    const row = document.createElement('tr');
+    
+    const badgeClass = getBadgeClass(student.class);
+    const roleClass = student.role !== '-' ? 'archive-role leadership' : 'archive-role';
+    
+    row.innerHTML = `
+      <td>
+        <div style="font-weight: 500;">${student.name}</div>
+      </td>
+      <td>
+        <div style="font-family: 'SF Mono', monospace; font-size: 15px; color: var(--ios-label-tertiary);">
+          ${student.id}
+        </div>
+      </td>
+      <td>
+        <span class="archive-badge ${badgeClass}">${student.class}</span>
+      </td>
+      <td>
+        <span class="${roleClass}">${student.role}</span>
+      </td>
+    `;
+    
+    tableBody.appendChild(row);
+  });
+}
+
+// Get badge class based on student class
+function getBadgeClass(className) {
+  switch(className) {
+    case 'SS3 Science': return 'badge-science';
+    case 'SS3 Humanities': return 'badge-humanities';
+    case 'JSS3 A': return 'badge-jss3a';
+    case 'JSS3 B': return 'badge-jss3b';
+    default: return '';
+  }
+}
+
+// Update statistics
+function updateStats() {
+  const total = allStudents.length;
+  const ss3Count = allStudents.filter(s => s.class.includes('SS3')).length;
+  const jss3Count = allStudents.filter(s => s.class.includes('JSS3')).length;
+  const leadershipCount = allStudents.filter(s => s.role !== '-').length;
+  
+  document.getElementById('totalStudents').textContent = total;
+  document.getElementById('ss3Count').textContent = ss3Count;
+  document.getElementById('jss3Count').textContent = jss3Count;
+  document.getElementById('leadershipCount').textContent = leadershipCount;
+}
+
+// Setup search functionality
+function setupSearch() {
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    
+    filteredStudents = allStudents.filter(student => 
+      student.name.toLowerCase().includes(searchTerm) ||
+      student.id.toLowerCase().includes(searchTerm) ||
+      student.class.toLowerCase().includes(searchTerm)
+    );
+    
+    renderTable();
+  });
+}
+
+// Setup filter buttons
+function setupFilterButtons() {
+  const buttons = document.querySelectorAll('.archive-filter-btn');
+  buttons.forEach(button => {
+    button.addEventListener('click', function() {
+      buttons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+}
+
+// Filter by class
+function filterClass(className) {
+  const buttons = document.querySelectorAll('.archive-filter-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if (className === 'all') {
+    filteredStudents = [...allStudents];
+  } else {
+    filteredStudents = allStudents.filter(student => student.class === className);
+  }
+  
+  renderTable();
+}
+
+// Sort table
+function sortTable(columnIndex) {
+  const headers = document.querySelectorAll('.archive-table th');
+  headers.forEach(header => header.classList.remove('sorted'));
+  
+  if (currentSortColumn === columnIndex) {
+    sortDirection = -sortDirection;
+  } else {
+    currentSortColumn = columnIndex;
+    sortDirection = 1;
+  }
+  
+  headers[columnIndex].classList.add('sorted');
+  
+  filteredStudents.sort((a, b) => {
+    let aValue, bValue;
+    
+    switch(columnIndex) {
+      case 0: aValue = a.name; bValue = b.name; break;
+      case 1: aValue = a.id; bValue = b.id; break;
+      case 2: aValue = a.class; bValue = b.class; break;
+      case 3: aValue = a.role; bValue = b.role; break;
+      default: return 0;
+    }
+    
+    if (aValue < bValue) return -1 * sortDirection;
+    if (aValue > bValue) return 1 * sortDirection;
+    return 0;
+  });
+  
+  renderTable();
+}
+
+// Export to CSV
+function exportToCSV() {
+  const headers = ['Name', 'Student ID', 'Class', 'Role'];
+  const csvData = [
+    headers.join(','),
+    ...filteredStudents.map(student => 
+      `"${student.name}","${student.id}","${student.class}","${student.role}"`
+    )
+  ].join('\n');
+  
+  const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  
+  link.setAttribute('href', url);
+  link.setAttribute('download', `tendercare_students_${new Date().toISOString().split('T')[0]}.csv`);
+  link.style.visibility = 'hidden';
+  
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', initializeTable);
+</script>
+</body>
+</html>

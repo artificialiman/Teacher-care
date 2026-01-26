@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TENDERCARE Teacher Portal - Dashboard</title>
+  <title>School Management - Teacher Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -62,7 +62,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== AUTHENTICATION VIEW ===== */
     .auth-container {
       min-height: 100vh;
       display: flex;
@@ -210,6 +209,31 @@
       transform: translateY(0);
     }
 
+    .button-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .button-secondary {
+      padding: 0.75rem 1.5rem;
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .button-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
     .auth-footer {
       text-align: center;
       margin-top: 2.5rem;
@@ -219,7 +243,6 @@
       font-size: 0.85rem;
     }
 
-    /* ===== DASHBOARD VIEW ===== */
     .dashboard-header {
       background: var(--secondary-bg);
       backdrop-filter: blur(20px);
@@ -364,103 +387,6 @@
       line-height: 1;
     }
 
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .feature-card {
-      background: var(--secondary-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 2rem;
-      transition: var(--transition);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent-blue), transparent);
-    }
-
-    .feature-card:nth-child(2)::before {
-      background: linear-gradient(90deg, var(--accent-green), transparent);
-    }
-
-    .feature-card:nth-child(3)::before {
-      background: linear-gradient(90deg, var(--accent-purple), transparent);
-    }
-
-    .feature-card:nth-child(4)::before {
-      background: linear-gradient(90deg, var(--accent-orange), transparent);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--border-active);
-      box-shadow: var(--shadow);
-    }
-
-    .feature-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .feature-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .feature-header h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
-
-    .feature-card p {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-
-    .feature-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .progress-ring {
-      width: 40px;
-      height: 40px;
-    }
-
-    .progress-ring-circle {
-      fill: none;
-      stroke-width: 4;
-      stroke-linecap: round;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-    }
-
-    /* ===== SELECTION VIEW ===== */
     .selection-container {
       max-width: 800px;
       margin: 0 auto;
@@ -566,7 +492,6 @@
       cursor: not-allowed;
     }
 
-    /* ===== ENTRY VIEW ===== */
     .entry-view {
       position: fixed;
       top: 0;
@@ -639,7 +564,7 @@
 
     .config-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
     }
 
@@ -831,7 +756,6 @@
       border-top: 1px solid var(--border-color);
     }
 
-    /* ===== NOTIFICATIONS ===== */
     .notification {
       padding: 1.25rem 1.5rem;
       border-radius: var(--radius-md);
@@ -876,7 +800,6 @@
       font-size: 1.25rem;
     }
 
-    /* ===== RESPONSIVE DESIGN ===== */
     @media (max-width: 1024px) {
       .config-grid,
       .stats-summary {
@@ -900,10 +823,6 @@
       .teacher-meta {
         justify-content: center;
         flex-wrap: wrap;
-      }
-
-      .feature-grid {
-        grid-template-columns: 1fr;
       }
 
       .stats-grid {
@@ -935,23 +854,6 @@
       }
     }
 
-    @media (max-width: 480px) {
-      .auth-card {
-        padding: 2rem 1.5rem;
-      }
-
-      .form-card {
-        padding: 1.5rem;
-      }
-
-      .selection-header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-    }
-
-    /* ===== LOADING STATES ===== */
     .loading {
       display: inline-block;
       width: 20px;
@@ -966,19 +868,6 @@
       to { transform: rotate(360deg); }
     }
 
-    .skeleton {
-      background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: var(--radius-sm);
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    /* ===== SCROLLBAR STYLING ===== */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -1000,14 +889,13 @@
   </style>
 </head>
 <body>
-  <!-- AUTHENTICATION VIEW -->
   <div id="authView" class="view active">
     <div class="auth-container">
       <div class="auth-card">
         <div class="logo">
           <i class="fas fa-chalkboard-teacher"></i>
           <h1>Teacher Portal</h1>
-          <p>Access your teaching dashboard</p>
+          <p>School Management System</p>
         </div>
 
         <form id="loginForm" onsubmit="login(event)">
@@ -1015,7 +903,7 @@
             <label>Teacher ID</label>
             <div class="input-with-icon">
               <i class="fas fa-user"></i>
-              <input type="text" id="teacherId" placeholder="Enter your teacher ID" value="T001" required>
+              <input type="text" id="teacherId" placeholder="Enter your teacher ID" required>
             </div>
           </div>
 
@@ -1023,7 +911,7 @@
             <label>Password</label>
             <div class="input-with-icon">
               <i class="fas fa-lock"></i>
-              <input type="password" id="password" placeholder="Enter your password" value="password" required>
+              <input type="password" id="password" placeholder="Enter your password" required>
             </div>
           </div>
 
@@ -1034,22 +922,20 @@
         </form>
 
         <div class="auth-footer">
-          <p><i class="fas fa-shield-alt"></i> Secure login with end-to-end encryption</p>
+          <p><i class="fas fa-shield-alt"></i> Secure teacher authentication</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- DASHBOARD VIEW -->
   <div id="dashboardView" class="view">
     <header class="dashboard-header">
       <div class="header-content">
         <div class="teacher-info">
-          <h1 id="teacherName">Mr. WISDOM</h1>
+          <h1 id="teacherName"></h1>
           <div class="teacher-meta">
-            <span><i class="fas fa-id-card"></i> ID: <strong>T001</strong></span>
+            <span><i class="fas fa-id-card"></i> ID: <strong id="teacherIdDisplay"></strong></span>
             <span><i class="fas fa-calendar-alt"></i> Term: <strong>2024/2025 Term 1</strong></span>
-            <span><i class="fas fa-graduation-cap"></i> Dept: <strong>Mathematics</strong></span>
           </div>
         </div>
 
@@ -1064,8 +950,8 @@
 
     <main class="dashboard-container">
       <section class="welcome-section">
-        <h2>Welcome back, <span id="teacherFirstName">WISDOM</span>!</h2>
-        <p>You have <strong>4 pending results</strong> to grade. Check your progress below and access teaching materials.</p>
+        <h2>Welcome back, <span id="teacherFirstName"></span>!</h2>
+        <p>Select a subject and class below to enter student scores.</p>
       </section>
 
       <div class="stats-grid">
@@ -1074,118 +960,50 @@
             <i class="fas fa-edit"></i>
           </div>
           <div class="stat-content">
-            <h3>Pending Grading</h3>
-            <div class="stat-value">4</div>
+            <h3>Score Entry</h3>
+            <div class="stat-value">Start</div>
           </div>
         </div>
 
-        <div class="stat-card" onclick="viewLessonNotes()">
+        <div class="stat-card">
           <div class="stat-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">
-            <i class="fas fa-book"></i>
-          </div>
-          <div class="stat-content">
-            <h3>Lesson Notes</h3>
-            <div class="stat-value">24</div>
-          </div>
-        </div>
-
-        <div class="stat-card" onclick="viewProfiles()">
-          <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">
             <i class="fas fa-users"></i>
           </div>
           <div class="stat-content">
-            <h3>Staff Members</h3>
-            <div class="stat-value">48</div>
+            <h3>Your Classes</h3>
+            <div class="stat-value" id="classCount">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Your Subjects</h3>
+            <div class="stat-value" id="subjectCount">0</div>
           </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
-            <i class="fas fa-chart-line"></i>
+            <i class="fas fa-chalkboard"></i>
           </div>
           <div class="stat-content">
-            <h3>Completion Rate</h3>
-            <div class="stat-value">75%</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-card" onclick="goToScoreEntry()">
-          <div class="feature-header">
-            <div class="feature-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">
-              <i class="fas fa-table"></i>
-            </div>
-            <h3>Score Entry</h3>
-          </div>
-          <p>Enter and submit student assessment scores for your assigned subjects and classes. Track submission deadlines.</p>
-          <div class="feature-meta">
-            <span><i class="fas fa-clock"></i> Due in 3 days</span>
-            <span><i class="fas fa-arrow-right"></i></span>
-          </div>
-        </div>
-
-        <div class="feature-card" onclick="viewLessonNotes()">
-          <div class="feature-header">
-            <div class="feature-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">
-              <i class="fas fa-file-alt"></i>
-            </div>
-            <h3>Lesson Notes</h3>
-          </div>
-          <p>Access teaching materials, curriculum guides, and downloadable lesson plans for all subjects and classes.</p>
-          <div class="feature-meta">
-            <span><i class="fas fa-download"></i> Updated weekly</span>
-            <span><i class="fas fa-arrow-right"></i></span>
-          </div>
-        </div>
-
-        <div class="feature-card" onclick="viewProfiles()">
-          <div class="feature-header">
-            <div class="feature-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">
-              <i class="fas fa-address-book"></i>
-            </div>
-            <h3>Staff Directory</h3>
-          </div>
-          <p>View profiles and contact information for other teachers and administrators. Schedule meetings and collaborate.</p>
-          <div class="feature-meta">
-            <span><i class="fas fa-user-friends"></i> 48 active</span>
-            <span><i class="fas fa-arrow-right"></i></span>
-          </div>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <div class="feature-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
-              <i class="fas fa-chart-pie"></i>
-            </div>
-            <h3>Progress Analytics</h3>
-          </div>
-          <p>Track your result submission progress for the current term. Visualize completion rates and pending tasks.</p>
-          <div class="feature-meta">
-            <div>
-              <svg class="progress-ring" viewBox="0 0 40 40">
-                <circle class="progress-ring-circle" stroke="#fb923c" stroke-width="4" fill="transparent"
-                  r="18" cx="20" cy="20" stroke-dasharray="113" stroke-dashoffset="28">
-                </circle>
-              </svg>
-            </div>
-            <div>
-              <div class="metric-value">75%</div>
-              <div class="metric-label">Completed</div>
-            </div>
+            <h3>Class Teacher</h3>
+            <div class="stat-value" id="classTeacherDisplay">-</div>
           </div>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- SELECTION VIEW -->
   <div id="selectionView" class="view">
     <div class="selection-container">
       <div class="selection-header">
         <div>
           <h1>Score Entry</h1>
-          <p>Select subject and class to begin entering scores</p>
+          <p>Select subject and class to begin</p>
         </div>
         <button class="back-button" onclick="backToDashboard()">
           <i class="fas fa-arrow-left"></i>
@@ -1200,12 +1018,6 @@
           <label>Subject</label>
           <select id="subjectSelect" class="styled-select" onchange="updateClasses()">
             <option value="">Select a subject</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="English Language">English Language</option>
-            <option value="Physics">Physics</option>
-            <option value="Chemistry">Chemistry</option>
-            <option value="Biology">Biology</option>
-            <option value="Computer Science">Computer Science</option>
           </select>
         </div>
 
@@ -1224,13 +1036,12 @@
     </div>
   </div>
 
-  <!-- ENTRY VIEW -->
   <div id="entryView" class="view entry-view">
     <div class="entry-container">
       <div class="entry-header">
         <div class="entry-title">
-          <h2 id="entryTitle">Mathematics - JSS1A</h2>
-          <p><i class="fas fa-calendar-alt"></i> 2024/2025 Term 1 • <i class="fas fa-clock"></i> Due: Dec 15, 2024</p>
+          <h2 id="entryTitle"></h2>
+          <p><i class="fas fa-calendar-alt"></i> 2024/2025 Term 1</p>
         </div>
         <div class="entry-controls">
           <button class="back-button" onclick="closeEntry()">
@@ -1245,10 +1056,9 @@
       <div class="config-section">
         <h3><i class="fas fa-sliders-h"></i> Maximum Scores Configuration</h3>
         <div class="config-grid">
-         
           <div class="config-item">
-            <label>CA3 Maximum</label>
-            <input type="number" id="maxCA3" value="40" min="0" step="1" onchange="recalculate()">
+            <label>CA Maximum</label>
+            <input type="number" id="maxCA" value="40" min="0" step="1" onchange="recalculate()">
           </div>
           <div class="config-item">
             <label>Exam Maximum</label>
@@ -1282,7 +1092,7 @@
           <div class="table-actions">
             <button class="button-secondary" onclick="validateAllScores()">
               <i class="fas fa-check-circle"></i>
-              Validate All
+              Validate
             </button>
             <button class="button-secondary" onclick="clearAllScores()">
               <i class="fas fa-eraser"></i>
@@ -1296,8 +1106,7 @@
             <thead>
               <tr>
                 <th>Student ID</th>
-              
-                <th>CA3</th>
+                <th>CA</th>
                 <th>Exam</th>
                 <th>Total</th>
                 <th>Grade</th>
@@ -1305,7 +1114,6 @@
               </tr>
             </thead>
             <tbody id="scoresBody">
-              <!-- Scores will be populated here -->
             </tbody>
           </table>
         </div>
@@ -1316,67 +1124,238 @@
           <i class="fas fa-times"></i>
           Cancel
         </button>
-        <button class="button-primary" onclick="submitScores()">
-          <i class="fas fa-paper-plane"></i>
-          Submit Scores
+        <button class="button-primary" onclick="downloadJSON()">
+          <i class="fas fa-download"></i>
+          Download JSON
+        </button>
+        <button class="button-primary" onclick="emailJSON()">
+          <i class="fas fa-envelope"></i>
+          Email to Admin
         </button>
       </div>
     </div>
   </div>
 
   <script>
-    // Application State
+    const ADMIN_EMAIL = 'artificialiman111@gmail.com';
+
+    const TEACHERS = {
+      'T001': {
+        id: 'T001',
+        name: 'Mr Aladesihun',
+        firstName: 'Aladesihun',
+        subjects: {
+          'Civic': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Government': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        role: 'Principal'
+      },
+      'T002': {
+        id: 'T002',
+        name: 'Mr Muritala',
+        firstName: 'Muritala',
+        subjects: {
+          'English': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        role: 'Vice Principal'
+      },
+      'T003': {
+        id: 'T003',
+        name: 'Pst Dada',
+        firstName: 'Dada',
+        subjects: {
+          'Yoruba': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'CRS': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        }
+      },
+      'T004': {
+        id: 'T004',
+        name: 'Mr Tony',
+        firstName: 'Tony',
+        subjects: {
+          'Physics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Mathematics': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'SS2 Science'
+      },
+      'T005': {
+        id: 'T005',
+        name: 'Mrs Odesoji',
+        firstName: 'Odesoji',
+        subjects: {
+          'English': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'SS1 Actuarial'
+      },
+      'T006': {
+        id: 'T006',
+        name: 'Mrs Akanji',
+        firstName: 'Akanji',
+        subjects: {
+          'CCN': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'CRS': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS3A'
+      },
+      'T007': {
+        id: 'T007',
+        name: 'Mrs Ademuyiwa',
+        firstName: 'Ademuyiwa',
+        subjects: {
+          'Social Studies': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'Citizenship': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS1A'
+      },
+      'T008': {
+        id: 'T008',
+        name: 'Mr Abdullahi',
+        firstName: 'Abdullahi',
+        subjects: {
+          'DT': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B'],
+          'BT': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'Computer': ['JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS3B'
+      },
+      'T009': {
+        id: 'T009',
+        name: 'Miss Shukurat',
+        firstName: 'Shukurat',
+        subjects: {
+          'Commerce': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Marketing': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        classTeacher: 'JSS2B'
+      },
+      'T010': {
+        id: 'T010',
+        name: 'Mrs Olufunsho',
+        firstName: 'Olufunsho',
+        subjects: {
+          'Horticulture': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'History': ['JSS1A', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        classTeacher: 'JSS2A',
+        role: 'HoD'
+      },
+      'T011': {
+        id: 'T011',
+        name: 'Mrs Blessing',
+        firstName: 'Blessing',
+        subjects: {
+          'Basic Science': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'PHE': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'SS1 Science'
+      },
+      'T012': {
+        id: 'T012',
+        name: 'Mrs Adewale',
+        firstName: 'Adewale',
+        subjects: {
+          'Business Studies': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS1B'
+      },
+      'T013': {
+        id: 'T013',
+        name: 'Mr Daniel',
+        firstName: 'Daniel',
+        subjects: {
+          'Agriculture': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Livestock': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        classTeacher: 'SS3 Actuarial',
+        role: 'Web Secretary'
+      },
+      'T014': {
+        id: 'T014',
+        name: 'Mr Wisdom',
+        firstName: 'Wisdom',
+        subjects: {
+          'Mathematics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        role: 'Exams Director'
+      },
+      'T015': {
+        id: 'T015',
+        name: 'Mr Iman',
+        firstName: 'Iman',
+        subjects: {
+          'Chemistry': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Data Processing': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Further Mathematics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        classTeacher: 'SS2 Actuarial',
+        role: 'Web Developer'
+      },
+      'T016': {
+        id: 'T016',
+        name: 'Mrs Taiwo',
+        firstName: 'Taiwo',
+        subjects: {
+          'Yoruba': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        partTime: true
+      },
+      'T017': {
+        id: 'T017',
+        name: 'Mr Emmanuel',
+        firstName: 'Emmanuel',
+        subjects: {
+          'Economics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Accounting': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        partTime: true
+      },
+      'T018': {
+        id: 'T018',
+        name: 'Mr Deji',
+        firstName: 'Deji',
+        subjects: {
+          'Biology': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        partTime: true
+      },
+      'T019': {
+        id: 'T019',
+        name: 'Mr Chika',
+        firstName: 'Chika',
+        subjects: {
+          'Literature': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        partTime: true
+      },
+      'T020': {
+        id: 'T020',
+        name: 'Madam Nwosu',
+        firstName: 'Nwosu',
+        subjects: {
+          'French': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        partTime: true
+      }
+    };
+
     const state = {
       teacher: null,
-      subjects: {
-        'Mathematics': ['JSS1A', 'JSS2B', 'SSS1A', 'SSS2C'],
-        'English Language': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS3A'],
-        'Physics': ['SSS2A', 'SSS2B', 'SSS3A', 'SSS3B'],
-        'Chemistry': ['SSS2A', 'SSS2B', 'SSS3A'],
-        'Biology': ['SSS1A', 'SSS1B', 'SSS2A'],
-        'Computer Science': ['SSS1A', 'SSS2A', 'SSS3A']
-      },
       students: [],
       scores: {},
-      maxValues: { CA3: 20, exam: 60 },
+      maxValues: { CA: 40, exam: 60 },
       currentSubject: null,
       currentClass: null,
       isAuthenticated: false
     };
 
-    // Mock teacher data (in real app, this would come from API)
-    const mockTeachers = {
-      'T001': {
-        id: 'T001',
-        name: 'Mr. Wisdom',
-        firstName: 'John',
-        department: 'Mathematics',
-        email: 'wisdom@school.edu',
-        phone: '+2348012345678',
-        currentTerm: '2024/2025 Term 1',
-        token: 'mock_jwt_token_12345'
-      },
-      'T002': {
-        id: 'T002',
-        name: 'Mrs. shukurat',
-        firstName: 'Sarah',
-        department: 'English Language',
-        email: 'shukurat@school.edu',
-        phone: '+2348023456789',
-        currentTerm: '2024/2025 Term 1',
-        token: 'mock_jwt_token_67890'
-      }
-    };
-
-    // Initialize application
     document.addEventListener('DOMContentLoaded', () => {
       checkAuthStatus();
       setupEventListeners();
     });
 
     function checkAuthStatus() {
-      const token = localStorage.getItem('teacherToken');
-      const teacherData = localStorage.getItem('teacherData');
+      const token = sessionStorage.getItem('teacherToken');
+      const teacherData = sessionStorage.getItem('teacherData');
       
       if (token && teacherData) {
         try {
@@ -1390,21 +1369,12 @@
     }
 
     function setupEventListeners() {
-      // Auto-enable submit button when class is selected
       document.getElementById('classSelect').addEventListener('change', function() {
         const btn = document.getElementById('openEntryBtn');
         btn.disabled = !this.value;
       });
-
-      // Enter key submits login form
-      document.getElementById('password').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          document.getElementById('loginForm').requestSubmit();
-        }
-      });
     }
 
-    // Authentication Functions
     async function login(e) {
       e.preventDefault();
       
@@ -1414,33 +1384,27 @@
       const loginText = document.getElementById('loginText');
       const loginLoading = document.getElementById('loginLoading');
 
-      // Show loading state
       loginText.style.display = 'none';
       loginLoading.style.display = 'inline-block';
       loginBtn.disabled = true;
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       try {
-        // In a real app, this would be an API call
-        if (teacherId in mockTeachers && password === 'password') {
-          state.teacher = mockTeachers[teacherId];
+        if (teacherId in TEACHERS && password === 'password') {
+          state.teacher = TEACHERS[teacherId];
           state.isAuthenticated = true;
 
-          // Store auth data
-          localStorage.setItem('teacherToken', state.teacher.token);
-          localStorage.setItem('teacherData', JSON.stringify(state.teacher));
+          sessionStorage.setItem('teacherToken', 'token_' + teacherId);
+          sessionStorage.setItem('teacherData', JSON.stringify(state.teacher));
 
           showDashboard();
-          showNotification('success', `Welcome back, ${state.teacher.firstName}!`);
         } else {
-          throw new Error('Invalid credentials');
+          alert('Invalid teacher ID or password');
         }
       } catch (error) {
-        showNotification('error', 'Invalid teacher ID or password. Please try again.');
+        alert('Login failed. Please try again.');
       } finally {
-        // Reset button state
         loginText.style.display = 'inline';
         loginLoading.style.display = 'none';
         loginBtn.disabled = false;
@@ -1451,18 +1415,16 @@
       if (confirm('Are you sure you want to logout?')) {
         clearAuth();
         showView('authView');
-        showNotification('success', 'Logged out successfully');
       }
     }
 
     function clearAuth() {
-      localStorage.removeItem('teacherToken');
-      localStorage.removeItem('teacherData');
+      sessionStorage.removeItem('teacherToken');
+      sessionStorage.removeItem('teacherData');
       state.teacher = null;
       state.isAuthenticated = false;
     }
 
-    // Navigation Functions
     function showView(viewId) {
       document.querySelectorAll('.view').forEach(v => {
         v.classList.remove('active');
@@ -1471,6 +1433,7 @@
     }
 
     function goToScoreEntry() {
+      populateSubjects();
       showView('selectionView');
     }
 
@@ -1479,31 +1442,43 @@
     }
 
     function closeEntry() {
-      if (confirm('Are you sure you want to leave? Any unsaved changes will be lost.')) {
+      if (confirm('Unsaved changes will be lost. Continue?')) {
         showView('selectionView');
       }
     }
 
-    function viewLessonNotes() {
-      showNotification('info', 'Lesson Notes feature is coming soon!', 3000);
-    }
-
-    function viewProfiles() {
-      showNotification('info', 'Staff Directory is coming soon!', 3000);
-    }
-
-    // Dashboard Functions
     function showDashboard() {
       if (!state.teacher) return;
 
-      // Update UI with teacher data
       document.getElementById('teacherName').textContent = state.teacher.name;
       document.getElementById('teacherFirstName').textContent = state.teacher.firstName;
+      document.getElementById('teacherIdDisplay').textContent = state.teacher.id;
+      
+      const subjectCount = Object.keys(state.teacher.subjects).length;
+      const allClasses = new Set();
+      Object.values(state.teacher.subjects).forEach(classes => {
+        classes.forEach(c => allClasses.add(c));
+      });
+      
+      document.getElementById('subjectCount').textContent = subjectCount;
+      document.getElementById('classCount').textContent = allClasses.size;
+      document.getElementById('classTeacherDisplay').textContent = state.teacher.classTeacher || '-';
       
       showView('dashboardView');
     }
 
-    // Selection Functions
+    function populateSubjects() {
+      const select = document.getElementById('subjectSelect');
+      select.innerHTML = '<option value="">Select a subject</option>';
+      
+      Object.keys(state.teacher.subjects).forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        select.appendChild(option);
+      });
+    }
+
     function updateClasses() {
       const subject = document.getElementById('subjectSelect').value;
       const classSelect = document.getElementById('classSelect');
@@ -1518,14 +1493,14 @@
 
       classSelect.disabled = false;
       classSelect.innerHTML = '<option value="">Select a class</option>' +
-        state.subjects[subject].map(c => `<option value="${c}">${c}</option>`).join('');
+        state.teacher.subjects[subject].map(c => `<option value="${c}">${c}</option>`).join('');
       
       btn.disabled = true;
     }
 
     function generateStudents(count = 30) {
-      const firstNames = ['John', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'James', 'Olivia', 'Robert', 'Sophia'];
-      const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+      const firstNames = ['Abiodun', 'Chioma', 'Emeka', 'Fatima', 'Ibrahim', 'Kemi', 'Olu', 'Ngozi', 'Tunde', 'Zainab'];
+      const lastNames = ['Adebayo', 'Okafor', 'Musa', 'Bello', 'Okonkwo', 'Hassan', 'Eze', 'Mohammed', 'Obi', 'Yusuf'];
       
       return Array.from({ length: count }, (_, i) => ({
         id: `STU${String(i + 1).padStart(4, '0')}`,
@@ -1533,7 +1508,6 @@
       }));
     }
 
-    // Entry View Functions
     async function openEntry() {
       const subject = document.getElementById('subjectSelect').value;
       const className = document.getElementById('classSelect').value;
@@ -1544,10 +1518,8 @@
       state.currentClass = className;
       state.students = generateStudents(30);
 
-      // Update UI
       document.getElementById('entryTitle').textContent = `${subject} - ${className}`;
       
-      // Load or initialize scores
       await loadScores();
       renderTable();
       recalculate();
@@ -1556,10 +1528,10 @@
     }
 
     async function loadScores() {
-      const key = `teacher:${state.teacher.id}:term:${state.teacher.currentTerm}:${state.currentSubject}:${state.currentClass}`;
+      const key = `${state.teacher.id}:${state.currentSubject}:${state.currentClass}`;
       
       try {
-        const saved = localStorage.getItem(key);
+        const saved = sessionStorage.getItem(key);
         if (saved) {
           state.scores = JSON.parse(saved);
         } else {
@@ -1573,19 +1545,15 @@
     function initializeScores() {
       state.scores = {};
       state.students.forEach(s => {
-        state.scores[s.id] = { 
-          
-          CA3: 0, 
-          exam: 0 
-        };
+        state.scores[s.id] = { CA: 0, exam: 0 };
       });
     }
 
     function renderTable() {
       const tbody = document.getElementById('scoresBody');
       tbody.innerHTML = state.students.map((s, index) => {
-        const sc = state.scores[s.id] || { CA3: 0, exam: 0 };
-        const total = sc.CA3 + sc.exam;
+        const sc = state.scores[s.id] || { CA: 0, exam: 0 };
+        const total = sc.CA + sc.exam;
         const grade = getGrade(total);
         const status = total > 0 ? 'Entered' : 'Pending';
 
@@ -1595,43 +1563,32 @@
               <strong>${s.id}</strong><br>
               <small style="color: var(--text-muted);">${s.name}</small>
             </td>
-            
             <td>
-              <input type="number" min="0" max="${state.maxValues.CA3}" 
-                     value="${sc.CA3}" 
+              <input type="number" min="0" max="${state.maxValues.CA}" 
+                     value="${sc.CA}" 
                      data-student="${s.id}" 
-                     data-field="CA3"
-                     onchange="updateScore('${s.id}', 'CA3', this.value)"
-                     onfocus="highlightRow(${index})">
+                     data-field="CA"
+                     onchange="updateScore('${s.id}', 'CA', this.value)">
             </td>
             <td>
               <input type="number" min="0" max="${state.maxValues.exam}" 
                      value="${sc.exam}" 
                      data-student="${s.id}" 
                      data-field="exam"
-                     onchange="updateScore('${s.id}', 'exam', this.value)"
-                     onfocus="highlightRow(${index})">
+                     onchange="updateScore('${s.id}', 'exam', this.value)">
             </td>
-            <td class="computed-cell" style="font-weight: 600; font-size: 1.1rem;">${total}</td>
+            <td style="font-weight: 600; font-size: 1.1rem;">${total}</td>
             <td>
               <span class="grade-badge grade-${grade.toLowerCase()}">${grade}</span>
             </td>
             <td>
-              <span style="color: ${status === 'Entered' ? '#4ade80' : '#f87171'}; 
-                           font-size: 0.85rem; font-weight: 500;">
+              <span style="color: ${status === 'Entered' ? '#4ade80' : '#f87171'}; font-size: 0.85rem; font-weight: 500;">
                 ${status}
               </span>
             </td>
           </tr>
         `;
       }).join('');
-    }
-
-    function highlightRow(index) {
-      const rows = document.querySelectorAll('#scoresBody tr');
-      rows.forEach((row, i) => {
-        row.style.backgroundColor = i === index ? 'rgba(59, 130, 246, 0.1)' : '';
-      });
     }
 
     function updateScore(studentId, field, value) {
@@ -1648,21 +1605,21 @@
         input.classList.remove('invalid');
       }
 
+      const key = `${state.teacher.id}:${state.currentSubject}:${state.currentClass}`;
+      sessionStorage.setItem(key, JSON.stringify(state.scores));
+
       recalculate();
     }
 
     function recalculate() {
-      // Update max values from config
       state.maxValues = {
-        
-        CA3: parseFloat(document.getElementById('maxCA3').value) || 0,
+        CA: parseFloat(document.getElementById('maxCA').value) || 0,
         exam: parseFloat(document.getElementById('maxExam').value) || 0
       };
 
-      // Calculate statistics
       const totals = state.students.map(s => {
-        const sc = state.scores[s.id] || { CA3: 0, exam: 0 };
-        return sc.CA3 + sc.exam;
+        const sc = state.scores[s.id] || { CA: 0, exam: 0 };
+        return sc.CA + sc.exam;
       });
 
       const validTotals = totals.filter(t => t > 0);
@@ -1670,36 +1627,14 @@
         ? validTotals.reduce((a, b) => a + b, 0) / validTotals.length 
         : 0;
 
-      const maxTotal =  
-                       state.maxValues.CA3 + state.maxValues.exam;
-      const percentages = totals.map(t => (t / maxTotal) * 100);
-
-      // Update UI
       document.getElementById('totalStudents').textContent = state.students.length;
       document.getElementById('classAvg').textContent = avg.toFixed(1);
       document.getElementById('highest').textContent = validTotals.length > 0 ? Math.max(...validTotals) : 0;
       document.getElementById('lowest').textContent = validTotals.length > 0 ? Math.min(...validTotals) : 0;
-
-      // Update table with recalculated totals and grades
-      const rows = document.querySelectorAll('#scoresBody tr');
-      rows.forEach((row, i) => {
-        const totalCell = row.querySelector('.computed-cell');
-        const gradeCell = row.querySelector('.grade-badge');
-        
-        if (totalCell && gradeCell) {
-          const total = totals[i];
-          const grade = getGrade(total);
-          
-          totalCell.textContent = total;
-          gradeCell.className = `grade-badge grade-${grade.toLowerCase()}`;
-          gradeCell.textContent = grade;
-        }
-      });
     }
 
     function getGrade(total) {
-      const maxTotal =  
-                       state.maxValues.CA3 + state.maxValues.exam;
+      const maxTotal = state.maxValues.CA + state.maxValues.exam;
       const pct = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
       
       if (pct >= 70) return 'A';
@@ -1727,92 +1662,148 @@
       });
 
       if (hasErrors) {
-        showNotification('error', 'Some scores exceed maximum limits. Please fix them.', 5000);
+        showNotification('error', 'Some scores exceed maximum limits', 3000);
       } else {
         showNotification('success', 'All scores are valid!', 3000);
       }
     }
 
     function clearAllScores() {
-      if (confirm('Are you sure you want to clear all scores?')) {
+      if (confirm('Clear all scores?')) {
         state.students.forEach(s => {
-          state.scores[s.id] = { CA3: 0, exam: 0 };
+          state.scores[s.id] = { CA: 0, exam: 0 };
         });
         renderTable();
         recalculate();
-        showNotification('warning', 'All scores have been cleared', 3000);
+        showNotification('warning', 'All scores cleared', 3000);
       }
     }
 
-    async function submitScores() {
-      // Validate before submission
+    function downloadJSON() {
       validateAllScores();
       
       const invalidInputs = document.querySelectorAll('#scoresBody input.invalid');
       if (invalidInputs.length > 0) {
-        showNotification('error', 'Please fix validation errors before submitting', 5000);
+        showNotification('error', 'Fix validation errors before downloading', 3000);
         return;
       }
 
-      // Check if all scores are zero (empty submission)
-      const allZero = state.students.every(s => {
-        const sc = state.scores[s.id];
-        return sc.CA3 === 0 && sc.exam === 0;
-      });
-
-      if (allZero) {
-        showNotification('warning', 'All scores are zero. Are you sure you want to submit?', 5000);
-        if (!confirm('All scores are set to zero. Do you want to proceed with submission?')) {
-          return;
+      const data = {
+        metadata: {
+          teacher: {
+            id: state.teacher.id,
+            name: state.teacher.name
+          },
+          subject: state.currentSubject,
+          class: state.currentClass,
+          term: '2024/2025 Term 1',
+          submittedAt: new Date().toISOString(),
+          maxScores: state.maxValues
+        },
+        students: state.students.map(s => {
+          const sc = state.scores[s.id];
+          const total = sc.CA + sc.exam;
+          return {
+            studentId: s.id,
+            name: s.name,
+            scores: {
+              CA: sc.CA,
+              exam: sc.exam,
+              total: total,
+              grade: getGrade(total)
+            }
+          };
+        }),
+        statistics: {
+          totalStudents: state.students.length,
+          classAverage: parseFloat(document.getElementById('classAvg').textContent),
+          highest: parseInt(document.getElementById('highest').textContent),
+          lowest: parseInt(document.getElementById('lowest').textContent)
         }
-      }
+      };
 
-      // Simulate API submission
-      showNotification('info', 'Submitting scores...', 2000);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const filename = `${state.teacher.id}_${state.currentSubject.replace(/\s+/g, '-')}_${state.currentClass.replace(/\s+/g, '-')}_${Date.now()}.json`;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      try {
-        // Save to localStorage (simulating API call)
-        const key = `teacher:${state.teacher.id}:term:${state.teacher.currentTerm}:${state.currentSubject}:${state.currentClass}`;
-        localStorage.setItem(key, JSON.stringify(state.scores));
-
-        // Update completion status
-        updateCompletionStatus();
-
-        showNotification('success', 'Scores submitted successfully!', 3000);
-
-        // Return to dashboard after delay
-        setTimeout(() => {
-          showView('dashboardView');
-          showNotification('success', 'Your scores have been saved.', 3000);
-        }, 2000);
-
-      } catch (error) {
-        showNotification('error', 'Failed to submit scores. Please try again.', 5000);
-      }
+      showNotification('success', 'JSON downloaded successfully!', 3000);
     }
 
-    function updateCompletionStatus() {
-      // In a real app, this would update the completion percentage
-      const progressElement = document.querySelector('.metric-value');
-      if (progressElement) {
-        // Simulate progress increase
-        const current = parseInt(progressElement.textContent) || 0;
-        const newValue = Math.min(current + 5, 100);
-        progressElement.textContent = `${newValue}%`;
-        
-        // Update progress ring
-        const circle = document.querySelector('.progress-ring-circle');
-        if (circle) {
-          const circumference = 2 * Math.PI * 18;
-          const offset = circumference - (newValue / 100) * circumference;
-          circle.style.strokeDashoffset = offset;
-        }
+    function emailJSON() {
+      validateAllScores();
+      
+      const invalidInputs = document.querySelectorAll('#scoresBody input.invalid');
+      if (invalidInputs.length > 0) {
+        showNotification('error', 'Fix validation errors before emailing', 3000);
+        return;
       }
+
+      const data = {
+        metadata: {
+          teacher: {
+            id: state.teacher.id,
+            name: state.teacher.name
+          },
+          subject: state.currentSubject,
+          class: state.currentClass,
+          term: '2024/2025 Term 1',
+          submittedAt: new Date().toISOString(),
+          maxScores: state.maxValues
+        },
+        students: state.students.map(s => {
+          const sc = state.scores[s.id];
+          const total = sc.CA + sc.exam;
+          return {
+            studentId: s.id,
+            name: s.name,
+            scores: {
+              CA: sc.CA,
+              exam: sc.exam,
+              total: total,
+              grade: getGrade(total)
+            }
+          };
+        }),
+        statistics: {
+          totalStudents: state.students.length,
+          classAverage: parseFloat(document.getElementById('classAvg').textContent),
+          highest: parseInt(document.getElementById('highest').textContent),
+          lowest: parseInt(document.getElementById('lowest').textContent)
+        }
+      };
+
+      const jsonString = JSON.stringify(data, null, 2);
+      const subject = `Score Submission: ${state.currentSubject} - ${state.currentClass}`;
+      const body = `Teacher: ${state.teacher.name} (${state.teacher.id})
+Subject: ${state.currentSubject}
+Class: ${state.currentClass}
+Term: 2024/2025 Term 1
+Submitted: ${new Date().toLocaleString()}
+
+Total Students: ${state.students.length}
+Class Average: ${document.getElementById('classAvg').textContent}
+
+Please find the complete JSON data below (copy and paste):
+
+${jsonString}
+
+---
+This is an automated submission from the Teacher Portal.`;
+
+      const mailtoLink = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      window.location.href = mailtoLink;
+      
+      showNotification('success', 'Email client opened! Send the email to complete submission.', 5000);
     }
 
-    // Notification System
     function showNotification(type, message, duration = 5000) {
       const notif = document.getElementById('entryNotification');
       notif.className = `notification ${type} show`;
@@ -1838,46 +1829,15 @@
       }
     }
 
-    // Export/Import Functions (for future enhancement)
-    function exportScores() {
-      const data = {
-        subject: state.currentSubject,
-        class: state.currentClass,
-        term: state.teacher.currentTerm,
-        maxScores: state.maxValues,
-        scores: state.scores,
-        exportedAt: new Date().toISOString()
-      };
-
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `scores_${state.currentSubject}_${state.currentClass}_${Date.now()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      showNotification('success', 'Scores exported successfully', 3000);
-    }
-
-    function importScores() {
-      // This would handle file upload and parsing
-      showNotification('info', 'Import feature coming soon!', 3000);
-    }
-
-    // Initialize the application
     window.addEventListener('load', () => {
-      // Check if user was already logged in
-      const savedTeacher = localStorage.getItem('teacherData');
+      const savedTeacher = sessionStorage.getItem('teacherData');
       if (savedTeacher) {
         try {
           state.teacher = JSON.parse(savedTeacher);
           showDashboard();
         } catch (e) {
-          localStorage.removeItem('teacherData');
-          localStorage.removeItem('teacherToken');
+          sessionStorage.removeItem('teacherData');
+          sessionStorage.removeItem('teacherToken');
         }
       }
     });
