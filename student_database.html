@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Database - Tendercare School</title>
+<style>
+:root {
+--primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+--glass-bg: rgba(255, 255, 255, 0.25);
+--glass-border: rgba(255, 255, 255, 0.18);
+--blur-amount: 10px;
+--text-primary: #1a202c;
+--text-secondary: #4a5568;
+--text-light: #a0aec0;
+--spacing-xs: 8px;
+--spacing-sm: 12px;
+--spacing-md: 16px;
+--spacing-lg: 24px;
+--spacing-xl: 32px;
+--radius-sm: 8px;
+--radius-md: 12px;
+--radius-full: 9999px;
+--transition: all 0.3s ease;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+min-height: 100vh;
+color: var(--text-primary);
+}
+
+.glass-nav {
+background: var(--glass-bg);
+backdrop-filter: blur(var(--blur-amount));
+-webkit-backdrop-filter: blur(var(--blur-amount));
+border-bottom: 1px solid var(--glass-border);
+position: sticky;
+top: 0;
+z-index: 100;
+}
+
+.nav-content {
+max-width: 1400px;
+margin: 0 auto;
+padding: var(--spacing-md);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.nav-left {
+display: flex;
+align-items: center;
+gap: var(--spacing-md);
+}
+
+.school-crest {
+width: 48px;
+height: 48px;
+background: var(--primary-gradient);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+}
+
+.school-crest::before {
+content: '🎓';
+}
+
+.nav-text h1 {
+font-size: 20px;
+font-weight: 700;
+color: white;
+}
+
+.nav-text p {
+font-size: 14px;
+color: rgba(255, 255, 255, 0.9);
+}
+
+.container {
+max-width: 1400px;
+margin: 0 auto;
+padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.header {
+text-align: center;
+margin-bottom: var(--spacing-xl);
+}
+
+.header h2 {
+font-size: 36px;
+font-weight: 700;
+color: white;
+margin-bottom: var(--spacing-sm);
+}
+
+.header p {
+font-size: 18px;
+color: rgba(255, 255, 255, 0.9);
+}
+
+.controls {
+display: flex;
+gap: var(--spacing-md);
+margin-bottom: var(--spacing-lg);
+flex-wrap: wrap;
+}
+
+.search-box {
+flex: 1;
+min-width: 250px;
+padding: var(--spacing-md);
+background: var(--glass-bg);
+backdrop-filter: blur(var(--blur-amount));
+border: 1px solid var(--glass-border);
+border-radius: var(--radius-full);
+display: flex;
+align-items: center;
+gap: var(--spacing-sm);
+}
+
+.search-box input {
+flex: 1;
+background: none;
+border: none;
+outline: none;
+color: white;
+font-size: 16px;
+}
+
+.search-box input::placeholder {
+color: rgba(255, 255, 255, 0.7);
+}
+
+.filter-btn {
+background: var(--glass-bg);
+backdrop-filter: blur(var(--blur-amount));
+border: 1px solid var(--glass-border);
+padding: var(--spacing-sm) var(--spacing-lg);
+border-radius: var(--radius-full);
+color: white;
+font-weight: 600;
+cursor: pointer;
+transition: var(--transition);
+}
+
+.filter-btn:hover {
+background: rgba(255, 255, 255, 0.35);
+}
+
+.filter-btn.active {
+background: white;
+color: var(--text-primary);
+}
+
+.export-btn {
+background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+border: none;
+padding: var(--spacing-sm) var(--spacing-lg);
+border-radius: var(--radius-full);
+color: white;
+font-weight: 600;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: var(--spacing-xs);
+transition: var(--transition);
+}
+
+.export-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+}
+
+.glass-card {
+background: var(--glass-bg);
+backdrop-filter: blur(var(--blur-amount));
+-webkit-backdrop-filter: blur(var(--blur-amount));
+border: 1px solid var(--glass-border);
+border-radius: var(--radius-md);
+}
+
+.table-container {
+overflow-x: auto;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+thead {
+background: rgba(255, 255, 255, 0.1);
+}
+
+th {
+padding: var(--spacing-md);
+text-align: left;
+color: white;
+font-weight: 600;
+white-space: nowrap;
+cursor: pointer;
+user-select: none;
+}
+
+th:hover {
+background: rgba(255, 255, 255, 0.15);
+}
+
+th svg {
+display: inline-block;
+vertical-align: middle;
+margin-left: 4px;
+opacity: 0.5;
+transition: var(--transition);
+}
+
+th.sorted svg {
+opacity: 1;
+}
+
+td {
+padding: var(--spacing-md);
+color: white;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tbody tr {
+transition: var(--transition);
+}
+
+tbody tr:hover {
+background: rgba(255, 255, 255, 0.1);
+}
+
+.badge {
+display: inline-block;
+padding: 4px 12px;
+border-radius: var(--radius-full);
+font-size: 12px;
+font-weight: 600;
+}
+
+.badge-science {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+}
+
+.badge-humanities {
+background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+color: white;
+}
+
+.badge-jss3a {
+background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+color: white;
+}
+
+.badge-jss3b {
+background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+color: white;
+}
+
+.stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: var(--spacing-md);
+margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+padding: var(--spacing-lg);
+text-align: center;
+}
+
+.stat-value {
+font-size: 36px;
+font-weight: 700;
+color: white;
+margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+font-size: 14px;
+color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+.controls {
+flex-direction: column;
+}
+  
+.search-box {
+width: 100%;
+}
+  
+table {
+font-size: 14px;
+}
+  
+th, td {
+padding: var(--spacing-sm);
+}
+}
+</style>
+</head>
+<body>
+<nav class="glass-nav">
+<div class="nav-content">
+<div class="nav-left">
+<div class="school-crest"></div>
+<div class="nav-text">
+<h1>Tendercare School</h1>
+<p>Student Database Management</p>
+</div>
+</div>
+</div>
+</nav>
+
+<div class="container">
+<div class="header">
+<h2>Student Database</h2>
+<p>Complete Student Records 2025/26</p>
+</div>
+
+<div class="stats">
+<div class="glass-card stat-card">
+<div class="stat-value" id="totalStudents">0</div>
+<div class="stat-label">Total Students</div>
+</div>
+<div class="glass-card stat-card">
+<div class="stat-value" id="ss3Count">0</div>
+<div class="stat-label">SS3 Students</div>
+</div>
+<div class="glass-card stat-card">
+<div class="stat-value" id="jss3Count">0</div>
+<div class="stat-label">JSS3 Students</div>
+</div>
+</div>
+
+<div class="controls">
+<div class="search-box">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+<circle cx="11" cy="11" r="8"></circle>
+<path d="m21 21-4.35-4.35"></path>
+</svg>
+<input type="text" id="searchInput" placeholder="Search by name or ID...">
+</div>
+<button class="filter-btn active" onclick="filterClass('all')">All</button>
+<button class="filter-btn" onclick="filterClass('SS3 Science')">SS3 Science</button>
+<button class="filter-btn" onclick="filterClass('SS3 Humanities')">SS3 Humanities</button>
+<button class="filter-btn" onclick="filterClass('JSS3 A')">JSS3 A</button>
+<button class="filter-btn" onclick="filterClass('JSS3 B')">JSS3 B</button>
+<button class="export-btn" onclick="exportToCSV()">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="7 10 12 15 17 10"></polyline>
+<line x1="12" y1="15" x2="12" y2="3"></line>
+</svg>
+Export CSV
+</button>
+</div>
+
+<div class="glass-card table-container">
+<table id="studentTable">
+<thead>
+<tr>
+<th onclick="sortTable(0)">
+Name
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+</svg>
+</th>
+<th onclick="sortTable(1)">
+Student ID
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+</svg>
+</th>
+<th onclick="sortTable(2)">
+Class
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+</svg>
+</th>
+<th onclick="sortTable(3)">
+Role
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M7 10l5-5 5 5M7 14l5 5 5-5"></path>
+</svg>
+</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+</div>
+
+<script>
+const allStudents = [
+// SS3 Science
+{ name: "Angel", id: "TCH020", class: "SS3 Science", role: "-" },
+{ name: "Bamise", id: "TCH014", class: "SS3 Science", role: "-" },
+{ name: "Bright", id: "TCH002", class: "SS3 Science", role: "Head Girl" },
+{ name: "Dorcas", id: "TCH016", class: "SS3 Science", role: "-" },
+{ name: "Enoch", id: "TCH012", class: "SS3 Science", role: "-" },
+{ name: "Famous", id: "TCH004", class: "SS3 Science", role: "-" },
+{ name: "Fauziyyah", id: "TCH007", class: "SS3 Science", role: "-" },
+{ name: "Fawaz", id: "TCH021", class: "SS3 Science", role: "-" },
+{ name: "Fiyin", id: "TCH011", class: "SS3 Science", role: "-" },
+{ name: "Habitat", id: "TCH022", class: "SS3 Science", role: "-" },
+{ name: "Kaosara", id: "TCH010", class: "SS3 Science", role: "-" },
+{ name: "Khadija", id: "TCH015", class: "SS3 Science", role: "-" },
+{ name: "Mercy", id: "TCH008", class: "SS3 Science", role: "-" },
+{ name: "Michael", id: "TCH006", class: "SS3 Science", role: "-" },
+{ name: "Moyin", id: "TCH017", class: "SS3 Science", role: "-" },
+{ name: "Prosper", id: "TCH003", class: "SS3 Science", role: "-" },
+{ name: "Rita", id: "TCH019", class: "SS3 Science", role: "-" },
+{ name: "Rokibat", id: "TCH018", class: "SS3 Science", role: "-" },
+{ name: "Samuel", id: "TCH005", class: "SS3 Science", role: "-" },
+{ name: "Taiwo", id: "TCH013", class: "SS3 Science", role: "-" },
+{ name: "Temi", id: "TCH001", class: "SS3 Science", role: "Head Boy" },
+{ name: "Zainab", id: "TCH009", class: "SS3 Science", role: "-" },
+// SS3 Humanities
+{ name: "Abdul Majeed Quadri", id: "TCH-H001", class: "SS3 Humanities", role: "-" },
+{ name: "Abdul Razak Kehinde", id: "TCH-H002", class: "SS3 Humanities", role: "-" },
+{ name: "Abuh God's Power", id: "TCH-H003", class: "SS3 Humanities", role: "-" },
+{ name: "Adebayo David", id: "TCH-H004", class: "SS3 Humanities", role: "-" },
+{ name: "Adeniran Moses", id: "TCH-H005", class: "SS3 Humanities", role: "-" },
+{ name: "Adesanya Emmanuel", id: "TCH-H006", class: "SS3 Humanities", role: "-" },
+{ name: "Adisa Fathia", id: "TCH-H007", class: "SS3 Humanities", role: "-" },
+{ name: "Ajibola Roheemot", id: "TCH-H008", class: "SS3 Humanities", role: "-" },
+{ name: "Amos Wisdom", id: "TCH-H009", class: "SS3 Humanities", role: "-" },
+{ name: "Asiemor Divine", id: "TCH-H010", class: "SS3 Humanities", role: "-" },
+{ name: "Enemali Ojotoeba", id: "TCH-H011", class: "SS3 Humanities", role: "-" },
+{ name: "Falope Darasimi", id: "TCH-H012", class: "SS3 Humanities", role: "-" },
+{ name: "Famakinwa Akorede", id: "TCH-H013", class: "SS3 Humanities", role: "-" },
+{ name: "Folorunsho Petra", id: "TCH-H014", class: "SS3 Humanities", role: "-" },
+{ name: "Muritala Rashidat", id: "TCH-H015", class: "SS3 Humanities", role: "-" },
+{ name: "Olalere Aishat", id: "TCH-H016", class: "SS3 Humanities", role: "-" },
+{ name: "Oyakan Emmanuel", id: "TCH-H017", class: "SS3 Humanities", role: "-" },
+{ name: "Sowole Azeem", id: "TCH-H018", class: "SS3 Humanities", role: "-" },
+{ name: "Tujiki David", id: "TCH-H019", class: "SS3 Humanities", role: "-" },
+{ name: "Yakubu Happiness", id: "TCH-H020", class: "SS3 Humanities", role: "-" },
+// JSS3 A
+{ name: "Abdul Rasheed Rodiat", id: "TCH-3A001", class: "JSS3 A", role: "-" },
+{ name: "Abdul Sattar Yusuff", id: "TCH-3A002", class: "JSS3 A", role: "-" },
+{ name: "Abdulsamod Oseni", id: "TCH-3A003", class: "JSS3 A", role: "-" },
+{ name: "Adebayo Dorcas", id: "TCH-3A004", class: "JSS3 A", role: "-" },
+{ name: "Adebayo Favour", id: "TCH-3A005", class: "JSS3 A", role: "-" },
+{ name: "Adeniyi Darasimi", id: "TCH-3A006", class: "JSS3 A", role: "-" },
+{ name: "Aduragbemi Waheed", id: "TCH-3A007", class: "JSS3 A", role: "-" },
+{ name: "Afolayan Joshua", id: "TCH-3A008", class: "JSS3 A", role: "-" },
+{ name: "Akanji Favour", id: "TCH-3A009", class: "JSS3 A", role: "-" },
+{ name: "Akinbiyi Glory", id: "TCH-3A010", class: "JSS3 A", role: "-" },
+{ name: "Al-Ameen Olatunji", id: "TCH-3A011", class: "JSS3 A", role: "-" },
+{ name: "Albarka Garba", id: "TCH-3A012", class: "JSS3 A", role: "-" },
+{ name: "Amusat Khalilulahi O.", id: "TCH-3A013", class: "JSS3 A", role: "-" },
+{ name: "Aransiola", id: "TCH-3A014", class: "JSS3 A", role: "-" },
+{ name: "Ayowole Emmanuel", id: "TCH-3A015", class: "JSS3 A", role: "-" },
+{ name: "Balogun Jomiloju", id: "TCH-3A016", class: "JSS3 A", role: "-" },
+{ name: "Blessing Sunny", id: "TCH-3A017", class: "JSS3 A", role: "-" },
+{ name: "David Nathaniel", id: "TCH-3A018", class: "JSS3 A", role: "-" },
+{ name: "Fausiyat Olowu", id: "TCH-3A019", class: "JSS3 A", role: "-" },
+{ name: "Fawas Salawudeen", id: "TCH-3A020", class: "JSS3 A", role: "-" },
+{ name: "Folorunsho Precious", id: "TCH-3A021", class: "JSS3 A", role: "-" },
+{ name: "Godswill Ibhadore", id: "TCH-3A022", class: "JSS3 A", role: "-" },
+{ name: "Idera Kolade", id: "TCH-3A023", class: "JSS3 A", role: "-" },
+{ name: "Israel Oyewole", id: "TCH-3A024", class: "JSS3 A", role: "-" },
+{ name: "Jomiloju Praise Irinyemi", id: "TCH-3A025", class: "JSS3 A", role: "-" },
+{ name: "Maxwell Emmanuel", id: "TCH-3A026", class: "JSS3 A", role: "-" },
+{ name: "Nanmwa Victor", id: "TCH-3A027", class: "JSS3 A", role: "-" },
+{ name: "Nurudeen Nyakos", id: "TCH-3A028", class: "JSS3 A", role: "-" },
+{ name: "Ogunlana Abdullahi", id: "TCH-3A029", class: "JSS3 A", role: "-" },
+{ name: "Okwuabudike Victoria", id: "TCH-3A030", class: "JSS3 A", role: "-" },
+{ name: "Oluborode True Vine", id: "TCH-3A031", class: "JSS3 A", role: "-" },
+{ name: "Oluwanifemi Fatuki", id: "TCH-3A032", class: "JSS3 A", role: "-" },
+{ name: "Priscilla Emmanuel", id: "TCH-3A033", class: "JSS3 A", role: "-" },
+{ name: "Ramadan Owoyele", id: "TCH-3A034", class: "JSS3 A", role: "-" },
+{ name: "Sonia C.C. Nelson", id: "TCH-3A035", class: "JSS3 A", role: "-" },
+{ name: "Taiwo Yusuf", id: "TCH-3A036", class: "JSS3 A", role: "-" },
+{ name: "Wisdom Donald", id: "TCH-3A037", class: "JSS3 A", role: "-" },
+// JSS3 B
+{ name: "Abdul Razak Somod", id: "TCH-3B001", class: "JSS3 B", role: "-" },
+{ name: "Adebisi Aishat", id: "TCH-3B002", class: "JSS3 B", role: "-" },
+{ name: "Adebisi Ayomide", id: "TCH-3B003", class: "JSS3 B", role: "-" },
+{ name: "Adebisi Yusuf", id: "TCH-3B004", class: "JSS3 B", role: "-" },
+{ name: "Adeniyi Korede", id: "TCH-3B005", class: "JSS3 B", role: "-" },
+{ name: "Adewunmi Oluwademilade", id: "TCH-3B006", class: "JSS3 B", role: "-" },
+{ name: "Aduragbemi Popoola", id: "TCH-3B007", class: "JSS3 B", role: "-" },
+{ name: "Agbo Favour", id: "TCH-3B008", class: "JSS3 B", role: "-" },
+{ name: "Akinfe Christianah", id: "TCH-3B009", class: "JSS3 B", role: "-" },
+{ name: "Alexander Folorunsho", id: "TCH-3B010", class: "JSS3 B", role: "-" },
+{ name: "Ambrose Emmanuella", id: "TCH-3B011", class: "JSS3 B", role: "-" },
+{ name: "Angel Medua", id: "TCH-3B012", class: "JSS3 B", role: "-" },
+{ name: "Ariyo Moses", id: "TCH-3B013", class: "JSS3 B", role: "-" },
+{ name: "Ayobami Olasunkanmi", id: "TCH-3B014", class: "JSS3 B", role: "-" },
+{ name: "Ayoade Doris", id: "TCH-3B015", class: "JSS3 B", role: "-" },
+{ name: "Balogun Tobiloba", id: "TCH-3B016", class: "JSS3 B", role: "-" },
+{ name: "David Opatimeyin", id: "TCH-3B017", class: "JSS3 B", role: "-" },
+{ name: "David Oyeniyi", id: "TCH-3B018", class: "JSS3 B", role: "-" },
+{ name: "Emmanuella Soyode", id: "TCH-3B019", class: "JSS3 B", role: "-" },
+{ name: "Enabulele Israel", id: "TCH-3B020", class: "JSS3 B", role: "-" },
+{ name: "Eniola Rotimi", id: "TCH-3B021", class: "JSS3 B", role: "-" },
+{ name: "Esther Lawal", id: "TCH-3B022", class: "JSS3 B", role: "-" },
+{ name: "Faluyi Israel", id: "TCH-3B023", class: "JSS3 B", role: "-" },
+{ name: "Feranmi Olukotun", id: "TCH-3B024", class: "JSS3 B", role: "-" },
+{ name: "Gabriel Peace", id: "TCH-3B025", class: "JSS3 B", role: "-" },
+{ name: "Kayode Olajesu", id: "TCH-3B026", class: "JSS3 B", role: "-" },
+{ name: "Loveth Samson", id: "TCH-3B027", class: "JSS3 B", role: "-" },
+{ name: "Naimat Nyakos", id: "TCH-3B028", class: "JSS3 B", role: "-" },
+{ name: "Onafowokan Ridwan", id: "TCH-3B029", class: "JSS3 B", role: "-" },
+{ name: "Peace Gabriel", id: "TCH-3B030", class: "JSS3 B", role: "-" },
+{ name: "Peace Uduakhomo", id: "TCH-3B031", class: "JSS3 B", role: "-" },
+{ name: "Zainab Samuel", id: "TCH-3B032", class: "JSS3 B", role: "-" }
+];
+
+let filteredStudents = [...allStudents];
+let currentSort = { column: null, ascending: true };
+
+function getClassBadge(className) {
+const badges = {
+'SS3 Science': 'badge-science',
+'SS3 Humanities': 'badge-humanities',
+'JSS3 A': 'badge-jss3a',
+'JSS3 B': 'badge-jss3b'
+};
+return `<span class="badge ${badges[className]}">${className}</span>`;
+}
+
+function renderTable(students = filteredStudents) {
+const tbody = document.getElementById('tableBody');
+tbody.innerHTML = students.map(s => `
+<tr>
+<td>${s.name}</td>
+<td>${s.id}</td>
+<td>${getClassBadge(s.class)}</td>
+<td>${s.role}</td>
+</tr>
+`).join('');
+}
+
+function updateStats() {
+document.getElementById('totalStudents').textContent = allStudents.length;
+document.getElementById('ss3Count').textContent = allStudents.filter(s => s.class.startsWith('SS3')).length;
+document.getElementById('jss3Count').textContent = allStudents.filter(s => s.class.startsWith('JSS3')).length;
+}
+
+function filterClass(className) {
+const btns = document.querySelectorAll('.filter-btn');
+btns.forEach(btn => btn.classList.remove('active'));
+event.target.classList.add('active');
+  
+if (className === 'all') {
+filteredStudents = [...allStudents];
+} else {
+filteredStudents = allStudents.filter(s => s.class === className);
+}
+renderTable();
+}
+
+function sortTable(columnIndex) {
+const headers = document.querySelectorAll('th');
+const columns = ['name', 'id', 'class', 'role'];
+const column = columns[columnIndex];
+  
+if (currentSort.column === columnIndex) {
+currentSort.ascending = !currentSort.ascending;
+} else {
+currentSort.column = columnIndex;
+currentSort.ascending = true;
+}
+  
+headers.forEach((h, i) => h.classList.toggle('sorted', i === columnIndex));
+  
+filteredStudents.sort((a, b) => {
+let aVal = a[column];
+let bVal = b[column];
+    
+if (currentSort.ascending) {
+return aVal > bVal ? 1 : -1;
+} else {
+return aVal < bVal ? 1 : -1;
+}
+});
+  
+renderTable();
+}
+
+function exportToCSV() {
+const headers = ['Name', 'Student ID', 'Class', 'Role'];
+const rows = filteredStudents.map(s => [s.name, s.id, s.class, s.role]);
+  
+let csv = headers.join(',') + '\n';
+csv += rows.map(r => r.join(',')).join('\n');
+  
+const blob = new Blob([csv], { type: 'text/csv' });
+const url = window.URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+  a.download = 'tendercare_students.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+const searchTerm = e.target.value.toLowerCase();
+filteredStudents = allStudents.filter(s => 
+s.name.toLowerCase().includes(searchTerm) || 
+s.id.toLowerCase().includes(searchTerm)
+);
+renderTable();
+});
+
+updateStats();
+renderTable();
+</script>
+</body>
+</html>
