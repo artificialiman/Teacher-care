@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Management - Teacher Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-bg: #0a0a19;
+      --secondary-bg: rgba(20, 20, 40, 0.7);
+      --accent-blue: rgba(59, 130, 246, 0.5);
+      --accent-green: rgba(34, 197, 94, 0.5);
+      --accent-purple: rgba(139, 92, 246, 0.5);
+      --accent-orange: rgba(249, 115, 22, 0.5);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-active: rgba(255, 255, 255, 0.2);
+      --success-bg: rgba(22, 163, 74, 0.15);
+      --success-border: rgba(34, 197, 94, 0.3);
+      --error-bg: rgba(220, 38, 38, 0.15);
+      --error-border: rgba(239, 68, 68, 0.3);
+      --warning-bg: rgba(234, 179, 8, 0.15);
+      --warning-border: rgba(250, 204, 21, 0.3);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(30, 30, 60, 0.3) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(40, 40, 80, 0.2) 0%, transparent 20%);
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(10, 10, 25, 0.95) 0%, rgba(20, 20, 45, 0.95) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+      animation: pulse 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(5%, 5%) scale(1.1); }
+    }
+
+    .auth-card {
+      background: var(--secondary-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 10;
+      box-shadow: var(--shadow);
+      transform: translateY(0);
+      transition: var(--transition);
+    }
+
+    .auth-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-active);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo i {
+      font-size: 2.5rem;
+      color: var(--accent-blue);
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .logo h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .logo p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon i {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .input-with-icon input {
+      width: 100%;
+      padding: 1.1rem 1.25rem 1.1rem 3.5rem;
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .input-with-icon input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .button-primary {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-blue), rgba(139, 92, 246, 0.7));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .button-primary:active {
+      transform: translateY(0);
+    }
+
+    .button-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .button-secondary {
+      padding: 0.75rem 1.5rem;
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .button-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .dashboard-header {
+      background: var(--secondary-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .teacher-info h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .teacher-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .teacher-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .teacher-meta i {
+      font-size: 0.8rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .logout-btn {
+      padding: 0.75rem 1.5rem;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-sm);
+      color: #fca5a5;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .welcome-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--secondary-bg), rgba(30, 30, 60, 0.7));
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .welcome-section h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-section p {
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-content h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .action-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .action-card {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), transparent);
+    }
+
+    .action-card.lesson-notes::before {
+      background: linear-gradient(90deg, var(--accent-green), transparent);
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow);
+    }
+
+    .action-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .action-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .action-header h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .action-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-bar-container {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .progress-bar-container:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .progress-title i {
+      font-size: 1.5rem;
+      color: var(--accent-purple);
+    }
+
+    .progress-title h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .progress-percentage {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+      border-radius: 6px;
+      transition: width 0.5s ease-out;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .selection-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .selection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .selection-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .selection-header p {
+      color: var(--text-secondary);
+    }
+
+    .back-button {
+      padding: 0.875rem 1.75rem;
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(-3px);
+    }
+
+    .form-card {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-card h2 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .select-wrapper {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .select-wrapper label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .styled-select {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.5rem center;
+      padding-right: 3.5rem;
+      transition: var(--transition);
+    }
+
+    .styled-select:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .styled-select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .entry-view {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 25, 0.98);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      overflow-y: auto;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .entry-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .entry-title h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .entry-title p {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .entry-controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .config-section {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .config-section h3 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .config-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .config-item label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .config-item input {
+      width: 100%;
+      padding: 0.875rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .config-item input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-box:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-active);
+    }
+
+    .stat-box h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .stat-box p {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .scores-table-container {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table-header h3 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .scores-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+
+    .scores-table thead {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .scores-table th {
+      padding: 1.25rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .scores-table tbody tr {
+      transition: var(--transition);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .scores-table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .scores-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .scores-table input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 0.95rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .scores-table input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .scores-table input.invalid {
+      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .grade-a { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .grade-b2 { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .grade-b3 { background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); }
+    .grade-c4 { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .grade-c5 { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .grade-c6 { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .grade-d7 { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .grade-e8 { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .grade-f9 { background: rgba(220, 38, 38, 0.15); color: #ef4444; border: 1px solid rgba(220, 38, 38, 0.3); }
+
+    .entry-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .notification {
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      animation: slideIn 0.3s ease-out;
+      display: none;
+    }
+
+    .notification.show {
+      display: flex;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notification.success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #86efac;
+    }
+
+    .notification.error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: #fca5a5;
+    }
+
+    .notification.warning {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: #fde047;
+    }
+
+    .notification i {
+      font-size: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      .config-grid,
+      .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container,
+      .selection-container,
+      .entry-container {
+        padding: 1rem;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .teacher-meta {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .config-grid,
+      .stats-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .entry-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .entry-controls {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .entry-actions {
+        flex-direction: column;
+      }
+
+      .entry-actions button {
+        width: 100%;
+      }
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #60a5fa;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div id="authView" class="view active">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="logo">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <h1>Teacher Portal</h1>
+          <p>School Management System</p>
+        </div>
+
+        <form id="loginForm" onsubmit="login(event)">
+          <div class="form-group">
+            <label>Teacher ID</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user"></i>
+              <input type="text" id="teacherId" placeholder="Enter your teacher ID" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-with-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+          </div>
+
+          <button type="submit" class="button-primary" id="loginBtn">
+            <span id="loginText">Sign In</span>
+            <span id="loginLoading" class="loading" style="display: none;"></span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p><i class="fas fa-shield-alt"></i> Secure teacher authentication</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="dashboardView" class="view">
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="teacher-info">
+          <h1 id="teacherName"></h1>
+          <div class="teacher-meta">
+            <span><i class="fas fa-id-card"></i> ID: <strong id="teacherIdDisplay"></strong></span>
+            <span><i class="fas fa-calendar-alt"></i> Term: <strong>2024/2025 Term 1</strong></span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      <section class="welcome-section">
+        <h2>Welcome back, <span id="teacherFirstName"></span>!</h2>
+        <p>Select a subject and class below to enter student scores.</p>
+      </section>
+
+      <div class="stats-grid">
+        <div class="stat-card" onclick="goToScoreEntry()">
+          <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">
+            <i class="fas fa-edit"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Score Entry</h3>
+            <div class="stat-value">Start</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Your Classes</h3>
+            <div class="stat-value" id="classCount">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Your Subjects</h3>
+            <div class="stat-value" id="subjectCount">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
+            <i class="fas fa-chalkboard"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Class Teacher</h3>
+            <div class="stat-value" id="classTeacherDisplay">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-bar-container" onclick="viewProgress()">
+        <div class="progress-header">
+          <div class="progress-title">
+            <i class="fas fa-chart-line"></i>
+            <h3>Progress Tracking</h3>
+          </div>
+          <div class="progress-percentage" id="progressPercentage">0%</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-stats">
+          <span><i class="fas fa-check-circle"></i> <span id="completedCount">0</span> Completed</span>
+          <span><i class="fas fa-clock"></i> <span id="pendingCount">0</span> Pending</span>
+        </div>
+      </div>
+
+      <div class="action-cards">
+        <div class="action-card" onclick="goToScoreEntry()">
+          <div class="action-header">
+            <div class="action-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">
+              <i class="fas fa-table"></i>
+            </div>
+            <h3>Score Entry</h3>
+          </div>
+          <p>Enter and submit student assessment scores for your assigned subjects and classes.</p>
+        </div>
+
+        <div class="action-card lesson-notes" onclick="viewLessonNotes()">
+          <div class="action-header">
+            <div class="action-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <h3>Lesson Notes & Scheme</h3>
+          </div>
+          <p>Access teaching materials, curriculum guides, and downloadable lesson plans for all subjects.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="selectionView" class="view">
+    <div class="selection-container">
+      <div class="selection-header">
+        <div>
+          <h1>Score Entry</h1>
+          <p>Select subject and class to begin</p>
+        </div>
+        <button class="back-button" onclick="backToDashboard()">
+          <i class="fas fa-arrow-left"></i>
+          Back to Dashboard
+        </button>
+      </div>
+
+      <div class="form-card">
+        <h2><i class="fas fa-tasks"></i> Assignment Selection</h2>
+
+        <div class="select-wrapper">
+          <label>Subject</label>
+          <select id="subjectSelect" class="styled-select" onchange="updateClasses()">
+            <option value="">Select a subject</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label>Class</label>
+          <select id="classSelect" class="styled-select" disabled>
+            <option value="">Select a class</option>
+          </select>
+        </div>
+
+        <button class="button-primary" id="openEntryBtn" onclick="openEntry()" disabled>
+          <i class="fas fa-external-link-alt"></i>
+          Open Score Entry Sheet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="entryView" class="view entry-view">
+    <div class="entry-container">
+      <div class="entry-header">
+        <div class="entry-title">
+          <h2 id="entryTitle"></h2>
+          <p><i class="fas fa-calendar-alt"></i> 2024/2025 Term 1</p>
+        </div>
+        <div class="entry-controls">
+          <button class="back-button" onclick="closeEntry()">
+            <i class="fas fa-arrow-left"></i>
+            Back to Selection
+          </button>
+        </div>
+      </div>
+
+      <div id="entryNotification" class="notification"></div>
+
+      <div class="config-section">
+        <h3><i class="fas fa-sliders-h"></i> Maximum Scores Configuration</h3>
+        <div class="config-grid">
+          <div class="config-item">
+            <label>CA Maximum</label>
+            <input type="number" id="maxCA" value="40" min="0" step="1" onchange="recalculate()">
+          </div>
+          <div class="config-item">
+            <label>Exam Maximum</label>
+            <input type="number" id="maxExam" value="60" min="0" step="1" onchange="recalculate()">
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-summary">
+        <div class="stat-box">
+          <h4>Total Students</h4>
+          <p id="totalStudents">0</p>
+        </div>
+        <div class="stat-box">
+          <h4>Class Average</h4>
+          <p id="classAvg">0.0</p>
+        </div>
+        <div class="stat-box">
+          <h4>Highest Score</h4>
+          <p id="highest">0</p>
+        </div>
+        <div class="stat-box">
+          <h4>Lowest Score</h4>
+          <p id="lowest">0</p>
+        </div>
+      </div>
+
+      <div class="scores-table-container">
+        <div class="table-header">
+          <h3><i class="fas fa-table"></i> Student Scores Sheet</h3>
+          <div class="table-actions">
+            <button class="button-secondary" onclick="validateAllScores()">
+              <i class="fas fa-check-circle"></i>
+              Validate
+            </button>
+            <button class="button-secondary" onclick="clearAllScores()">
+              <i class="fas fa-eraser"></i>
+              Clear All
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="scores-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>CA</th>
+                <th>Exam</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="scoresBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="entry-actions">
+        <button class="button-secondary" onclick="closeEntry()">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+        <button class="button-primary" onclick="downloadJSON()">
+          <i class="fas fa-download"></i>
+          Download JSON
+        </button>
+        <button class="button-primary" onclick="emailJSON()">
+          <i class="fas fa-envelope"></i>
+          Email to Admin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_EMAIL = 'artificialiman111@gmail.com';
+
+    // EMBEDDED STUDENT DATABASE
+    const STUDENTS_DB = {
+      'SS3 Science': [
+        { id: 'TCH020', name: 'Angel' },
+        { id: 'TCH014', name: 'Bamise' },
+        { id: 'TCH002', name: 'Bright' },
+        { id: 'TCH016', name: 'Dorcas' },
+        { id: 'TCH012', name: 'Enoch' },
+        { id: 'TCH004', name: 'Famous' },
+        { id: 'TCH007', name: 'Fauziyyah' },
+        { id: 'TCH021', name: 'Fawaz' },
+        { id: 'TCH011', name: 'Fiyin' },
+        { id: 'TCH022', name: 'Habitat' },
+        { id: 'TCH010', name: 'Kaosara' },
+        { id: 'TCH015', name: 'Khadija' },
+        { id: 'TCH008', name: 'Mercy' },
+        { id: 'TCH006', name: 'Michael' },
+        { id: 'TCH017', name: 'Moyin' },
+        { id: 'TCH003', name: 'Prosper' },
+        { id: 'TCH019', name: 'Rita' },
+        { id: 'TCH018', name: 'Rokibat' },
+        { id: 'TCH005', name: 'Samuel' },
+        { id: 'TCH013', name: 'Taiwo' },
+        { id: 'TCH001', name: 'Temi' },
+        { id: 'TCH009', name: 'Zainab' }
+      ],
+      'SS3 Actuarial': [
+        { id: 'TCH-H001', name: 'Abuh God\'s power' },
+        { id: 'TCH-H002', name: 'Abdul Razak kehinde' },
+        { id: 'TCH-H003', name: 'Abdul Majeed Quadri' },
+        { id: 'TCH-H004', name: 'Adebayo David' },
+        { id: 'TCH-H005', name: 'Adesanya Emmanuel' },
+        { id: 'TCH-H006', name: 'Adeniran Moses' },
+        { id: 'TCH-H007', name: 'Adisa Fathia' },
+        { id: 'TCH-H008', name: 'Ajibola Roheemot' },
+        { id: 'TCH-H009', name: 'Amos wisdom' },
+        { id: 'TCH-H010', name: 'Enemali ojotoeba' },
+        { id: 'TCH-H011', name: 'Folorunsho Petra' },
+        { id: 'TCH-H012', name: 'Falope darasimi' },
+        { id: 'TCH-H013', name: 'Famakinwa akorede' },
+        { id: 'TCH-H014', name: 'Muritala rashidat' },
+        { id: 'TCH-H015', name: 'Olalere aishat' },
+        { id: 'TCH-H016', name: 'Oyakan Emmanuel' },
+        { id: 'TCH-H017', name: 'Sowole Azeem' },
+        { id: 'TCH-H018', name: 'Tujiki David' },
+        { id: 'TCH-H019', name: 'Yakubu happiness' },
+        { id: 'TCH-H020', name: 'Asiemor Divine' }
+      ],
+      'JSS3A': [
+        { id: 'J3A001', name: 'Adebayo Dorcas' },
+        { id: 'J3A002', name: 'Adebayo favour' },
+        { id: 'J3A003', name: 'Garba albarka' },
+        { id: 'J3A004', name: 'Abdul Rasheed rodiat' },
+        { id: 'J3A005', name: 'Akinbiyi Glory' },
+        { id: 'J3A006', name: 'Folorunsho precious' },
+        { id: 'J3A007', name: 'Ogunlana Abdullahi' },
+        { id: 'J3A008', name: 'Adeniyi darasimi' },
+        { id: 'J3A009', name: 'Emmanuel ayowole' },
+        { id: 'J3A010', name: 'Ibhadore Godswill' },
+        { id: 'J3A011', name: 'Aransiola' },
+        { id: 'J3A012', name: 'Yusuff Abdul Sattar' },
+        { id: 'J3A013', name: 'Owoyele Ramadan' },
+        { id: 'J3A014', name: 'Akanji favour' },
+        { id: 'J3A015', name: 'Wisdom Donald' },
+        { id: 'J3A016', name: 'Salawudeen fawas' },
+        { id: 'J3A017', name: 'Afolayan Joshua' },
+        { id: 'J3A018', name: 'Balogun jomiloju' },
+        { id: 'J3A019', name: 'Okwuabudike Victoria' },
+        { id: 'J3A020', name: 'Oluborode true Vine' },
+        { id: 'J3A021', name: 'Emmanuel Maxwell' },
+        { id: 'J3A022', name: 'Nathaniel David' },
+        { id: 'J3A023', name: 'Yusuf Taiwo' },
+        { id: 'J3A024', name: 'Irinyemi jomiloju praise' },
+        { id: 'J3A025', name: 'Emmanuel Priscilla' },
+        { id: 'J3A026', name: 'Sunny blessing' },
+        { id: 'J3A027', name: 'Fatuki oluwanifemi' },
+        { id: 'J3A028', name: 'Oyewole Israel' },
+        { id: 'J3A029', name: 'Kolade idera' },
+        { id: 'J3A030', name: 'Oseni abdulsamod' },
+        { id: 'J3A031', name: 'Nelson Sonia C.C' },
+        { id: 'J3A032', name: 'Nyakos nurudeen' },
+        { id: 'J3A033', name: 'Olatunji al-meen' },
+        { id: 'J3A034', name: 'Olowu fausiyat' },
+        { id: 'J3A035', name: 'Amusat khalilulahi. O' },
+        { id: 'J3A036', name: 'Nanmwa victor' },
+        { id: 'J3A037', name: 'Waheed Aduragbemi' }
+      ],
+      'JSS3B': [
+        { id: 'J3B001', name: 'Adebisi Yusuf' },
+        { id: 'J3B002', name: 'Soyode emmanuella' },
+        { id: 'J3B003', name: 'Faluyi Israel' },
+        { id: 'J3B004', name: 'Uduakhomo peace' },
+        { id: 'J3B005', name: 'Balogun tobiloba' },
+        { id: 'J3B006', name: 'Enabulele Israel' },
+        { id: 'J3B007', name: 'Opatimeyin David' },
+        { id: 'J3B008', name: 'Medua Angel' },
+        { id: 'J3B009', name: 'Gabriel peace' },
+        { id: 'J3B010', name: 'Agbo favour' },
+        { id: 'J3B011', name: 'Lawal Esther' },
+        { id: 'J3B012', name: 'Akinfe christianah' },
+        { id: 'J3B013', name: 'Ayoade Doris' },
+        { id: 'J3B014', name: 'Ambrose emmanuella' },
+        { id: 'J3B015', name: 'Adewunmi oluwademilade' },
+        { id: 'J3B016', name: 'Olasunkanmi ayobami' },
+        { id: 'J3B017', name: 'Samson loveth' },
+        { id: 'J3B018', name: 'Oyeniyi David' },
+        { id: 'J3B019', name: 'Folorunsho Alexander' },
+        { id: 'J3B020', name: 'Olukotun feranmi' },
+        { id: 'J3B021', name: 'Adebisi aishat' },
+        { id: 'J3B022', name: 'Samuel Zainab' },
+        { id: 'J3B023', name: 'Nyakos naimat' },
+        { id: 'J3B024', name: 'Olajesu Kayode' },
+        { id: 'J3B025', name: 'Rotimi Eniola' },
+        { id: 'J3B026', name: 'Onafowokan ridwan' },
+        { id: 'J3B027', name: 'Adeniyi korede' },
+        { id: 'J3B028', name: 'Abdul Razak somod' },
+        { id: 'J3B029', name: 'Adebisi ayomide' },
+        { id: 'J3B030', name: 'Ariyo moses' },
+        { id: 'J3B031', name: 'Popoola Aduragbemi' }
+      ]
+    };
+
+    const TEACHERS = {
+      'T001': {
+        id: 'T001',
+        name: 'Mr Aladesihun',
+        firstName: 'Aladesihun',
+        subjects: {
+          'Civic': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Government': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        role: 'Principal'
+      },
+      'T002': {
+        id: 'T002',
+        name: 'Mr Muritala',
+        firstName: 'Muritala',
+        subjects: {
+          'English': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        role: 'Vice Principal'
+      },
+      'T003': {
+        id: 'T003',
+        name: 'Pst Dada',
+        firstName: 'Dada',
+        subjects: {
+          'Yoruba': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'CRS': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        }
+      },
+      'T004': {
+        id: 'T004',
+        name: 'Mr Tony',
+        firstName: 'Tony',
+        subjects: {
+          'Physics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Mathematics': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'SS2 Science'
+      },
+      'T005': {
+        id: 'T005',
+        name: 'Mrs Odesoji',
+        firstName: 'Odesoji',
+        subjects: {
+          'English': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'SS1 Actuarial'
+      },
+      'T006': {
+        id: 'T006',
+        name: 'Mrs Akanji',
+        firstName: 'Akanji',
+        subjects: {
+          'CCN': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'CRS': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS3A'
+      },
+      'T007': {
+        id: 'T007',
+        name: 'Mrs Ademuyiwa',
+        firstName: 'Ademuyiwa',
+        subjects: {
+          'Social Studies': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'Citizenship': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS1A'
+      },
+      'T008': {
+        id: 'T008',
+        name: 'Mr Abdullahi',
+        firstName: 'Abdullahi',
+        subjects: {
+          'DT': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B'],
+          'BT': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+          'Computer': ['JSS3A', 'JSS3B']
+        },
+        classTeacher: 'JSS3B'
+      },
+      'T009': {
+        id: 'T009',
+        name: 'Miss Shukurat',
+        firstName: 'Shukurat',
+        subjects: {
+          'Commerce': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Marketing': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        },
+        classTeacher: 'JSS2B'
+      },
+      'T010': {
+        id: 'T010',
+        name: 'Mrs Olufunsho',
+        firstName: 'Olufunsho',
+        subjects: {
+          'Horticulture': ['JSS1A', 'JSS1B', 'JSS2A', 
