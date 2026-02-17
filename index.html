@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TENDERCARE Teacher Portal - Professional Dashboard</title>
+  <title>TENDERCARE TEACHER-CARE-App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -1064,8 +1064,8 @@
       <div class="auth-card">
         <div class="logo">
           <i class="fas fa-chalkboard-teacher"></i>
-          <h1>Teacher Portal</h1>
-          <p>TENDERCARE School Management</p>
+          <h1> Teacher-care </h1>
+          <p> TENDERCARE School Mgmt </p>
         </div>
 
         <form id="loginForm" onsubmit="login(event)">
@@ -1106,7 +1106,7 @@
           <h1 id="teacherName"></h1>
           <div class="teacher-meta">
             <span><i class="fas fa-id-card"></i> ID: <strong id="teacherIdDisplay"></strong></span>
-            <span><i class="fas fa-calendar-alt"></i> Term: <strong>2024/2025 Term 1</strong></span>
+            <span><i class="fas fa-calendar-alt"></i> Term: <strong>2025/2026 Term 2</strong></span>
             <span id="roleDisplay"></span>
           </div>
         </div>
@@ -1194,7 +1194,7 @@
             </div>
             <h3>Score Entry</h3>
           </div>
-          <p>Enter and submit student assessment scores for your assigned subjects and classes using the Nigerian grading scale (A1-F9).</p>
+          <p>Enter and submit student assessment scores for your assigned subjects (auto-scaled (A1-F9)).</p>
         </div>
 
         <div class="feature-card" onclick="viewLessonNotes()">
@@ -1204,7 +1204,7 @@
             </div>
             <h3>Lesson Notes & Materials</h3>
           </div>
-          <p>Access teaching materials, curriculum guides, and downloadable lesson plans for all subjects and classes you teach.</p>
+          <p>Access your teaching materials, and curriculum guides.</p>
         </div>
       </div>
     </main>
@@ -1255,7 +1255,7 @@
       <div class="entry-header">
         <div class="entry-title">
           <h2 id="entryTitle"></h2>
-          <p><i class="fas fa-calendar-alt"></i> 2024/2025 Term 1 • <i class="fas fa-user"></i> <span id="entryTeacher"></span></p>
+          <p><i class="fas fa-calendar-alt"></i> 2025/2026 Term 2 • <i class="fas fa-user"></i> <span id="entryTeacher"></span></p>
         </div>
         <div class="entry-controls">
           <button class="back-button" onclick="closeEntry()">
@@ -1272,11 +1272,11 @@
         <div class="config-grid">
           <div class="config-item">
             <label>CA Maximum</label>
-            <input type="number" id="maxCA" value="40" min="0" step="1" onchange="recalculate()">
+            <input type="number" id="maxCA" value="30" min="0" step="1" onchange="recalculate()">
           </div>
           <div class="config-item">
             <label>Exam Maximum</label>
-            <input type="number" id="maxExam" value="60" min="0" step="1" onchange="recalculate()">
+            <input type="number" id="maxExam" value="70" min="0" step="1" onchange="recalculate()">
           </div>
         </div>
       </div>
@@ -1321,8 +1321,8 @@
               <tr>
                 <th>Student ID</th>
                 <th>Student Name</th>
-                <th>CA (40)</th>
-                <th>Exam (60)</th>
+                <th>CA (30)</th>
+                <th>Exam (70)</th>
                 <th>Total</th>
                 <th>Grade</th>
                 <th>Status</th>
@@ -1354,14 +1354,7 @@
   <script>
     const ADMIN_EMAIL = 'artificialiman111@gmail.com';
 
-    /**
-     * HARDCODED STUDENT DATABASE - 340+ STUDENTS
-     * Academic Year 2025/2026
-     * This is the primary source of truth - no API calls needed
-     * STUDENTS_DB object serves as fallback/cache for future database integration
-     */
-    
-    // PRIMARY HARDCODED STUDENT DATA - ALWAYS LOADS INSTANTLY - ZERO FAILURE RISK
+  
     const HARDCODED_STUDENTS = {
       'JSS1A': [
         { id: 'TCH-2025-001', name: 'Abraham Comfort Princess' },
@@ -2016,7 +2009,7 @@
       teacher: null,
       students: [],
       scores: {},
-      maxValues: { CA: 40, exam: 60 },
+      maxValues: { CA: 30, exam: 70 },
       currentSubject: null,
       currentClass: null,
       isAuthenticated: false
@@ -2443,7 +2436,7 @@
         },
         subject: state.currentSubject,
         class: state.currentClass,
-        term: '2024/2025 Term 1',
+        term: '2025/2026 Term 2',
         maxScores: state.maxValues,
         scores: state.students.map(s => ({
           studentId: s.id,
@@ -2491,7 +2484,7 @@
         },
         subject: state.currentSubject,
         class: state.currentClass,
-        term: '2024/2025 Term 1',
+        term: '2025/2026 Term 2',
         maxScores: state.maxValues,
         scores: state.students.map(s => ({
           studentId: s.id,
