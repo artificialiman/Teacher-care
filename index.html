@@ -1808,22 +1808,22 @@
       return hardcodedStudents;
     }
 
-    // TEACHER REGISTRY WITH SUBJECT-CLASS ASSIGNMENTS
+    // TEACHER REGISTRY WITH SUBJECT-CLASS ASSESSMENT
     const TEACHERS = {
       'T001': {
         id: 'T001',
-        name: 'Mr ALADESIUN',
-        firstName: 'ALADESIUN',
+        name: 'Mr Aladesiun',
+        firstName: 'Mr Aladesiun',
         subjects: {
           'Citizenship and Heritage': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
-          'Government': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'Government': ['SS1 Actuarial', 'SS2 Actuarial', 'SS3 Actuarial']
         },
         role: 'Principal'
       },
       'T002': {
         id: 'T002',
         name: 'Mr Muritala',
-        firstName: 'Muritala',
+        firstName: 'Mr Muritala',
         subjects: {
           'English': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
         },
@@ -1832,18 +1832,18 @@
       'T003': {
         id: 'T003',
         name: 'Pst Dada',
-        firstName: 'Dada',
+        firstName: 'Pst Dada',
         subjects: {
-          'Yoruba': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
-          'CRS': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
-        }
+          'Yoruba': ['SS1 Actuarial', 'SS2 Actuarial', 'SS3 Actuarial'],
+          'CRS': ['SS1 Actuarial', 'SS2 Actuarial', 'SS3 Actuarial']
+        },
       },
       'T004': {
         id: 'T004',
         name: 'Mr Tony',
-        firstName: 'Tony',
+        firstName: 'Mr Tony',
         subjects: {
-          'Physics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Physics': ['SS1 Science', 'SS2 Science', 'SS3 Science'],
           'Mathematics': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
         },
         classTeacher: 'SS2 Science'
@@ -1851,7 +1851,7 @@
       'T005': {
         id: 'T005',
         name: 'Mrs Odesoji',
-        firstName: 'Odesoji',
+        firstName: 'Mrs Odesoji',
         subjects: {
           'English': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
         },
@@ -1860,26 +1860,25 @@
       'T006': {
         id: 'T006',
         name: 'Mrs Akanji',
-        firstName: 'Akanji',
+        firstName: 'Mrs Akanji',
         subjects: {
-          'CCN': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+          'CCA': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
         },
         classTeacher: 'JSS3A'
       },
       'T007': {
         id: 'T007',
         name: 'Mrs Ademuyiwa',
-        firstName: 'Ademuyiwa',
+        firstName: 'Mrs Ademuyiwa',
         subjects: {
-          'Social Studies': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
-          'Citizenship and Heritage': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
-        },
+          'Business Studies': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
+           },
         classTeacher: 'JSS1A'
       },
       'T008': {
         id: 'T008',
         name: 'Mr Abdullahi',
-        firstName: 'Abdullahi',
+        firstName: 'Mr Abdullahi',
         subjects: {
           'DT': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B'],
           'BT': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
@@ -1889,47 +1888,48 @@
       },
       'T009': {
         id: 'T009',
-        name: 'Miss Shukurat',
-        firstName: 'Shukurat',
-        subjects: {
-          'Commerce': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
-          'Marketing': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+        name: 'Miss Shuqrat',
+        firstName: 'Miss Shuqrat',
+        subjects: { 
+          'Social & citizenship education': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B'] 
+          'NVE': [ 'JSS3A', 'JSS3B']
         },
         classTeacher: 'JSS2B'
       },
       'T010': {
         id: 'T010',
         name: 'Mrs Olufunsho',
-        firstName: 'Olufunsho',
+        firstName: 'Mrs Olufunsho',
         subjects: {
           'Horticulture': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
-          'History': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'History': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
         },
-        role: 'HoD'
+        role: 'HoD Junior school'
       },
       'T011': {
         id: 'T011',
         name: 'Mrs Blessing',
-        firstName: 'Blessing',
+        firstName: 'Mrs Blessing',
         subjects: {
           'Basic Science': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B'],
-          'PHE': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'PHE': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
         },
-        role: 'Teacher'
+        classTeacher: 'SS1 Science'
       },
       'T012': {
         id: 'T012',
         name: 'Mrs Adewale',
-        firstName: 'Adewale',
+        firstName: 'Mrs Adewale',
         subjects: {
-          'Business Studies': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
+          'Commerce': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Marketing': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
         },
-        role: 'Teacher'
+        classTeacher: 'JSS1B'
       },
       'T013': {
         id: 'T013',
         name: 'Mr Daniel',
-        firstName: 'Daniel',
+        firstName: 'Mr Daniel',
         subjects: {
           'Agriculture': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
           'Livestock': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
@@ -1939,7 +1939,7 @@
       'T014': {
         id: 'T014',
         name: 'Mr Wisdom',
-        firstName: 'Wisdom',
+        firstName: 'Mr Wisdom',
         subjects: {
           'Mathematics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
         },
@@ -1948,18 +1948,18 @@
       'T015': {
         id: 'T015',
         name: 'Mr Iman',
-        firstName: 'Iman',
+        firstName: 'Mr Iman',
         subjects: {
-          'Chemistry': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
+          'Chemistry': ['SS1 Science', 'SS2 Science', 'SS3 Science'],
           'Data Processing': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
-          'Further Math': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'Further Math': ['SS1 Science', 'SS2 Science', 'SS3 Science']
         },
         role: 'Web Developer'
       },
       'T016': {
         id: 'T016',
         name: 'Mrs Taiwo',
-        firstName: 'Taiwo',
+        firstName: 'Mrs Taiwo',
         subjects: {
           'Yoruba': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
         },
@@ -1968,17 +1968,17 @@
       'T017': {
         id: 'T017',
         name: 'Mr Emmanuel',
-        firstName: 'Emmanuel',
+        firstName: 'Mr Emmanuel',
         subjects: {
           'Economics': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial'],
-          'Accounting': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'Accounting': ['SS1 Actuarial', 'SS2 Actuarial', 'SS3 Actuarial']
         },
         role: 'Part-time'
       },
       'T018': {
         id: 'T018',
         name: 'Mr Deji',
-        firstName: 'Deji',
+        firstName: 'Mr Deji',
         subjects: {
           'Biology': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
         },
@@ -1987,18 +1987,18 @@
       'T019': {
         id: 'T019',
         name: 'Mr Chika',
-        firstName: 'Chika',
+        firstName: 'Mr Chika',
         subjects: {
-          'Literature': ['SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'Literature': ['SS1 Actuarial', 'SS2 Actuarial', 'SS3 Actuarial']
         },
         role: 'Part-time'
       },
       'T020': {
         id: 'T020',
         name: 'Madam Nwosu',
-        firstName: 'Nwosu',
+        firstName: 'Madam Nwosu',
         subjects: {
-          'French': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B', 'SS1 Science', 'SS1 Actuarial', 'SS2 Science', 'SS2 Actuarial', 'SS3 Science', 'SS3 Actuarial']
+          'French': ['JSS1A', 'JSS1B', 'JSS2A', 'JSS2B', 'JSS3A', 'JSS3B']
         },
         role: 'Part-time'
       }
