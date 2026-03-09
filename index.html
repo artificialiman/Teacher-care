@@ -2024,15 +2024,17 @@
     function checkAuthStatus() {
       const token = localStorage.getItem('teacherToken');
       const teacherData = localStorage.getItem('teacherData');
-      
+
       if (token && teacherData) {
         try {
           state.teacher = JSON.parse(teacherData);
-          state.isAuthenticated = true;
-          showDashboard();
         } catch (e) {
+          // Corrupted JSON — clear and stay on login
           clearAuth();
+          return;
         }
+        state.isAuthenticated = true;
+        showDashboard();
       }
     }
 
@@ -2041,16 +2043,10 @@
         const btn = document.getElementById('openEntryBtn');
         btn.disabled = !this.value;
       });
-
-      document.getElementById('password').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          document.getElementById('loginForm').requestSubmit();
-        }
-      });
     }
 
     // Authentication Functions
-    async function login(e) {
+    window.login = async function login(e) {
       e.preventDefault();
       
       const teacherId = document.getElementById('teacherId').value.trim();
@@ -2087,7 +2083,7 @@
       }
     }
 
-    function logout() {
+    window.logout = function logout() {
       if (confirm('Are you sure you want to logout?')) {
         clearAuth();
         showView('authView');
@@ -2095,7 +2091,7 @@
       }
     }
 
-    function clearAuth() {
+    window.clearAuth = function clearAuth() {
       localStorage.removeItem('teacherToken');
       localStorage.removeItem('teacherData');
       state.teacher = null;
