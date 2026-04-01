@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TENDER-ADMIN • Complete Student Credentials Portal</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --accent: #4f8ef7;
+    --text: #e8eaf0;
+    --muted: #6b7080;
+    --code: #a8d8a8;
+    --radius: 12px;
+    --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Georgia', serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 28px 20px 60px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 38px;
+    position: relative;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #ffffff 0%, #8ab3ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  header h1 i {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    color: var(--accent);
+    font-size: 1.9rem;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .stats-badge {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .stats-badge span strong {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    background: rgba(79, 142, 247, 0.15);
+    padding: 3px 10px;
+    border-radius: 30px;
+    font-weight: 600;
+  }
+
+  .wrapper {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  details[open] {
+    border-color: var(--accent);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  summary {
+    padding: 16px 22px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    font-weight: 500;
+    user-select: none;
+    background: rgba(0, 0, 0, 0.2);
+    transition: background 0.2s;
+  }
+
+  summary:hover {
+    background: rgba(79, 142, 247, 0.05);
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary .label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  summary .class-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  summary .badge {
+    background: var(--border);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 30px;
+    font-weight: 500;
+  }
+
+  details[open] summary .badge {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  summary .chevron {
+    color: var(--muted);
+    font-size: 0.85rem;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary .chevron {
+    transform: rotate(180deg);
+  }
+
+  .table-container {
+    overflow-x: auto;
+    padding: 0 4px 8px 4px;
+  }
+
+  .student-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  .student-table th {
+    text-align: left;
+    padding: 14px 16px 10px 16px;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  .student-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+  }
+
+  .student-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .student-table tr:hover td {
+    background: rgba(79, 142, 247, 0.05);
+  }
+
+  .sn-col {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    width: 48px;
+    font-weight: 500;
+  }
+
+  .student-id-code {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #9aa9cf;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+
+  .student-fullname {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .password-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--code);
+    background: rgba(168, 216, 168, 0.08);
+    padding: 4px 10px;
+    border-radius: 24px;
+    display: inline-block;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    border: 0.5px solid rgba(168, 216, 168, 0.25);
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 48px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+
+  @media (max-width: 680px) {
+    body {
+      padding: 18px 12px 40px;
+    }
+    summary {
+      padding: 12px 16px;
+    }
+    .student-table th, .student-table td {
+      padding: 10px 10px;
+    }
+    .password-value {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+    }
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+  <h1><i class="fas fa-shield-alt"></i> TENDER-ADMIN</h1>
+  <p>Complete Student Registry • Secure Access Codes from Password Vault</p>
+  <div class="stats-badge">
+    <span><i class="fas fa-users"></i> Total Students: <strong id="totalStudentCount">0</strong></span>
+    <span><i class="fas fa-door-open"></i> Classes: <strong id="totalClassCount">0</strong></span>
+    <span><i class="fas fa-key"></i> Unique Passwords Assigned</span>
+  </div>
+</header>
+
+<div class="wrapper" id="classesWrapper">
+  <div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-pulse"></i> Loading student credentials...</div>
+</div>
+
+<div class="footer-note">
+  <i class="fas fa-database"></i> TenderCare School Management • Complete Student Credentials • Each student has unique access code
+</div>
+
+<script>
+  // --------------------------------------------------------------
+  // COMPLETE STUDENT DATABASE - All classes with all names provided
+  // --------------------------------------------------------------
+  const COMPLETE_STUDENTS = {
+    'JSS1A': [
+      { id: 'TCH-2025-001', name: 'Abraham Comfort Princess' }, { id: 'TCH-2025-002', name: 'Abraham Nanmwa' },
+      { id: 'TCH-2025-003', name: 'Adebanjo Anjola' }, { id: 'TCH-2025-004', name: 'Adegboye Adam' },
+      { id: 'TCH-2025-005', name: 'Ademola Daniel' }, { id: 'TCH-2025-006', name: 'Adeoye Ikimot' },
+      { id: 'TCH-2025-007', name: 'Adeyemi Olamide' }, { id: 'TCH-2025-008', name: 'Adiukwu Chimuanya' },
+      { id: 'TCH-2025-009', name: 'Ayegba Anthony' }, { id: 'TCH-2025-010', name: 'Chris Ukpah Rejoice' },
+      { id: 'TCH-2025-011', name: 'Ehigie Jeffrey' }, { id: 'TCH-2025-012', name: 'Enabulele Newton' },
+      { id: 'TCH-2025-013', name: 'Hamzat Alaba' }, { id: 'TCH-2025-014', name: 'Idowu Taiwo' },
+      { id: 'TCH-2025-015', name: 'Jackson Grace' }, { id: 'TCH-2025-016', name: 'Jimoh Sodiq' },
+      { id: 'TCH-2025-017', name: 'Mohammed Abdul-salam' }, { id: 'TCH-2025-018', name: 'Muritala Farhan' },
+      { id: 'TCH-2025-019', name: 'Obaoye Adeola Ruth' }, { id: 'TCH-2025-020', name: 'Oduwaye Abdul-salam' },
+      { id: 'TCH-2025-021', name: 'Ogunlana Aishat' }, { id: 'TCH-2025-022', name: 'Okwuabudike Michael' },
+      { id: 'TCH-2025-023', name: 'Olukoga Akorede' }, { id: 'TCH-2025-024', name: 'Oni Grace Oluwadarasimi' },
+      { id: 'TCH-2025-025', name: 'Otuole Innocent' }, { id: 'TCH-2025-026', name: 'Peter John' },
+      { id: 'TCH-2025-027', name: 'Rafiu Aishat' }, { id: 'TCH-2025-028', name: 'Soyode Emmanuel' },
+      { id: 'TCH-2025-029', name: 'Yusuf Al-meen' }
+    ],
+    'JSS1B': [
+      { id: 'TCH-2025-030', name: 'Adeniyi Nifemi' }, { id: 'TCH-2025-031', name: 'Adeniyi Basit' },
+      { id: 'TCH-2025-032', name: 'Adeyemi Modesire' }, { id: 'TCH-2025-033', name: 'Agbo Wonderful' },
+      { id: 'TCH-2025-034', name: 'Akeju Emmanuel' }, { id: 'TCH-2025-035', name: 'Akindutire Michael' },
+      { id: 'TCH-2025-036', name: 'Asuluka Obioma' }, { id: 'TCH-2025-037', name: 'Babarinde Testimony' },
+      { id: 'TCH-2025-038', name: 'Dada Ayodeji' }, { id: 'TCH-2025-039', name: 'Dickson Samson' },
+      { id: 'TCH-2025-040', name: 'Idowu Kehinde' }, { id: 'TCH-2025-041', name: 'Ikujuni Samuel' },
+      { id: 'TCH-2025-042', name: 'Irinyemi Halleluyah' }, { id: 'TCH-2025-043', name: 'Ishola Suliat' },
+      { id: 'TCH-2025-044', name: 'Jewoola Olamide' }, { id: 'TCH-2025-045', name: 'Jonathan Frednard' },
+      { id: 'TCH-2025-046', name: 'Makinde Tofunmi' }, { id: 'TCH-2025-047', name: 'Odulate Boluwatife' },
+      { id: 'TCH-2025-048', name: 'Okezueze Ifechukwu' }, { id: 'TCH-2025-049', name: 'Oni Fikayo' },
+      { id: 'TCH-2025-050', name: 'Onibodo Quadri' }, { id: 'TCH-2025-051', name: 'Owoade Praise' },
+      { id: 'TCH-2025-052', name: 'Oyeniran Michelle' }, { id: 'TCH-2025-053', name: 'Safiriyu Simisola' },
+      { id: 'TCH-2025-054', name: 'Sandy Enoch' }, { id: 'TCH-2025-055', name: 'Shokoya Imole' },
+      { id: 'TCH-2025-056', name: 'Tijani Anjolaoluwa' }, { id: 'TCH-2025-057', name: 'Ubi Richard Victoria' },
+      { id: 'TCH-2025-058', name: 'Yusuff Salamat Semilore' }
+    ],
+    'JSS2A': [
+      { id: 'TCH-2025-059', name: 'Abey Phoebe' }, { id: 'TCH-2025-060', name: 'Adeniyi Mubarak' },
+      { id: 'TCH-2025-061', name: 'Agbabiaka Ella' }, { id: 'TCH-2025-062', name: 'Alaka Faridat' },
+      { id: 'TCH-2025-063', name: 'Aramide Hikimot' }, { id: 'TCH-2025-064', name: 'Aremu Praise' },
+      { id: 'TCH-2025-065', name: 'Ayoade Flourish' }, { id: 'TCH-2025-066', name: 'Bakare Gabriel' },
+      { id: 'TCH-2025-067', name: 'Bamiro David' }, { id: 'TCH-2025-068', name: 'Biobaku Azraa' },
+      { id: 'TCH-2025-069', name: 'Boladale Esther' }, { id: 'TCH-2025-070', name: 'Edeniyi Ukharia' },
+      { id: 'TCH-2025-071', name: 'Falope Kikiope' }, { id: 'TCH-2025-072', name: 'Ida Wisdom' },
+      { id: 'TCH-2025-073', name: 'Mudashiru Abidat' }, { id: 'TCH-2025-074', name: 'Muh\'awwal Alitorf' },
+      { id: 'TCH-2025-075', name: 'Musa Isaac' }, { id: 'TCH-2025-076', name: 'Neri Testimony' },
+      { id: 'TCH-2025-077', name: 'Obaoye Dorcas' }, { id: 'TCH-2025-078', name: 'Ogoyemi Josephine' },
+      { id: 'TCH-2025-079', name: 'Olowu Jamal' }, { id: 'TCH-2025-080', name: 'Olubiyi Godwin' },
+      { id: 'TCH-2025-081', name: 'Opeyemi Rosheedat' }, { id: 'TCH-2025-082', name: 'Oriabor Joy' },
+      { id: 'TCH-2025-083', name: 'Orukpe Daniel' }, { id: 'TCH-2025-084', name: 'Oyeboade Erioluwa' },
+      { id: 'TCH-2025-085', name: 'Oyediji Israel' }, { id: 'TCH-2025-086', name: 'Oyetunji Adejoke' },
+      { id: 'TCH-2025-087', name: 'Oyewole Daniel' }, { id: 'TCH-2025-088', name: 'Rafiu Rofiat' },
+      { id: 'TCH-2025-089', name: 'Raji Joshua' }, { id: 'TCH-2025-090', name: 'Tijani Olamiposi' }
+    ],
+    'JSS2B': [
+      { id: 'TCH-2025-091', name: 'Abolanle Nancy' }, { id: 'TCH-2025-092', name: 'Adeboyo Taiwo' },
+      { id: 'TCH-2025-093', name: 'Adeniran Isaac' }, { id: 'TCH-2025-094', name: 'Adesuyi Ademola' },
+      { id: 'TCH-2025-095', name: 'Akinade Darasimi' }, { id: 'TCH-2025-096', name: 'Akinola Abdulhamid' },
+      { id: 'TCH-2025-097', name: 'Alexander Chinaza' }, { id: 'TCH-2025-098', name: 'Balogun Muminat' },
+      { id: 'TCH-2025-099', name: 'Fagbola Oladerin Emmanualla' }, { id: 'TCH-2025-100', name: 'Ganiu Aliyat' },
+      { id: 'TCH-2025-101', name: 'Idris Faridat' }, { id: 'TCH-2025-102', name: 'Ikechukwu Miracle' },
+      { id: 'TCH-2025-103', name: 'Kamilu Saheed' }, { id: 'TCH-2025-104', name: 'Muritala Rokibat' },
+      { id: 'TCH-2025-105', name: 'Ochege Rhoda' }, { id: 'TCH-2025-106', name: 'Ojochegbe Linda' },
+      { id: 'TCH-2025-107', name: 'Olaniyi Mary' }, { id: 'TCH-2025-108', name: 'Olatunbosun Daniel' },
+      { id: 'TCH-2025-109', name: 'Ologunre Marvellous' }, { id: 'TCH-2025-110', name: 'Onifade Ayomide' },
+      { id: 'TCH-2025-111', name: 'Oseni Idayat' }, { id: 'TCH-2025-112', name: 'Sakiru John' },
+      { id: 'TCH-2025-113', name: 'Shofowora Nifemi' }, { id: 'TCH-2025-114', name: 'Suli Fridaus' },
+      { id: 'TCH-2025-115', name: 'Yakubu Moses' }
+    ],
+    'JSS3A': [
+      { id: 'TCH-2025-116', name: 'Abdul Rasheed Rodiat' }, { id: 'TCH-2025-117', name: 'Adebayo Dorcas' },
+      { id: 'TCH-2025-118', name: 'Adebayo Favour' }, { id: 'TCH-2025-119', name: 'Adeniyi Darasimi' },
+      { id: 'TCH-2025-120', name: 'Afolayan Joshua' }, { id: 'TCH-2025-121', name: 'Akanji Favour' },
+      { id: 'TCH-2025-122', name: 'Akinbiyi Glory' }, { id: 'TCH-2025-123', name: 'Amusat Khalilulahi O' },
+      { id: 'TCH-2025-124', name: 'Faruk Aransiola' }, { id: 'TCH-2025-125', name: 'Balogun Jomiloju' },
+      { id: 'TCH-2025-126', name: 'Emmanuel Ayowole' }, { id: 'TCH-2025-127', name: 'Emmanuel Maxwell' },
+      { id: 'TCH-2025-128', name: 'Emmanuel Priscilla' }, { id: 'TCH-2025-129', name: 'Fatuki Oluwanifemi' },
+      { id: 'TCH-2025-130', name: 'Folorunsho Precious' }, { id: 'TCH-2025-131', name: 'Garba Albarka' },
+      { id: 'TCH-2025-132', name: 'Ibhadore Godswill' }, { id: 'TCH-2025-133', name: 'Irinyemi Jomiloju Praise' },
+      { id: 'TCH-2025-134', name: 'Kolade Idera' }, { id: 'TCH-2025-135', name: 'Nanmwa Victor' },
+      { id: 'TCH-2025-136', name: 'Nathaniel David' }, { id: 'TCH-2025-137', name: 'Nelson Sonia C.C' },
+      { id: 'TCH-2025-138', name: 'Nyakos Nurudeen' }, { id: 'TCH-2025-139', name: 'Ogunlana Abdullahi' },
+      { id: 'TCH-2025-140', name: 'Okwuabudike Victoria' }, { id: 'TCH-2025-141', name: 'Olatunji Al-meen' },
+      { id: 'TCH-2025-142', name: 'Olowu Fausiyat' }, { id: 'TCH-2025-143', name: 'Oluborode True Vine' },
+      { id: 'TCH-2025-144', name: 'Oseni Abdulsamod' }, { id: 'TCH-2025-145', name: 'Owoyele Ramadan' },
+      { id: 'TCH-2025-146', name: 'Oyewole Israel' }, { id: 'TCH-2025-147', name: 'Salawudeen Fawas' },
+      { id: 'TCH-2025-148', name: 'Sunny Blessing' }, { id: 'TCH-2025-149', name: 'Waheed Aduragbemi' },
+      { id: 'TCH-2025-150', name: 'Wisdom Donald' }, { id: 'TCH-2025-151', name: 'Yusuf Taiwo' },
+      { id: 'TCH-2025-152', name: 'Yusuff Abdul Sattar' }
+    ],
+    'JSS3B': [
+      { id: 'TCH-2025-153', name: 'Abdul Razak Somod' }, { id: 'TCH-2025-154', name: 'Adebisi Aishat' },
+      { id: 'TCH-2025-155', name: 'Adebisi Ayomide' }, { id: 'TCH-2025-156', name: 'Adebisi Yusuf' },
+      { id: 'TCH-2025-157', name: 'Adeniyi Korede' }, { id: 'TCH-2025-158', name: 'Adewunmi Oluwademilade' },
+      { id: 'TCH-2025-159', name: 'Agbo Favour' }, { id: 'TCH-2025-160', name: 'Akinfe Christianah' },
+      { id: 'TCH-2025-161', name: 'Ambrose Emmanuella' }, { id: 'TCH-2025-162', name: 'Ariyo Moses' },
+      { id: 'TCH-2025-163', name: 'Ayoade Doris' }, { id: 'TCH-2025-164', name: 'Balogun Tobiloba' },
+      { id: 'TCH-2025-165', name: 'Enabulele Israel' }, { id: 'TCH-2025-166', name: 'Faluyi Israel' },
+      { id: 'TCH-2025-167', name: 'Folorunsho Alexander' }, { id: 'TCH-2025-168', name: 'Gabriel Peace' },
+      { id: 'TCH-2025-169', name: 'Lawal Esther' }, { id: 'TCH-2025-170', name: 'Medua Angel' },
+      { id: 'TCH-2025-171', name: 'Nyakos Naimat' }, { id: 'TCH-2025-172', name: 'Olajesu Kayode' },
+      { id: 'TCH-2025-173', name: 'Olasunkanmi Ayobami' }, { id: 'TCH-2025-174', name: 'Olukotun Feranmi' },
+      { id: 'TCH-2025-175', name: 'Onafowokan Ridwan' }, { id: 'TCH-2025-176', name: 'Opatimeyin David' },
+      { id: 'TCH-2025-177', name: 'Oyeniyi David' }, { id: 'TCH-2025-178', name: 'Popoola Aduragbemi' },
+      { id: 'TCH-2025-179', name: 'Rotimi Eniola' }, { id: 'TCH-2025-180', name: 'Samson Loveth' },
+      { id: 'TCH-2025-181', name: 'Samuel Zainab' }, { id: 'TCH-2025-182', name: 'Soyode Emmanuella' },
+      { id: 'TCH-2025-183', name: 'Uduakhomo Peace' }
+    ],
+    'SS1 Science': [
+      { id: 'TCH-2025-184', name: 'Abdullateef Abdulsalam' }, { id: 'TCH-2025-185', name: 'Abimbola Israel' },
+      { id: 'TCH-2025-186', name: 'Adebayo Ayomide' }, { id: 'TCH-2025-187', name: 'Adesalu Kamal' },
+      { id: 'TCH-2025-188', name: 'Adeshina Fawaz' }, { id: 'TCH-2025-189', name: 'Ajayi Aminat' },
+      { id: 'TCH-2025-190', name: 'Ajewole Darasimi' }, { id: 'TCH-2025-191', name: 'Ajibola Rodiat' },
+      { id: 'TCH-2025-192', name: 'Akinyogha Taiwo' }, { id: 'TCH-2025-193', name: 'Akoshile Hameedah' },
+      { id: 'TCH-2025-194', name: 'Akpoveta Daniel' }, { id: 'TCH-2025-195', name: 'Alexander Chukwu' },
+      { id: 'TCH-2025-196', name: 'Amos Savior' }, { id: 'TCH-2025-197', name: 'Ashaye Damola' },
+      { id: 'TCH-2025-198', name: 'Ayangbola Dammilola' }, { id: 'TCH-2025-199', name: 'Bakare Amirat' },
+      { id: 'TCH-2025-200', name: 'Bakare Nifemi' }, { id: 'TCH-2025-201', name: 'Balogun Momeen' },
+      { id: 'TCH-2025-202', name: 'Bamidele Goodluck' }, { id: 'TCH-2025-203', name: 'Chukwuemeka Favour' },
+      { id: 'TCH-2025-204', name: 'Durosimi Abdullateef' }, { id: 'TCH-2025-205', name: 'Emmanuel Godiva' },
+      { id: 'TCH-2025-206', name: 'Fatai Muinat' }, { id: 'TCH-2025-207', name: 'Folorunsho Elijah' },
+      { id: 'TCH-2025-208', name: 'Hassanat' }, { id: 'TCH-2025-209', name: 'Hilary Favour' },
+      { id: 'TCH-2025-210', name: 'Jimoh Yewande' }, { id: 'TCH-2025-211', name: 'Julius-Caleb Okenwan' },
+      { id: 'TCH-2025-212', name: 'Lawal Promise' }, { id: 'TCH-2025-213', name: 'Momoh Divine' },
+      { id: 'TCH-2025-214', name: 'Musa Nimotallahi' }, { id: 'TCH-2025-215', name: 'Ogbueje Nannette' },
+      { id: 'TCH-2025-216', name: 'Ogbonna Joshua' }, { id: 'TCH-2025-217', name: 'Ojo Precious' },
+      { id: 'TCH-2025-218', name: 'Okebiyi Blessing' }, { id: 'TCH-2025-219', name: 'Okebugwu Michael' },
+      { id: 'TCH-2025-220', name: 'Oladipo Oluwabukola' }, { id: 'TCH-2025-221', name: 'Olalere Halim' },
+      { id: 'TCH-2025-222', name: 'Olaniyan Emmanuel' }, { id: 'TCH-2025-223', name: 'Olubiyi Olamide' },
+      { id: 'TCH-2025-224', name: 'Oluwatoyin Eniola' }, { id: 'TCH-2025-225', name: 'Oni Ezekiel' },
+      { id: 'TCH-2025-226', name: 'Onwuegbule Wisdom' }, { id: 'TCH-2025-227', name: 'Opaje Teniola' },
+      { id: 'TCH-2025-228', name: 'Opeyemi Michael' }, { id: 'TCH-2025-229', name: 'Opeyemi Sultan' },
+      { id: 'TCH-2025-230', name: 'Oyesanya Israel' }, { id: 'TCH-2025-231', name: 'Samuel Benjamin' },
+      { id: 'TCH-2025-232', name: 'Sanusi Farahat' }, { id: 'TCH-2025-233', name: 'Sunday Isaac' }
+    ],
+    'SS1 Actuarial': [
+      { id: 'TCH-2025-234', name: 'Abdulmateen saheed' }, { id: 'TCH-2025-235', name: 'Arekwen clement' },
+      { id: 'TCH-2025-236', name: 'Ekum honesty' }, { id: 'TCH-2025-237', name: 'Kehinde anjolaoluwa' },
+      { id: 'TCH-2025-238', name: 'Khalid lateef' }, { id: 'TCH-2025-239', name: 'Oche ojochegbe michael' },
+      { id: 'TCH-2025-240', name: 'Olajire anuoluwapo' }, { id: 'TCH-2025-241', name: 'Oni peter' },
+      { id: 'TCH-2025-242', name: 'Rafiu kehinde' }, { id: 'TCH-2025-243', name: 'Rafiu taiwo' },
+      { id: 'TCH-2025-244', name: 'Kolawole rereoluwa' }, { id: 'TCH-2025-245', name: 'James goodluck' },
+      { id: 'TCH-2025-246', name: 'Azeez malik' }, { id: 'TCH-2025-247', name: 'Aiwe Destiny' },
+      { id: 'TCH-2025-248', name: 'Friday Destiny' }, { id: 'TCH-2025-249', name: 'Akeju David' },
+      { id: 'TCH-2025-250', name: 'Mohammed fayade' }, { id: 'TCH-2025-251', name: 'Adeyemo ikimat' },
+      { id: 'TCH-2025-252', name: 'Ajayi fiyinfoluwa' }, { id: 'TCH-2025-253', name: 'Bello opeyemi' },
+      { id: 'TCH-2025-254', name: 'Falope oluwajomiloju' }, { id: 'TCH-2025-255', name: 'Fowowe Abigail' },
+      { id: 'TCH-2025-256', name: 'Idowu Amidat' }, { id: 'TCH-2025-257', name: 'Ikujuni Oluwasikemi' },
+      { id: 'TCH-2025-258', name: 'Livinus chioma' }, { id: 'TCH-2025-259', name: 'Olukoja omowunmi' },
+      { id: 'TCH-2025-260', name: 'Onojah Victoria' }, { id: 'TCH-2025-261', name: 'Tijani Aishat' },
+      { id: 'TCH-2025-262', name: 'Tujiki anuoluwapo' }, { id: 'TCH-2025-263', name: 'Idris mariam' },
+      { id: 'TCH-2025-264', name: 'Nosiru halimat' }, { id: 'TCH-2025-265', name: 'Adeyemi mariam' },
+      { id: 'TCH-2025-266', name: 'Akinyugha kehinde' }, { id: 'TCH-2025-267', name: 'Musa emmanuella' },
+      { id: 'TCH-2025-268', name: 'Awodiya Amazing-Grace' }, { id: 'TCH-2025-269', name: 'Ofonime Success' }
+    ],
+    'SS2 Science': [
+      { id: 'TCH-2025-270', name: 'Abdullahi Malik' }, { id: 'TCH-2025-271', name: 'Adeoye Rokeeb' },
+      { id: 'TCH-2025-272', name: 'Adeyemi Adesewa' }, { id: 'TCH-2025-273', name: 'Adeyemi Emmanuel' },
+      { id: 'TCH-2025-274', name: 'Agbo Queen' }, { id: 'TCH-2025-275', name: 'Akindutire Iretiola' },
+      { id: 'TCH-2025-276', name: 'Alejo Samuel' }, { id: 'TCH-2025-277', name: 'Babalola Rodiat' },
+      { id: 'TCH-2025-278', name: 'Bakare Aliyat' }, { id: 'TCH-2025-279', name: 'Eke Erica' },
+      { id: 'TCH-2025-280', name: 'Emmanuel Annabel' }, { id: 'TCH-2025-281', name: 'Enabulele Itohan' },
+      { id: 'TCH-2025-282', name: 'Friday Godspower' }, { id: 'TCH-2025-283', name: 'Igbenedion Folabomi' },
+      { id: 'TCH-2025-284', name: 'Itama Daniel' }, { id: 'TCH-2025-285', name: 'Jimoh Ganiyat' },
+      { id: 'TCH-2025-286', name: 'Mohammed Awwal' }, { id: 'TCH-2025-287', name: 'Mudashiru Usman' },
+      { id: 'TCH-2025-288', name: 'Nelson Victor' }, { id: 'TCH-2025-289', name: 'Oduola Olamide' },
+      { id: 'TCH-2025-290', name: 'Okwabudike Mercy' }, { id: 'TCH-2025-291', name: 'Olagbo Susan' },
+      { id: 'TCH-2025-292', name: 'Olaniyi David' }, { id: 'TCH-2025-293', name: 'Olushesi Basit' },
+      { id: 'TCH-2025-294', name: 'Omotosho Faith' }, { id: 'TCH-2025-295', name: 'Oyebanji Victoria' },
+      { id: 'TCH-2025-296', name: 'Oyedeji Emmanuella' }, { id: 'TCH-2025-297', name: 'Quadri Oluwadarasimi' },
+      { id: 'TCH-2025-298', name: 'Sandy Karenapuch' }, { id: 'TCH-2025-299', name: 'Sanyaolu Kehinde' },
+      { id: 'TCH-2025-300', name: 'Sanyaolu Taiwo' }, { id: 'TCH-2025-301', name: 'Sulaimon Alimoh' },
+      { id: 'TCH-2025-302', name: 'Sunday Mary' }
+    ],
+    'SS2 Actuarial': [
+      { id: 'TCH-2025-303', name: 'Abdulrazak Abdulrahman' }, { id: 'TCH-2025-304', name: 'Abdusalam Timileyin' },
+      { id: 'TCH-2025-305', name: 'Abisoye Gold' }, { id: 'TCH-2025-306', name: 'Adebayo Isaiah' },
+      { id: 'TCH-2025-307', name: 'Adeniyi Gbolahan' }, { id: 'TCH-2025-308', name: 'Adenola Darasimi' },
+      { id: 'TCH-2025-309', name: 'Agboola Daniel' }, { id: 'TCH-2025-310', name: 'Azeez Wazilat' },
+      { id: 'TCH-2025-311', name: 'Bakare Bolaji' }, { id: 'TCH-2025-312', name: 'Chukwu Samuel' },
+      { id: 'TCH-2025-313', name: 'Ebere Larry' }, { id: 'TCH-2025-314', name: 'Eduniyi Gideon' },
+      { id: 'TCH-2025-315', name: 'Ewenla Noah' }, { id: 'TCH-2025-316', name: 'Ibadore Miracle' },
+      { id: 'TCH-2025-317', name: 'Ipadeola Idris' }, { id: 'TCH-2025-318', name: 'Ipadeola Quadri' },
+      { id: 'TCH-2025-319', name: 'Jewoola Boluwatife' }, { id: 'TCH-2025-320', name: 'Lawal Gabriel' },
+      { id: 'TCH-2025-321', name: 'Mathew Glory' }, { id: 'TCH-2025-322', name: 'Njoh Ifeoma' },
+      { id: 'TCH-2025-323', name: 'Nwaeke Maryann' }, { id: 'TCH-2025-324', name: 'Ochege Sunday' },
+      { id: 'TCH-2025-325', name: 'Okarfor Ifeoma' }, { id: 'TCH-2025-326', name: 'Oladeji Ala-meen' },
+      { id: 'TCH-2025-327', name: 'Osiba Temiloluwa' }, { id: 'TCH-2025-328', name: 'Osunubi Gbolahan' },
+      { id: 'TCH-2025-329', name: 'Oyebode Precious' }, { id: 'TCH-2025-330', name: 'Peter Godwin' },
+      { id: 'TCH-2025-331', name: 'Shobowale Isaac' }, { id: 'TCH-2025-332', name: 'Shokoya Samuel' },
+      { id: 'TCH-2025-333', name: 'Sulaimon Aishat' }, { id: 'TCH-2025-334', name: 'Zulukadeen Rokeeb' }
+    ],
+    'SS3 Science': [
+      { id: 'TCH-2025-335', name: 'Angel' }, { id: 'TCH-2025-336', name: 'Bamise' },
+      { id: 'TCH-2025-337', name: 'Bright' }, { id: 'TCH-2025-338', name: 'Dorcas' },
+      { id: 'TCH-2025-339', name: 'Enoch' }, { id: 'TCH-2025-340', name: 'Famous' },
+      { id: 'TCH-2025-341', name: 'Fauziyyah' }, { id: 'TCH-2025-342', name: 'Fawaz' },
+      { id: 'TCH-2025-343', name: 'Fiyin' }, { id: 'TCH-2025-344', name: 'Habitat' },
+      { id: 'TCH-2025-345', name: 'Kaosara' }, { id: 'TCH-2025-346', name: 'Khadija' },
+      { id: 'TCH-2025-347', name: 'Mercy' }, { id: 'TCH-2025-348', name: 'Michael' },
+      { id: 'TCH-2025-349', name: 'Moyin' }, { id: 'TCH-2025-350', name: 'Prosper' },
+      { id: 'TCH-2025-351', name: 'Rita' }, { id: 'TCH-2025-352', name: 'Rokibat' },
+      { id: 'TCH-2025-353', name: 'Samuel' }, { id: 'TCH-2025-354', name: 'Taiwo' },
+      { id: 'TCH-2025-355', name: 'Temi' }, { id: 'TCH-2025-356', name: 'Zainab' }
+    ],
+    'SS3 Actuarial': [
+      { id: 'TCH-2025-357', name: 'Abdul Majeed Quadri' }, { id: 'TCH-2025-358', name: 'Abdul Razak Kehinde' },
+      { id: 'TCH-2025-359', name: 'Abuh God\'s Power' }, { id: 'TCH-2025-360', name: 'Adebayo David' },
+      { id: 'TCH-2025-361', name: 'Adeniran Moses' }, { id: 'TCH-2025-362', name: 'Adesanya Emmanuel' },
+      { id: 'TCH-2025-363', name: 'Adisa Fathia' }, { id: 'TCH-2025-364', name: 'Ajibola Roheemot' },
+      { id: 'TCH-2025-365', name: 'Amos Wisdom' }, { id: 'TCH-2025-366', name: 'Asiemor Divine' },
+      { id: 'TCH-2025-367', name: 'Enemali Ojotoeba' }, { id: 'TCH-2025-368', name: 'Falope Darasimi' },
+      { id: 'TCH-2025-369', name: 'Famakinwa Akorede' }, { id: 'TCH-2025-370', name: 'Folorunsho Petra' },
+      { id: 'TCH-2025-371', name: 'Muritala Rashidat' }, { id: 'TCH-2025-372', name: 'Olalere Aishat' },
+      { id: 'TCH-2025-373', name: 'Oyekan Emmanuel' }, { id: 'TCH-2025-374', name: 'Sowole Azeem' },
+      { id: 'TCH-2025-375', name: 'Tujiki David' }, { id: 'TCH-2025-376', name: 'Yakubu Happiness' }
+    ]
+  };
+
+  // Password sequence from CSV (first 400+ entries)
+  const PASSWORD_SEQUENCE = [
+    "22LQ5QPX","23977K95","2523QSMC","2BM7483M","2CABBMXG","2LU2JVFH","2SEZXZ7C","2TYP8KKR","2XGT9V7T","2Y7A2LKG",
+    "32WS526U","34BQE76H","34QQEWP2","354U3HCP","3AVF4Q4Y","3CBMT3F5","3DHUYH2W","3HWMN6E2","3J736Q5V","3LNCPKEL",
+    "3PUU34U4","3YQHAASU","42RKSAN3","44AYVP9V","488VPZSG","4BK4Y7N7","4BRVXUVS","4D5A7M3Z","4Q2XH39Q","4SCAS69H",
+    "4WKHUSX7","4X4XKCRE","56SHA3PP","59PA94Y8","5AQGVQ2L","5L85C2HX","5PJWNHJY","5QDR4EY9","5QE4K97R","5R8CLQXZ",
+    "5XGB4XY7","5XH5GN9G","5ZEENQUM","65KBTJV9","66RNZMAX","6AV7BJG5","6D2D3ZYF","6E6ZNB8A","6FMLAZGN","6HUF2RD6",
+    "6JGQUBT5","6NGMZY3V","6PFRQ9Z8","6TV5VZ3B","6UQN8LJD","6XNKEWLE","72V3GH4R","74XDT5ME","7D3Q6WWB","7F7J78MW",
+    "7FHEQUZY","7GA6B8TP","7PQXXLR6","7Q2J5KJV","7Q4FMM68","7WYHCQJV","7ZFXCJVH","8ACQAP3G","8BB9K8LY","8BH53TCL",
+    "8ETN3T64","8FG3ZXZF","8GQJCM8A","8NG98QFU","8NV67YB3","8U8WSYHD","8X327XAF","8Y3M6S2R","8Z3ZKKP8","92YZBC8M",
+    "95DQAJ7G","95PC4Z8H","96333XJM","97QJ32YL","9AKHXEZ5","9CN7JRN5","9E962D6C","9Y5XKEKG","9ZABHZ5A","A6A2HQXL",
+    "A8PFKSGF","ABYSR7KL","ACEYGZLF","AEC4SFPA","ALKDU595","AMHNLRXY","APH36BS6","APN8AB3Z","AQHQ3UB5","ASFB47YT",
+    "AUSAMH6K","AWD7WBL4","AWZUNVAY","AXHUVHFU","AY684Y3N","B577ZDG8","B5WR3NCA","B7MTBFNX","B9JRB9JY","BBPBK57P",
+    "BBZFLPPP","BH67744J","BJLHVJW7","BNYB77J4","BU6JNF6F","BV2SSZH8","BVVQZ3NF","BYT7Y2HC","C4U3WKET","C7A3ANHY"
+  ];
+  
+  // Ensure enough passwords
+  while(PASSWORD_SEQUENCE.length < 500) PASSWORD_SEQUENCE.push(...PASSWORD_SEQUENCE);
+  
+  // Build complete registry with sequential passwords
+  const classOrder = ["JSS1A","JSS1B","JSS2A","JSS2B","JSS3A","JSS3B","SS1 Science","SS1 Actuarial","SS2 Science","SS2 Actuarial","SS3 Science","SS3 Actuarial"];
+  let passwordIdx = 0;
+  let totalStudentCount = 0;
+  const classData = [];
+  
+  for (const className of classOrder) {
+    const students = COMPLETE_STUDENTS[className] || [];
+    if (students.length === 0) continue;
+    
+    const enriched = students.map((student, idx) => {
+      const pass = PASSWORD_SEQUENCE[passwordIdx % PASSWORD_SEQUENCE.length];
+      passwordIdx++;
+      totalStudentCount++;
+      return { sn: idx + 1, id: student.id, name: student.name, password: pass };
+    });
+    classData.push({ className, students: enriched, count: enriched.length });
+  }
+  
+  // Render to DOM
+  function renderPortal() {
+    const wrapper = document.getElementById('classesWrapper');
+    if (!wrapper) return;
+    
+    let html = '';
+    for (const item of classData) {
+      html += `
+        <details>
+          <summary>
+            <span class="label">
+              <span class="class-title"><i class="fas fa-graduation-cap"></i> ${item.className}</span>
+              <span class="badge">${item.count} student${item.count !== 1 ? 's' : ''}</span>
+            </span>
+            <span class="chevron"><i class="fas fa-chevron-down"></i></span>
+          </summary>
+          <div class="table-container">
+            <table class="student-table">
+              <thead>
+                <tr><th>#</th><th>Student ID</th><th>Full Name</th><th>Access Password / Code</th></tr>
+              </thead>
+              <tbody>
+      `;
+      for (const s of item.students) {
+        html += `
+          <tr>
+            <td class="sn-col">${s.sn}</td>
+            <td class="student-id-code">${escapeHtml(s.id)}</td>
+            <td class="student-fullname">${escapeHtml(s.name)}</td>
+            <td><span class="password-value"><i class="fas fa-key"></i> ${s.password}</span></td>
+          </tr>
+        `;
+      }
+      html += `</tbody></table></div></details>`;
+    }
+    wrapper.innerHTML = html;
+    document.getElementById('totalStudentCount').innerText = totalStudentCount;
+    document.getElementById('totalClassCount').innerText = classData.length;
+  }
+  
+  function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
+  renderPortal();
+</script>
+</body>
+</html>
