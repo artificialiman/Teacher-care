@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TENDERCARE — Admin Broadsheet</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0c14;
+  --surface: #141720;
+  --surface2: #1c2030;
+  --border: #252836;
+  --accent: #4f8ef7;
+  --text: #dde1f0;
+  --muted: #5a5f72;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'SF Mono','Fira Code','Courier New',monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+/* ── TOOLBAR ─────────────────────────────────────────── */
+.toolbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+.brand {
+  font-weight: 700;
+  font-size: 1rem;
+  background: linear-gradient(135deg,#fff 0%,#8ab3ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.brand small {
+  font-size: .7rem;
+  opacity: .7;
+  display: block;
+  font-weight: 400;
+  background: none;
+  -webkit-background-clip: unset;
+  color: var(--muted);
+}
+.vr { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+.tg { display: flex; align-items: center; gap: 7px; }
+.tg label { font-size: .74rem; color: var(--muted); white-space: nowrap; }
+select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: .8rem;
+  font-family: var(--font);
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+select:focus { border-color: var(--accent); }
+.spacer { flex: 1; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 6px;
+  font-size: .78rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  font-family: var(--font);
+}
+.btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
+.btn-ghost:hover { background: var(--surface2); color: var(--text); }
+.btn-blue  { background: rgba(79,142,247,.15); color: #82b4ff; border-color: rgba(79,142,247,.3); }
+.btn-blue:hover  { background: rgba(79,142,247,.25); }
+.btn-green { background: rgba(34,197,94,.12);  color: #4ade80; border-color: rgba(34,197,94,.3); }
+.btn-green:hover { background: rgba(34,197,94,.22); }
+.btn-red   { background: rgba(239,68,68,.12);  color: #f87171; border-color: rgba(239,68,68,.3); }
+.btn-red:hover   { background: rgba(239,68,68,.22); }
+.btn-amber { background: rgba(245,158,11,.12); color: #fbbf24; border-color: rgba(245,158,11,.3); }
+.btn-amber:hover { background: rgba(245,158,11,.22); }
+
+/* ── STATS BAR ───────────────────────────────────────── */
+.stats-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 20px;
+  display: none;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: .74rem;
+  color: var(--muted);
+}
+.stats-bar.show { display: flex; }
+.stat strong { color: var(--accent); font-family: var(--mono); }
+
+/* ── SHEET WRAPPER ───────────────────────────────────── */
+.sheet-outer {
+  overflow-x: auto;
+  overflow-y: auto;
+  height: calc(100vh - 44px);  /* adjusted when stats-bar shows */
+}
+.sheet-outer.has-stats { height: calc(100vh - 78px); }
+
+/* ── EMPTY STATE ─────────────────────────────────────── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 80px 40px;
+  color: var(--muted);
+  text-align: center;
+}
+.empty i { font-size: 2.8rem; color: rgba(79,142,247,.25); }
+.empty h3 { color: var(--text); font-size: 1.1rem; font-weight: 600; }
+.empty p { font-size: .83rem; max-width: 340px; }
+
+/* ── BROADSHEET TABLE ────────────────────────────────── */
+.broadsheet {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: .76rem;
+}
+
+/* First sticky header row */
+.broadsheet thead tr:first-child th {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: #0d0f18;
+  padding: 9px 5px 7px;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+  font-size: .68rem;
+  font-family: var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* Second sticky header row (sub-cols) */
+.broadsheet thead tr:last-child th {
+  position: sticky;
+  top: 35px;
+  z-index: 59;
+  background: #0f111a;
+  padding: 5px 4px;
+  text-align: center;
+  font-size: .65rem;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+}
+/* Subject group header cells */
+.th-subj {
+  background: #141820 !important;
+  color: var(--text) !important;
+  font-size: .7rem !important;
+  font-family: var(--font) !important;
+  letter-spacing: 0 !important;
+  font-weight: 600 !important;
+  border-left: 2px solid var(--border) !important;
+  padding: 8px 4px !important;
+}
+/* Sticky SN + Name columns */
+th.st-sn, td.st-sn {
+  position: sticky; left: 0; z-index: 40;
+  background: #0d0f18;
+  width: 34px; min-width: 34px;
+  text-align: center;
+}
+th.st-name, td.st-name {
+  position: sticky; left: 34px; z-index: 40;
+  background: #0d0f18;
+  min-width: 170px; max-width: 200px;
+  text-align: left;
+  padding-left: 10px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Ensure header stickies get max z */
+thead th.st-sn, thead th.st-name { z-index: 70; }
+
+/* Body rows */
+.broadsheet tbody tr {
+  border-bottom: 1px solid rgba(37,40,54,.8);
+  transition: background .1s;
+}
+.broadsheet tbody tr:hover { background: rgba(79,142,247,.04); }
+.broadsheet tbody tr:hover td.st-sn,
+.broadsheet tbody tr:hover td.st-name { background: #111420; }
+
+.broadsheet td {
+  padding: 3px 4px;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid rgba(37,40,54,.5);
+}
+td.st-name {
+  text-align: left;
+  font-size: .78rem;
+  color: var(--text);
+}
+td.st-sn {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .68rem;
+}
+
+/* ── SCORE INPUTS ────────────────────────────────────── */
+.si {
+  width: 32px;
+  padding: 2px 1px;
+  text-align: center;
+  background: rgba(79,142,247,.05);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: .78rem;
+  font-family: var(--mono);
+  transition: all .15s;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.si::-webkit-outer-spin-button,
+.si::-webkit-inner-spin-button { -webkit-appearance: none; }
+.si:focus {
+  outline: none;
+  background: rgba(79,142,247,.15);
+  border-color: rgba(79,142,247,.6);
+}
+.si:hover:not(:focus) {
+  background: rgba(79,142,247,.1);
+  border-color: rgba(79,142,247,.25);
+}
+
+/* ── TOTAL / AGGREGATE CELLS ─────────────────────────── */
+.tc {
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-weight: 600;
+  min-width: 28px;
+  color: rgba(221,225,240,.7);
+}
+.tc.filled { color: var(--text); }
+.agg-cell {
+  background: rgba(79,142,247,.07);
+  border-left: 2px solid rgba(79,142,247,.25) !important;
+  min-width: 42px;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: .82rem;
+  color: var(--accent);
+}
+.pos-cell {
+  min-width: 32px;
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--muted);
+}
+.pos-1 { color: #fbbf24; font-weight: 700; }
+.pos-2 { color: #94a3b8; font-weight: 700; }
+.pos-3 { color: #c2844d; font-weight: 700; }
+
+/* Subject separator */
+.sep { border-left: 2px solid rgba(37,40,54,.9) !important; }
+
+/* ── GRADE BADGES ────────────────────────────────────── */
+.gb {
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: .66rem;
+  font-family: var(--mono);
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+}
+.g-a   { background: rgba(34,197,94,.18);   color: #4ade80; }
+.g-b2  { background: rgba(59,130,246,.18);  color: #60a5fa; }
+.g-b3  { background: rgba(96,165,250,.15);  color: #93c5fd; }
+.g-c4  { background: rgba(234,179,8,.18);   color: #fbbf24; }
+.g-c5  { background: rgba(202,138,4,.18);   color: #f59e0b; }
+.g-c6  { background: rgba(161,98,7,.22);    color: #d97706; }
+.g-d7  { background: rgba(249,115,22,.18);  color: #fb923c; }
+.g-e8  { background: rgba(239,68,68,.18);   color: #f87171; }
+.g-f9  { background: rgba(153,27,27,.28);   color: #fca5a5; }
+.g-nil { color: var(--muted); font-size: .64rem; }
+
+/* ── IMPORT MODAL ────────────────────────────────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  z-index: 400;
+  align-items: center;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 26px;
+  width: min(500px, 94vw);
+  box-shadow: 0 24px 64px rgba(0,0,0,.5);
+}
+.modal h3 { font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 9px; }
+.modal h3 i { color: var(--accent); }
+.modal p { font-size: .8rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.drop-zone:hover, .drop-zone.drag { border-color: var(--accent); background: rgba(79,142,247,.05); }
+.drop-zone i { font-size: 2rem; color: var(--muted); display: block; margin-bottom: 8px; }
+.drop-zone p { font-size: .8rem; color: var(--muted); }
+.drop-zone p strong { color: var(--text); }
+.import-preview {
+  display: none;
+  margin-top: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.import-preview .ok { color: var(--success); }
+.import-preview .warn { color: var(--warning); }
+.import-preview .err { color: var(--danger); }
+.modal-foot { display: flex; gap: 9px; justify-content: flex-end; margin-top: 18px; }
+
+/* ── TOAST ───────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: .82rem;
+  display: none;
+  align-items: center;
+  gap: 9px;
+  z-index: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  max-width: 340px;
+  animation: toastIn .25s ease;
+}
+.toast.show { display: flex; }
+.toast.t-ok  { border-color: rgba(34,197,94,.35); }
+.toast.t-err { border-color: rgba(239,68,68,.35); }
+.toast.t-ok  i { color: var(--success); }
+.toast.t-err i { color: var(--danger); }
+@keyframes toastIn {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── PRINT ───────────────────────────────────────────── */
+@media print {
+  .toolbar, .stats-bar { display: none !important; }
+  .sheet-outer { height: auto !important; overflow: visible !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .broadsheet { font-size: 6.5pt; }
+  .broadsheet thead tr:first-child th,
+  .broadsheet thead tr:last-child th { position: static; background: #f5f5f5; color: #333; }
+  .st-sn, .st-name { position: static !important; background: transparent !important; }
+  .si { border: 1px solid #ccc; background: transparent; color: #000; }
+  .gb { border: 1px solid #999; background: transparent !important; color: #000 !important; }
+  .agg-cell { background: #eef !important; color: #003 !important; border-left: 2px solid #99b !important; }
+  .broadsheet tbody tr:hover { background: transparent; }
+  .btn, .overlay { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOOLBAR ── -->
+<div class="toolbar">
+  <div style="flex-shrink:0">
+    <div class="brand">⚡ TENDERCARE<small>Admin Broadsheet</small></div>
+  </div>
+  <div class="vr"></div>
+  <div class="tg">
+    <label>Class</label>
+    <select id="selClass" onchange="loadClass()">
+      <option value="">— select —</option>
+      <option>JSS1A</option><option>JSS1B</option>
+      <option>JSS2A</option><option>JSS2B</option>
+      <option>JSS3A</option><option>JSS3B</option>
+      <option>SS1 Science</option><option>SS1 Actuarial</option>
+      <option>SS2 Science</option><option>SS2 Actuarial</option>
+      <option>SS3 Science</option><option>SS3 Actuarial</option>
+    </select>
+  </div>
+  <div class="tg">
+    <label>Term</label>
+    <select id="selTerm" onchange="loadClass()">
+      <option>2024/2025 Term 1</option>
+      <option>2024/2025 Term 2</option>
+      <option>2024/2025 Term 3</option>
+    </select>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-amber" onclick="openImport()">
+    <i class="fas fa-file-import"></i> Import JSON
+  </button>
+  <button class="btn btn-green" id="btnCSV" style="display:none" onclick="doExportCSV()">
+    <i class="fas fa-file-csv"></i> Export CSV
+  </button>
+  <button class="btn btn-ghost" id="btnPrint" style="display:none" onclick="window.print()">
+    <i class="fas fa-print"></i> Print
+  </button>
+  <button class="btn btn-red" id="btnClear" style="display:none" onclick="doClear()">
+    <i class="fas fa-trash-alt"></i> Clear
+  </button>
+</div>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar" id="statsBar">
+  <span class="stat">Class: <strong id="sClass">—</strong></span>
+  <span class="stat">Students: <strong id="sCnt">—</strong></span>
+  <span class="stat">Subjects: <strong id="sSubj">—</strong></span>
+  <span class="stat">Avg Aggregate: <strong id="sAvg">—</strong></span>
+  <span class="stat">Top Score: <strong id="sTop">—</strong></span>
+  <span class="stat">Entries: <strong id="sEntry">0</strong>/<strong id="sMax">—</strong></span>
+</div>
+
+<!-- ── SHEET AREA ── -->
+<div class="sheet-outer" id="sheetOuter">
+  <div class="empty" id="emptyMsg">
+    <i class="fas fa-table-cells-large"></i>
+    <h3>Select a class to open the broadsheet</h3>
+    <p>Choose a class and term from the toolbar above. All subjects for that class will load automatically.</p>
+  </div>
+</div>
+
+<!-- ── IMPORT MODAL ── -->
+<div class="overlay" id="importOverlay" onclick="if(event.target===this) closeImport()">
+  <div class="modal">
+    <h3><i class="fas fa-file-import"></i> Import Teacher JSON</h3>
+    <p>Drop a teacher-submitted .json file to automatically populate scores for its subject and class. Existing scores for that subject will be overwritten.</p>
+    <div class="drop-zone" id="dropZone"
+         onclick="document.getElementById('fileIn').click()"
+         ondragover="event.preventDefault(); this.classList.add('drag')"
+         ondragleave="this.classList.remove('drag')"
+         ondrop="handleDrop(event)">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p><strong>Click to browse</strong> or drag & drop a .json file</p>
+    </div>
+    <input type="file" id="fileIn" accept=".json" style="display:none" onchange="handleFileInput(event)">
+    <div class="import-preview" id="importPreview"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeImport()">Cancel</button>
+      <button class="btn btn-blue" id="btnApply" style="display:none" onclick="applyImport()">
+        <i class="fas fa-check"></i> Apply
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast">
+  <i class="fas fa-circle-check" id="toastIcon"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STUDENTS DATABASE
+// ═══════════════════════════════════════════════════════════
+const STUDENTS_DB = {
+  'JSS1A': [
+    {id:'TCH-2025-001',name:'Abraham Comfort Princess'},{id:'TCH-2025-002',name:'Abraham Nanmuwa'},
+    {id:'TCH-2025-003',name:'Adebanjo Anjola'},{id:'TCH-2025-004',name:'Adegboye Adam'},
+    {id:'TCH-2025-005',name:'Ademola Daniel'},{id:'TCH-2025-006',name:'Adeoye Ikimot'},
+    {id:'TCH-2025-007',name:'Adeyemi Olamide'},{id:'TCH-2025-008',name:'Adiukwu Chimuaya'},
+    {id:'TCH-2025-009',name:'Ayegba Anthony'},{id:'TCH-2025-010',name:'Chris Ukpah Rejoice'},
+    {id:'TCH-2025-011',name:'Ehigie Jeffrey'},{id:'TCH-2025-012',name:'Enabulele Newton'},
+    {id:'TCH-2025-013',name:'Hazmat Alaba'},{id:'TCH-2025-014',name:'Idowu Taiwo'},
+    {id:'TCH-2025-015',name:'Jackson Grace'},{id:'TCH-2025-016',name:'Jimoh Sodiq'},
+    {id:'TCH-2025-017',name:'Mohammed Abdul-salam'},{id:'TCH-2025-018',name:'Muritala Farhan'},
+    {id:'TCH-2025-019',name:'Obaoye Adeola Ruth'},{id:'TCH-2025-020',name:'Oduwaye Abdul-salam'},
+    {id:'TCH-2025-021',name:'Ogunlana Aishat'},{id:'TCH-2025-022',name:'Okwuabudike Michael'},
+    {id:'TCH-2025-023',name:'Olukoga Akorede'},{id:'TCH-2025-024',name:'Oni Grace Oluwadarasimi'},
+    {id:'TCH-2025-025',name:'Otuole Innocent'},{id:'TCH-2025-026',name:'Peter John'},
+    {id:'TCH-2025-027',name:'Rafiu Aishat'},{id:'TCH-2025-028',name:'Soyode Emmanuel'},
+    {id:'TCH-2025-029',name:'Yusuf Al-meen'},
+  ],
+  'JSS1B': [
+    {id:'TCH-2025-030',name:'Adeniyi Nifemi'},{id:'TCH-2025-031',name:'Adenoyi Basir'},
+    {id:'TCH-2025-032',name:'Adeyemi Modesire'},{id:'TCH-2025-033',name:'Agbo Wonderful'},
+    {id:'TCH-2025-034',name:'Akeju Emmanuel'},{id:'TCH-2025-035',name:'Akindutire Michael'},
+    {id:'TCH-2025-036',name:'Asuluka Obioma'},{id:'TCH-2025-037',name:'Babarinde Testimony'},
+    {id:'TCH-2025-038',name:'Dada Ayodeji'},{id:'TCH-2025-039',name:'Duckson Samson'},
+    {id:'TCH-2025-040',name:'Idowu Kehinde'},{id:'TCH-2025-041',name:'Ikujuni Samuel'},
+    {id:'TCH-2025-042',name:'Irinyemi Halleluyah'},{id:'TCH-2025-043',name:'Ishola Suliat'},
+    {id:'TCH-2025-044',name:'Jewoola Olamide'},{id:'TCH-2025-045',name:'Jonathan Frednard'},
+    {id:'TCH-2025-046',name:'Makinde Tofunmi'},{id:'TCH-2025-047',name:'Ofulate Boluwatife'},
+    {id:'TCH-2025-048',name:'Okezueze Ifechukwu'},{id:'TCH-2025-049',name:'Oni Fikayo'},
+    {id:'TCH-2025-050',name:'Onibodo Quadri'},{id:'TCH-2025-051',name:'Owoade Praise'},
+    {id:'TCH-2025-052',name:'Oyeniran Michelle'},{id:'TCH-2025-053',name:'Safiriyu Simisola'},
+    {id:'TCH-2025-054',name:'Sandy Enoch'},{id:'TCH-2025-055',name:'Shokoya Imole'},
+    {id:'TCH-2025-056',name:'Tijani Anjolaoluwa'},{id:'TCH-2025-057',name:'Ubi Richard Victoria'},
+    {id:'TCH-2025-058',name:'Yusuff Salamat Semilore'},
+  ],
+  'JSS2A': [
+    {id:'TCH-2025-059',name:'Abey Phoebe'},{id:'TCH-2025-060',name:'Adeniyi Mubarak'},
+    {id:'TCH-2025-061',name:'Agbabiaka Ella'},{id:'TCH-2025-062',name:'Alala Faridat'},
+    {id:'TCH-2025-063',name:'Aramide Ikimot'},{id:'TCH-2025-064',name:'Aremu Praise'},
+    {id:'TCH-2025-065',name:'Ayoade Flourish'},{id:'TCH-2025-066',name:'Bakare Gabriel'},
+    {id:'TCH-2025-067',name:'Bamiro David'},{id:'TCH-2025-068',name:'Biobaku Azraa'},
+    {id:'TCH-2025-069',name:'Boladale Esther'},{id:'TCH-2025-070',name:'Edeniyi Ukharia'},
+    {id:'TCH-2025-071',name:'Falope Kikiope'},{id:'TCH-2025-072',name:'Ida Wisdom'},
+    {id:'TCH-2025-073',name:'Mudashiru Abidat'},{id:'TCH-2025-074',name:"Muh'awwal Alitorf"},
+    {id:'TCH-2025-075',name:'Musa Isaac'},{id:'TCH-2025-076',name:'Neri Testimony'},
+    {id:'TCH-2025-077',name:'Obaoye Dorcas'},{id:'TCH-2025-078',name:'Ogoyemi Josephine'},
+    {id:'TCH-2025-079',name:'Olowu Jamal'},{id:'TCH-2025-080',name:'Olubiyi Godwin'},
+    {id:'TCH-2025-081',name:'Opeyemi Rosheedat'},{id:'TCH-2025-082',name:'Oriabor Joy'},
+    {id:'TCH-2025-083',name:'Orukpe Daniel'},{id:'TCH-2025-084',name:'Oyeboade Erioluwa'},
+    {id:'TCH-2025-085',name:'Oyediji Israel'},{id:'TCH-2025-086',name:'Oyetunji Adejoke'},
+    {id:'TCH-2025-087',name:'Oyewole Daniel'},{id:'TCH-2025-088',name:'Rafiu Rofiat'},
+    {id:'TCH-2025-089',name:'Raji Joshua'},{id:'TCH-2025-090',name:'Tijani Olamiposi'},
+  ],
+  'JSS2B': [
+    {id:'TCH-2025-091',name:'Abolanle Nancy'},{id:'TCH-2025-092',name:'Adeboyo Taiwo'},
+    {id:'TCH-2025-093',name:'Adeniran Isaac'},{id:'TCH-2025-094',name:'Adesuyi Ademola'},
+    {id:'TCH-2025-095',name:'Akinade Darasimi'},{id:'TCH-2025-096',name:'Akinola Abdulhamid'},
+    {id:'TCH-2025-097',name:'Alexander Chinaza'},{id:'TCH-2025-098',name:'Balogun Muminat'},
+    {id:'TCH-2025-099',name:'Fagbola Oladerin Emmanualla'},{id:'TCH-2025-100',name:'Ganiu Aliyat'},
+    {id:'TCH-2025-101',name:'Idris Faridat'},{id:'TCH-2025-102',name:'Ikechukwu Miracle'},
+    {id:'TCH-2025-103',name:'Kamilu Saheed'},{id:'TCH-2025-104',name:'Muritala Rokibat'},
+    {id:'TCH-2025-105',name:'Ochege Rhoda'},{id:'TCH-2025-106',name:'Ojochegbe Linda'},
+    {id:'TCH-2025-107',name:'Olaniyi Mary'},{id:'TCH-2025-108',name:'Olatunbosun Daniel'},
+    {id:'TCH-2025-109',name:'Ologunre Marvellous'},{id:'TCH-2025-110',name:'Onifade Ayomide'},
+    {id:'TCH-2025-111',name:'Oseni Idayat'},{id:'TCH-2025-112',name:'Sakiru John'},
+    {id:'TCH-2025-113',name:'Shofowora Nifemi'},{id:'TCH-2025-114',name:'Suli Fridaus'},
+    {id:'TCH-2025-115',name:'Yakubu Moses'},
+  ],
+  'JSS3A': [
+    {id:'TCH-2025-116',name:'Abdul Rasheed Rodiat'},{id:'TCH-2025-117',name:'Adebayo Dorcas'},
+    {id:'TCH-2025-118',name:'Adebayo Favour'},{id:'TCH-2025-119',name:'Adeniyi Darasimi'},
+    {id:'TCH-2025-120',name:'Afolayan Joshua'},{id:'TCH-2025-121',name:'Akanji Favour'},
+    {id:'TCH-2025-122',name:'Akinbiyi Glory'},{id:'TCH-2025-123',name:'Amusat Khalilulahi O'},
+    {id:'TCH-2025-124',name:'Aransiola'},{id:'TCH-2025-125',name:'Balogun Jomiloju'},
+    {id:'TCH-2025-126',name:'Emmanuel Ayowole'},{id:'TCH-2025-127',name:'Emmanuel Maxwell'},
+    {id:'TCH-2025-128',name:'Emmanuel Priscilla'},{id:'TCH-2025-129',name:'Fatuki Oluwanifemi'},
+    {id:'TCH-2025-130',name:'Folorunsho Precious'},{id:'TCH-2025-131',name:'Garba Albarka'},
+    {id:'TCH-2025-132',name:'Ibhadore Godswill'},{id:'TCH-2025-133',name:'Irinyemi Jomiloju Praise'},
+    {id:'TCH-2025-134',name:'Kolade Idera'},{id:'TCH-2025-135',name:'Nanmwa Victor'},
+    {id:'TCH-2025-136',name:'Nathaniel David'},{id:'TCH-2025-137',name:'Nelson Sonia C.C'},
+    {id:'TCH-2025-138',name:'Nyakos Nurudeen'},{id:'TCH-2025-139',name:'Ogunlana Abdullahi'},
+    {id:'TCH-2025-140',name:'Okwuabudike Victoria'},{id:'TCH-2025-141',name:'Olatunji Al-meen'},
+    {id:'TCH-2025-142',name:'Olowu Fausiyat'},{id:'TCH-2025-143',name:'Oluborode True Vine'},
+    {id:'TCH-2025-144',name:'Oseni Abdulsamod'},{id:'TCH-2025-145',name:'Owoyele Ramadan'},
+    {id:'TCH-2025-146',name:'Oyewole Israel'},{id:'TCH-2025-147',name:'Salawudeen Fawas'},
+    {id:'TCH-2025-148',name:'Sunny Blessing'},{id:'TCH-2025-149',name:'Waheed Aduragbemi'},
+    {id:'TCH-2025-150',name:'Wisdom Donald'},{id:'TCH-2025-151',name:'Yusuf Taiwo'},
+    {id:'TCH-2025-152',name:'Yusuff Abdul Sattar'},
+  ],
+  'JSS3B': [
+    {id:'TCH-2025-153',name:'Abdul Razak Somod'},{id:'TCH-2025-154',name:'Adebisi Aishat'},
+    {id:'TCH-2025-155',name:'Adebisi Ayomide'},{id:'TCH-2025-156',name:'Adebisi Yusuf'},
+    {id:'TCH-2025-157',name:'Adeniyi Korede'},{id:'TCH-2025-158',name:'Adewunmi Oluwademilade'},
+    {id:'TCH-2025-159',name:'Agbo Favour'},{id:'TCH-2025-160',name:'Akinfe Christianah'},
+    {id:'TCH-2025-161',name:'Ambrose Emmanuella'},{id:'TCH-2025-162',name:'Ariyo Moses'},
+    {id:'TCH-2025-163',name:'Ayoade Doris'},{id:'TCH-2025-164',name:'Balogun Tobiloba'},
+    {id:'TCH-2025-165',name:'Enabulele Israel'},{id:'TCH-2025-166',name:'Faluyi Israel'},
+    {id:'TCH-2025-167',name:'Folorunsho Alexander'},{id:'TCH-2025-168',name:'Gabriel Peace'},
+    {id:'TCH-2025-169',name:'Lawal Esther'},{id:'TCH-2025-170',name:'Medua Angel'},
+    {id:'TCH-2025-171',name:'Nyakos Naimat'},{id:'TCH-2025-172',name:'Olajesu Kayode'},
+    {id:'TCH-2025-173',name:'Olasunkanmi Ayobami'},{id:'TCH-2025-174',name:'Olukotun Feranmi'},
+    {id:'TCH-2025-175',name:'Onafowokan Ridwan'},{id:'TCH-2025-176',name:'Opatimeyin David'},
+    {id:'TCH-2025-177',name:'Oyeniyi David'},{id:'TCH-2025-178',name:'Popoola Aduragbemi'},
+    {id:'TCH-2025-179',name:'Rotimi Eniola'},{id:'TCH-2025-180',name:'Samson Loveth'},
+    {id:'TCH-2025-181',name:'Samuel Zainab'},{id:'TCH-2025-182',name:'Soyode Emmanuella'},
+    {id:'TCH-2025-183',name:'Uduakhomo Peace'},
+  ],
+  'SS1 Science': [
+    {id:'TCH-2025-184',name:'Abdullateef Abdulsalam'},{id:'TCH-2025-185',name:'Abimbola Israel'},
+    {id:'TCH-2025-186',name:'Adebayo Ayomide'},{id:'TCH-2025-187',name:'Adesalu Kamal'},
+    {id:'TCH-2025-188',name:'Adeshina Fawaz'},{id:'TCH-2025-189',name:'Ajayi Aminat'},
+    {id:'TCH-2025-190',name:'Ajewole Darasimi'},{id:'TCH-2025-191',name:'Ajibola Rodiat'},
+    {id:'TCH-2025-192',name:'Akinyogha Taiwo'},{id:'TCH-2025-193',name:'Akoshile Hameedah'},
+    {id:'TCH-2025-194',name:'Akpoveta Daniel'},{id:'TCH-2025-195',name:'Alexander Chukwu'},
+    {id:'TCH-2025-196',name:'Amos Savior'},{id:'TCH-2025-197',name:'Ashaye Damola'},
+    {id:'TCH-2025-198',name:'Ayangbola Damola'},{id:'TCH-2025-199',name:'Bakare Amirat'},
+    {id:'TCH-2025-200',name:'Bakare Nifemi'},{id:'TCH-2025-201',name:'Balogun Momeen'},
+    {id:'TCH-2025-202',name:'Bamidele Goodluck'},{id:'TCH-2025-203',name:'Chukwuemeka Favour'},
+    {id:'TCH-2025-204',name:'Durosimi Abdullateef'},{id:'TCH-2025-205',name:'Emmanuel Godiva'},
+    {id:'TCH-2025-206',name:'Fatai Muinat'},{id:'TCH-2025-207',name:'Folorunsho Elijah'},
+    {id:'TCH-2025-208',name:'Hassanat'},{id:'TCH-2025-209',name:'Hilary Favour'},
+    {id:'TCH-2025-210',name:'Jimoh Yewande'},{id:'TCH-2025-211',name:'Julius-Caleb Okenwan'},
+    {id:'TCH-2025-212',name:'Lawal Promise'},{id:'TCH-2025-213',name:'Momoh Divine'},
+    {id:'TCH-2025-214',name:'Musa Nimotallahi'},{id:'TCH-2025-215',name:'Nannette'},
+    {id:'TCH-2025-216',name:'Ogbonna Joshua'},{id:'TCH-2025-217',name:'Ojo Precious'},
+    {id:'TCH-2025-218',name:'Okebiyi Blessing'},{id:'TCH-2025-219',name:'Okebugwu Michael'},
+    {id:'TCH-2025-220',name:'Oladipo Oluwabukola'},{id:'TCH-2025-221',name:'Olalere Halim'},
+    {id:'TCH-2025-222',name:'Olaniyan Emmanuel'},{id:'TCH-2025-223',name:'Olubiyi Olamide'},
+    {id:'TCH-2025-224',name:'Oluwatoyin Eniola'},{id:'TCH-2025-225',name:'Oni Ezekiel'},
+    {id:'TCH-2025-226',name:'Onwuegbule Wisdom'},{id:'TCH-2025-227',name:'Opaje Teniola'},
+    {id:'TCH-2025-228',name:'Opeyemi Michael'},{id:'TCH-2025-229',name:'Opeyemi Sultan'},
+    {id:'TCH-2025-230',name:'Oyesanya Israel'},{id:'TCH-2025-231',name:'Samuel Benjamin'},
+    {id:'TCH-2025-232',name:'Sanusi Farahat'},{id:'TCH-2025-233',name:'Sunday Isaac'},
+  ],
+  'SS1 Actuarial': [
+    {id:'TCH-2025-341',name:'Abdulmateen Saheed'},{id:'TCH-2025-342',name:'Adeyemi Mariam'},
+    {id:'TCH-2025-343',name:'Adeyemo Ikimat'},{id:'TCH-2025-344',name:'Aiwe Destiny'},
+    {id:'TCH-2025-345',name:'Ajayi Fiyinfoluwa'},{id:'TCH-2025-346',name:'Akeju David'},
+    {id:'TCH-2025-347',name:'Akinyugha Kehinde'},{id:'TCH-2025-348',name:'Arekwen Clement'},
+    {id:'TCH-2025-349',name:'Awodiya Amazing-Grace'},{id:'TCH-2025-350',name:'Azeez Malik'},
+    {id:'TCH-2025-351',name:'Bello Opeyemi'},{id:'TCH-2025-352',name:'Ekum Honesty'},
+    {id:'TCH-2025-353',name:'Falope Oluwajomiloju'},{id:'TCH-2025-354',name:'Fowowe Abigail'},
+    {id:'TCH-2025-355',name:'Friday Destiny'},{id:'TCH-2025-356',name:'Idowu Amidat'},
+    {id:'TCH-2025-357',name:'Idris Mariam'},{id:'TCH-2025-358',name:'Ikujuni Oluwasikemi'},
+    {id:'TCH-2025-359',name:'James Goodluck'},{id:'TCH-2025-360',name:'Kehinde Anjolaoluwa'},
+    {id:'TCH-2025-361',name:'Khalid Lateef'},{id:'TCH-2025-362',name:'Kolawole Rereoluwa'},
+    {id:'TCH-2025-363',name:'Livinus Chioma'},{id:'TCH-2025-364',name:'Mohammed Fayade'},
+    {id:'TCH-2025-365',name:'Musa Emmanuella'},{id:'TCH-2025-366',name:'Nosiru Halimat'},
+    {id:'TCH-2025-367',name:'Oche Ojochegbe Michael'},{id:'TCH-2025-368',name:'Ofonime Success'},
+    {id:'TCH-2025-369',name:'Olajire Anuoluwapo'},{id:'TCH-2025-370',name:'Olukoja Omowunmi'},
+    {id:'TCH-2025-371',name:'Oni Peter'},{id:'TCH-2025-372',name:'Onojah Victoria'},
+    {id:'TCH-2025-373',name:'Rafiu Kehinde'},{id:'TCH-2025-374',name:'Rafiu Taiwo'},
+    {id:'TCH-2025-375',name:'Tijani Aishat'},{id:'TCH-2025-376',name:'Tujiki Anuoluwapo'},
+  ],
+  'SS2 Science': [
+    {id:'TCH-2025-234',name:'Abdullahi Malik'},{id:'TCH-2025-235',name:'Adeoye Rokeeb'},
+    {id:'TCH-2025-236',name:'Adeyemi Adesewa'},{id:'TCH-2025-237',name:'Adeyemi Emmanuel'},
+    {id:'TCH-2025-238',name:'Agbo Queen'},{id:'TCH-2025-239',name:'Akindutire Iretiola'},
+    {id:'TCH-2025-240',name:'Alejo Samuel'},{id:'TCH-2025-241',name:'Babalola Rodiat'},
+    {id:'TCH-2025-242',name:'Bakare Aliyat'},{id:'TCH-2025-243',name:'Eke Erica'},
+    {id:'TCH-2025-244',name:'Emmanuel Annabel'},{id:'TCH-2025-245',name:'Enabulele Itohan'},
+    {id:'TCH-2025-246',name:'Friday Godspower'},{id:'TCH-2025-247',name:'Igbenedion Folabomi'},
+    {id:'TCH-2025-248',name:'Itama Daniel'},{id:'TCH-2025-249',name:'Jimoh Ganiyat'},
+    {id:'TCH-2025-250',name:'Mohammed Awwal'},{id:'TCH-2025-251',name:'Mudashiru Usman'},
+    {id:'TCH-2025-252',name:'Nelson Victor'},{id:'TCH-2025-253',name:'Oduola Olamide'},
+    {id:'TCH-2025-254',name:'Okwabudike Mercy'},{id:'TCH-2025-255',name:'Olagbo Susan'},
+    {id:'TCH-2025-256',name:'Olaniyi David'},{id:'TCH-2025-257',name:'Olushesi Basit'},
+    {id:'TCH-2025-258',name:'Omotosho Faith'},{id:'TCH-2025-259',name:'Oyebanji Victoria'},
+    {id:'TCH-2025-260',name:'Oyedeji Emmanuella'},{id:'TCH-2025-261',name:'Quadri Oluwadarasimi'},
+    {id:'TCH-2025-262',name:'Sandy Karenapuch'},{id:'TCH-2025-263',name:'Sanyaolu Kehinde'},
+    {id:'TCH-2025-264',name:'Sanyaolu Taiwo'},{id:'TCH-2025-265',name:'Sulaimon Alimoh'},
+    {id:'TCH-2025-266',name:'Sunday Mary'},
+  ],
+  'SS2 Actuarial': [
+    {id:'TCH-2025-267',name:'Abdulrazak Abdulrahman'},{id:'TCH-2025-268',name:'Abdusalam Timileyin'},
+    {id:'TCH-2025-269',name:'Abisoye Gold'},{id:'TCH-2025-270',name:'Adebayo Isaiah'},
+    {id:'TCH-2025-271',name:'Adeniyi Gbolahan'},{id:'TCH-2025-272',name:'Adeola Darasimi'},
+    {id:'TCH-2025-273',name:'Agboola Daniel'},{id:'TCH-2025-274',name:'Azeez Wazilat'},
+    {id:'TCH-2025-275',name:'Bakare Bolaji'},{id:'TCH-2025-276',name:'Chukwu Samuel'},
+    {id:'TCH-2025-277',name:'Ebere Larry'},{id:'TCH-2025-278',name:'Eduniyi Gideon'},
+    {id:'TCH-2025-279',name:'Ewenra Noah'},{id:'TCH-2025-280',name:'Ibadore Miracle'},
+    {id:'TCH-2025-281',name:'Ipadeola Idris'},{id:'TCH-2025-282',name:'Ipadeola Quadri'},
+    {id:'TCH-2025-283',name:'Jewoola Boluwatife'},{id:'TCH-2025-284',name:'Lawal Gabriel'},
+    {id:'TCH-2025-285',name:'Mathew Glory'},{id:'TCH-2025-286',name:'Njoh Ifeoma'},
+    {id:'TCH-2025-287',name:'Nwacke Maryann'},{id:'TCH-2025-288',name:'Ochege Sunday'},
+    {id:'TCH-2025-289',name:'Okarfor Ifeoma'},{id:'TCH-2025-290',name:'Oladeji Ala-meen'},
+    {id:'TCH-2025-291',name:'Osiba Temiloluwa'},{id:'TCH-2025-292',name:'Osunibi Gbolahan'},
+    {id:'TCH-2025-293',name:'Oyebode Precious'},{id:'TCH-2025-294',name:'Peter Godwin'},
+    {id:'TCH-2025-295',name:'Shobowale Isaac'},{id:'TCH-2025-296',name:'Shokoya Samuel'},
+    {id:'TCH-2025-297',name:'Sulaimon Aishat'},{id:'TCH-2025-298',name:'Zulukadeen Rokeeb'},
+  ],
+  'SS3 Science': [
+    {id:'TCH-2025-299',name:'Angel'},{id:'TCH-2025-300',name:'Bamise'},
+    {id:'TCH-2025-301',name:'Bright'},{id:'TCH-2025-302',name:'Dorcas'},
+    {id:'TCH-2025-303',name:'Enoch'},{id:'TCH-2025-304',name:'Famous'},
+    {id:'TCH-2025-305',name:'Fauziyyah'},{id:'TCH-2025-306',name:'Fawaz'},
+    {id:'TCH-2025-307',name:'Fiyin'},{id:'TCH-2025-308',name:'Habitat'},
+    {id:'TCH-2025-309',name:'Kaosara'},{id:'TCH-2025-310',name:'Khadija'},
+    {id:'TCH-2025-311',name:'Mercy'},{id:'TCH-2025-312',name:'Michael'},
+    {id:'TCH-2025-313',name:'Moyin'},{id:'TCH-2025-314',name:'Prosper'},
+    {id:'TCH-2025-315',name:'Rita'},{id:'TCH-2025-316',name:'Rokibat'},
+    {id:'TCH-2025-317',name:'Samuel'},{id:'TCH-2025-318',name:'Taiwo'},
+    {id:'TCH-2025-319',name:'Temi'},{id:'TCH-2025-320',name:'Zainab'},
+  ],
+  'SS3 Actuarial': [
+    {id:'TCH-2025-321',name:'Abdul Majeed Quadri'},{id:'TCH-2025-322',name:'Abdul Razak Kehinde'},
+    {id:'TCH-2025-323',name:"Abuh God's Power"},{id:'TCH-2025-324',name:'Adebayo David'},
+    {id:'TCH-2025-325',name:'Adeniran Moses'},{id:'TCH-2025-326',name:'Adesanya Emmanuel'},
+    {id:'TCH-2025-327',name:'Adisa Fathia'},{id:'TCH-2025-328',name:'Ajibola Roheemot'},
+    {id:'TCH-2025-329',name:'Amos Wisdom'},{id:'TCH-2025-330',name:'Asiemor Divine'},
+    {id:'TCH-2025-331',name:'Enemali Ojotoeba'},{id:'TCH-2025-332',name:'Falope Darasimi'},
+    {id:'TCH-2025-333',name:'Famakinwa Akorede'},{id:'TCH-2025-334',name:'Folorunsho Petra'},
+    {id:'TCH-2025-335',name:'Muritala Rashidat'},{id:'TCH-2025-336',name:'Olalere Aishat'},
+    {id:'TCH-2025-337',name:'Oyakan Emmanuel'},{id:'TCH-2025-338',name:'Sowole Azeem'},
+    {id:'TCH-2025-339',name:'Tujiki David'},{id:'TCH-2025-340',name:'Yakubu Happiness'},
+  ],
+};
+
+// ═══════════════════════════════════════════════════════════
+// CLASS → SUBJECTS MAPPING
+// ═══════════════════════════════════════════════════════════
+const JSS_CORE = ['English','Mathematics','Basic Science','Basic Technology',
+  'Social Studies','Citizenship','CCN','PHE','Home Economics',
+  'Business Studies','History','Horticulture','Yoruba','CRS','French','Government'];
+const JSS3_CORE = [...JSS_CORE.slice(0,7),'Computer',...JSS_CORE.slice(7)];
+const SS_SCI = ['English','Mathematics','Physics','Chemistry','Biology',
+  'Further Maths','Data Processing','Literature',
+  'History','Horticulture','Yoruba','CRS','French','Civic'];
+const SS_ACT = ['English','Mathematics','Accounting','Commerce','Economics',
+  'Marketing','Agriculture','Livestock','Data Processing',
+  'History','Horticulture','Yoruba','CRS','French','Civic'];
+
+const CLASS_SUBJECTS = {
+  'JSS1A': JSS_CORE, 'JSS1B': JSS_CORE,
+  'JSS2A': JSS_CORE, 'JSS2B': JSS_CORE,
+  'JSS3A': JSS3_CORE,'JSS3B': JSS3_CORE,
+  'SS1 Science': SS_SCI, 'SS2 Science': SS_SCI, 'SS3 Science': SS_SCI,
+  'SS1 Actuarial': SS_ACT,'SS2 Actuarial': SS_ACT,'SS3 Actuarial': SS_ACT,
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let currentClass = '';
+let currentTerm  = '';
+let sheetData    = {};   // { [studentId]: { [subject]: {ca:'', exam:''} } }
+let pendingImport = null;
+
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function sid(id, subj, fld) {
+  // generate a safe DOM element id
+  return `${fld}__${id.replace(/-/g,'_')}__${subj.replace(/[^a-zA-Z0-9]/g,'_')}`;
+}
+function getGrade(total) {
+  if (!total || total <= 0) return '';
+  if (total >= 75) return 'A';
+  if (total >= 70) return 'B2';
+  if (total >= 65) return 'B3';
+  if (total >= 60) return 'C4';
+  if (total >= 55) return 'C5';
+  if (total >= 50) return 'C6';
+  if (total >= 45) return 'D7';
+  if (total >= 40) return 'E8';
+  return 'F9';
+}
+function gradeClass(g) {
+  if (!g) return 'g-nil';
+  return 'g-' + g.toLowerCase().replace('+','p');
+}
+function ordinal(n) {
+  const s = ['th','st','nd','rd'], v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
+function lsKey() {
+  return `tch_bs_${currentClass}_${currentTerm}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PERSIST
+// ═══════════════════════════════════════════════════════════
+function saveData() {
+  try { localStorage.setItem(lsKey(), JSON.stringify(sheetData)); } catch(e) {}
+}
+function loadData() {
+  try {
+    const raw = localStorage.getItem(lsKey());
+    if (raw) sheetData = JSON.parse(raw);
+    else sheetData = {};
+  } catch(e) { sheetData = {}; }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOAD CLASS  — builds the whole table
+// ═══════════════════════════════════════════════════════════
+function loadClass() {
+  const cls  = document.getElementById('selClass').value;
+  const term = document.getElementById('selTerm').value;
+  if (!cls) {
+    document.getElementById('sheetOuter').innerHTML = `
+      <div class="empty" id="emptyMsg">
+        <i class="fas fa-table-cells-large"></i>
+        <h3>Select a class to open the broadsheet</h3>
+        <p>Choose a class and term from the toolbar above.</p>
+      </div>`;
+    document.getElementById('statsBar').classList.remove('show');
+    document.getElementById('sheetOuter').classList.remove('has-stats');
+    ['btnCSV','btnPrint','btnClear'].forEach(id => document.getElementById(id).style.display='none');
+    return;
+  }
+  currentClass = cls;
+  currentTerm  = term;
+  loadData();
+  renderTable();
+  document.getElementById('statsBar').classList.add('show');
+  document.getElementById('sheetOuter').classList.add('has-stats');
+  ['btnCSV','btnPrint','btnClear'].forEach(id => document.getElementById(id).style.display='');
+  updateStats();
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER TABLE
+// ═══════════════════════════════════════════════════════════
+function renderTable() {
+  const students = STUDENTS_DB[currentClass] || [];
+  const subjects = CLASS_SUBJECTS[currentClass] || [];
+  const nSubj    = subjects.length;
+
+  let h = `<table class="broadsheet">`;
+
+  // ── Header row 1: subject group labels ──────────────────
+  h += `<thead><tr>`;
+  h += `<th class="st-sn" rowspan="2" style="z-index:70">#</th>`;
+  h += `<th class="st-name" rowspan="2" style="z-index:70;text-align:left;padding-left:10px">STUDENT NAME</th>`;
+  for (let i = 0; i < subjects.length; i++) {
+    const sep = i > 0 ? ' sep' : '';
+    h += `<th colspan="4" class="th-subj${sep}" title="${esc(subjects[i])}">${esc(subjects[i])}</th>`;
+  }
+  h += `<th rowspan="2" style="background:#0d0f18;border-left:2px solid rgba(79,142,247,.3);min-width:44px;z-index:58;position:sticky;top:0">AGG</th>`;
+  h += `<th rowspan="2" style="background:#0d0f18;min-width:34px;z-index:58;position:sticky;top:0">POS</th>`;
+  h += `</tr>`;
+
+  // ── Header row 2: CA / EXM / TOT / GRD per subject ──────
+  h += `<tr>`;
+  for (let i = 0; i < subjects.length; i++) {
+    const sp = i > 0 ? ' sep' : '';
+    h += `<th class="${sp}" style="color:rgba(130,180,255,.7)">CA</th>`;
+    h += `<th>EXM</th>`;
+    h += `<th>TOT</th>`;
+    h += `<th>GRD</th>`;
+  }
+  h += `</tr></thead>`;
+
+  // ── Body rows ────────────────────────────────────────────
+  h += `<tbody>`;
+  for (let ri = 0; ri < students.length; ri++) {
+    const s = students[ri];
+    const rowData = sheetData[s.id] || {};
+    const agg = computeAggregate(s.id, subjects);
+
+    h += `<tr>`;
+    h += `<td class="st-sn">${ri+1}</td>`;
+    h += `<td class="st-name" title="${esc(s.id)}">${esc(s.name)}</td>`;
+
+    for (let si = 0; si < subjects.length; si++) {
+      const subj   = subjects[si];
+      const subjD  = rowData[subj] || {ca:'', exam:''};
+      const caVal  = subjD.ca   !== '' ? parseInt(subjD.ca)  : '';
+      const exVal  = subjD.exam !== '' ? parseInt(subjD.exam): '';
+      const total  = (caVal !== '' || exVal !== '') ? (caVal||0) + (exVal||0) : '';
+      const grade  = total !== '' ? getGrade(total) : '';
+      const totCls = total !== '' ? ' filled' : '';
+      const sep    = si > 0 ? ' sep' : '';
+
+      h += `<td class="${sep}" style="padding:3px 2px">
+        <input type="number" class="si" min="0" max="40" value="${caVal}"
+          id="${esc(sid(s.id,subj,'ca'))}"
+          oninput="onScore('${esc(s.id)}','${esc(subj)}','ca',this.value)"
+          title="${esc(subj)} CA (max 40)">
+      </td>`;
+      h += `<td style="padding:3px 2px">
+        <input type="number" class="si" min="0" max="60" value="${exVal}"
+          id="${esc(sid(s.id,subj,'ex'))}"
+          oninput="onScore('${esc(s.id)}','${esc(subj)}','exam',this.value)"
+          title="${esc(subj)} Exam (max 60)">
+      </td>`;
+      h += `<td class="tc${totCls}" id="${esc(sid(s.id,subj,'tot'))}">${total !== '' ? total : '<span style="color:var(--muted);font-size:.65rem">—</span>'}</td>`;
+      h += `<td><span class="gb ${gradeClass(grade)}" id="${esc(sid(s.id,subj,'grd'))}">${grade || '—'}</span></td>`;
+    }
+
+    // Aggregate + position (filled in after full render)
+    h += `<td class="agg-cell" id="agg_${esc(s.id.replace(/-/g,'_'))}">${agg > 0 ? agg : '<span style="color:var(--muted);font-size:.65rem">—</span>'}</td>`;
+    h += `<td class="pos-cell" id="pos_${esc(s.id.replace(/-/g,'_'))}">—</td>`;
+    h += `</tr>`;
+  }
+  h += `</tbody></table>`;
+
+  document.getElementById('sheetOuter').innerHTML = h;
+  recomputePositions();
+}
+
+// ═══════════════════════════════════════════════════════════
+// SCORE INPUT HANDLER
+// ═══════════════════════════════════════════════════════════
+function onScore(studentId, subject, field, rawVal) {
+  const maxVal = field === 'ca' ? 40 : 60;
+  let v = parseInt(rawVal);
+  if (isNaN(v) || rawVal === '') v = '';
+  else { if (v < 0) v = 0; if (v > maxVal) v = maxVal; }
+
+  // clamp input visually
+  if (v !== '' && parseInt(rawVal) !== v) {
+    const inputEl = document.getElementById(sid(studentId, subject, field === 'ca' ? 'ca' : 'ex'));
+    if (inputEl) inputEl.value = v;
+  }
+
+  // update state
+  if (!sheetData[studentId]) sheetData[studentId] = {};
+  if (!sheetData[studentId][subject]) sheetData[studentId][subject] = {ca:'', exam:''};
+  sheetData[studentId][subject][field] = v;
+
+  // get both values to compute total
+  const d = sheetData[studentId][subject];
+  const ca  = d.ca   !== '' ? parseInt(d.ca)  : '';
+  const ex  = d.exam !== '' ? parseInt(d.exam): '';
+  const tot = (ca !== '' || ex !== '') ? (ca||0) + (ex||0) : '';
+  const g   = tot !== '' ? getGrade(tot) : '';
+
+  // update total cell
+  const totEl = document.getElementById(sid(studentId, subject, 'tot'));
+  if (totEl) {
+    totEl.innerHTML = tot !== '' ? tot : '<span style="color:var(--muted);font-size:.65rem">—</span>';
+    totEl.className = 'tc' + (tot !== '' ? ' filled' : '');
+  }
+  // update grade cell
+  const grdEl = document.getElementById(sid(studentId, subject, 'grd'));
+  if (grdEl) {
+    grdEl.textContent = g || '—';
+    grdEl.className = 'gb ' + gradeClass(g);
+  }
+
+  // update aggregate
+  const subjects = CLASS_SUBJECTS[currentClass] || [];
+  const agg = computeAggregate(studentId, subjects);
+  const aggEl = document.getElementById('agg_' + studentId.replace(/-/g,'_'));
+  if (aggEl) aggEl.innerHTML = agg > 0 ? agg : '<span style="color:var(--muted);font-size:.65rem">—</span>';
+
+  // recompute positions for all
+  recomputePositions();
+
+  saveData();
+  updateStats();
+}
+
+// ═══════════════════════════════════════════════════════════
+// AGGREGATE & POSITIONS
+// ═══════════════════════════════════════════════════════════
+function computeAggregate(studentId, subjects) {
+  const rowData = sheetData[studentId] || {};
+  let sum = 0, hasAny = false;
+  for (const subj of subjects) {
+    const d = rowData[subj];
+    if (!d) continue;
+    const ca = d.ca   !== '' ? parseInt(d.ca)  : 0;
+    const ex = d.exam !== '' ? parseInt(d.exam) : 0;
+    if (d.ca !== '' || d.exam !== '') { sum += ca + ex; hasAny = true; }
+  }
+  return hasAny ? sum : 0;
+}
+
+function recomputePositions() {
+  const students = STUDENTS_DB[currentClass] || [];
+  const subjects = CLASS_SUBJECTS[currentClass] || [];
+  const aggMap = students.map(s => ({ id: s.id, agg: computeAggregate(s.id, subjects) }));
+  const sorted = [...aggMap].sort((a,b) => b.agg - a.agg);
+
+  // standard competition rank
+  const posMap = {};
+  let pos = 1;
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i].agg < sorted[i-1].agg) pos = i + 1;
+    posMap[sorted[i].id] = sorted[i].agg > 0 ? pos : 0;
+  }
+
+  for (const s of students) {
+    const el = document.getElementById('pos_' + s.id.replace(/-/g,'_'));
+    if (!el) continue;
+    const p = posMap[s.id];
+    if (!p) { el.textContent = '—'; el.className = 'pos-cell'; continue; }
+    el.textContent = ordinal(p);
+    el.className = 'pos-cell' + (p===1?' pos-1':p===2?' pos-2':p===3?' pos-3':'');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATS BAR
+// ═══════════════════════════════════════════════════════════
+function updateStats() {
+  const students = STUDENTS_DB[currentClass] || [];
+  const subjects = CLASS_SUBJECTS[currentClass] || [];
+  document.getElementById('sClass').textContent = currentClass;
+  document.getElementById('sCnt').textContent   = students.length;
+  document.getElementById('sSubj').textContent  = subjects.length;
+
+  let aggs = [], entryCount = 0;
+  const maxEntries = students.length * subjects.length * 2; // CA + Exam per cell
+  for (const s of students) {
+    const agg = computeAggregate(s.id, subjects);
+    if (agg > 0) aggs.push(agg);
+    // count filled cells
+    const rowD = sheetData[s.id] || {};
+    for (const subj of subjects) {
+      const d = rowD[subj]; if (!d) continue;
+      if (d.ca   !== '') entryCount++;
+      if (d.exam !== '') entryCount++;
+    }
+  }
+  document.getElementById('sTop').textContent  = aggs.length ? Math.max(...aggs) : '—';
+  document.getElementById('sAvg').textContent  = aggs.length ? Math.round(aggs.reduce((a,b)=>a+b,0)/aggs.length) : '—';
+  document.getElementById('sEntry').textContent = entryCount;
+  document.getElementById('sMax').textContent  = maxEntries;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CLEAR
+// ═══════════════════════════════════════════════════════════
+function doClear() {
+  if (!confirm(`Clear ALL scores for ${currentClass} — ${currentTerm}? This cannot be undone.`)) return;
+  sheetData = {};
+  saveData();
+  renderTable();
+  updateStats();
+  toast('ok', `Scores cleared for ${currentClass}`);
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT CSV
+// ═══════════════════════════════════════════════════════════
+function doExportCSV() {
+  const students = STUDENTS_DB[currentClass] || [];
+  const subjects = CLASS_SUBJECTS[currentClass] || [];
+
+  // Build header
+  let headers = ['S/N','Student ID','Student Name'];
+  for (const subj of subjects) {
+    headers.push(`${subj} CA`, `${subj} Exam`, `${subj} Total`, `${subj} Grade`);
+  }
+  headers.push('Aggregate', 'Position');
+
+  const rows = [headers];
+  const students_sorted = [...students];
+  const subjects_list = subjects;
+
+  // Compute positions
+  const aggMap = students.map(s => ({id:s.id, agg: computeAggregate(s.id, subjects_list)}));
+  const sorted = [...aggMap].sort((a,b)=>b.agg-a.agg);
+  const posMap = {};
+  let pos = 1;
+  for (let i=0;i<sorted.length;i++) {
+    if (i>0 && sorted[i].agg<sorted[i-1].agg) pos=i+1;
+    posMap[sorted[i].id] = sorted[i].agg>0?pos:0;
+  }
+
+  for (let ri=0; ri<students.length; ri++) {
+    const s   = students[ri];
+    const row = [ri+1, s.id, s.name];
+    const rowD = sheetData[s.id] || {};
+    for (const subj of subjects) {
+      const d  = rowD[subj] || {ca:'',exam:''};
+      const ca = d.ca   !== '' ? parseInt(d.ca)  : '';
+      const ex = d.exam !== '' ? parseInt(d.exam) : '';
+      const tot = (ca!==''||ex!=='') ? (ca||0)+(ex||0) : '';
+      const g  = tot !== '' ? getGrade(tot) : '';
+      row.push(ca, ex, tot, g);
+    }
+    const agg = computeAggregate(s.id, subjects);
+    const p   = posMap[s.id];
+    row.push(agg||'', p ? ordinal(p) : '');
+    rows.push(row);
+  }
+
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const fname = `${currentClass.replace(/ /g,'_')}_${currentTerm.replace(/[ /]/g,'_')}_broadsheet.csv`;
+  a.href = url; a.download = fname; a.click();
+  URL.revokeObjectURL(url);
+  toast('ok', `CSV exported: ${fname}`);
+}
+
+// ═══════════════════════════════════════════════════════════
+// IMPORT JSON
+// ═══════════════════════════════════════════════════════════
+function openImport() {
+  pendingImport = null;
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('btnApply').style.display = 'none';
+  document.getElementById('fileIn').value = '';
+  document.getElementById('importOverlay').classList.add('open');
+}
+function closeImport() {
+  document.getElementById('importOverlay').classList.remove('open');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function handleFileInput(e) {
+  const file = e.target.files[0];
+  if (file) processFile(file);
+}
+function processFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      validateImport(data);
+    } catch(err) {
+      showPreview(`<span class="err"><i class="fas fa-times-circle"></i> Invalid JSON: ${esc(err.message)}</span>`, false);
+    }
+  };
+  reader.readAsText(file);
+}
+function validateImport(data) {
+  const prev = document.getElementById('importPreview');
+  // Check structure
+  if (!data.metadata || !data.students) {
+    showPreview(`<span class="err"><i class="fas fa-times-circle"></i> Not a valid teacher portal JSON — missing metadata or students.</span>`, false);
+    return;
+  }
+  const { subject, class: cls, term } = data.metadata;
+  // Class must match
+  if (cls && cls !== currentClass) {
+    showPreview(`<span class="warn"><i class="fas fa-triangle-exclamation"></i> This file is for <strong>${esc(cls)}</strong> but you have <strong>${esc(currentClass||'(none)')}</strong> open. Load that class first, or close and try again.</span>`, false);
+    return;
+  }
+  // Subject must exist in this class
+  const knownSubjects = CLASS_SUBJECTS[currentClass] || [];
+  const subjectMatch  = knownSubjects.find(s => s.toLowerCase() === (subject||'').toLowerCase());
+  if (!subjectMatch) {
+    showPreview(`<span class="warn"><i class="fas fa-triangle-exclamation"></i> Subject "<strong>${esc(subject)}</strong>" is not in the ${esc(currentClass)} subject list.<br>Known subjects: ${knownSubjects.map(esc).join(', ')}</span>`, false);
+    return;
+  }
+  // Count matchable students
+  const classStudents = STUDENTS_DB[currentClass] || [];
+  const classIds = new Set(classStudents.map(s => s.id));
+  let matched = 0, unmatched = 0;
+  for (const st of data.students) {
+    if (classIds.has(st.id)) matched++;
+    else unmatched++;
+  }
+  pendingImport = { data, subject: subjectMatch };
+  const termNote = term ? ` • Term: ${esc(term)}` : '';
+  const note = unmatched > 0 ? `<span class="warn"> • ${unmatched} student(s) not found in DB (will skip)</span>` : '';
+  showPreview(
+    `<span class="ok"><i class="fas fa-check-circle"></i> Ready to import</span><br>
+     Subject: <strong>${esc(subjectMatch)}</strong>${termNote}<br>
+     Class: <strong>${esc(cls||currentClass)}</strong><br>
+     Students: <strong>${matched}</strong> matched${note}`,
+    true
+  );
+}
+function showPreview(html, showApply) {
+  const prev = document.getElementById('importPreview');
+  prev.innerHTML = html;
+  prev.style.display = 'block';
+  document.getElementById('btnApply').style.display = showApply ? '' : 'none';
+}
+function applyImport() {
+  if (!pendingImport) return;
+  const { data, subject } = pendingImport;
+  const classStudents = STUDENTS_DB[currentClass] || [];
+  const classIds = new Set(classStudents.map(s => s.id));
+  let applied = 0;
+  for (const st of data.students) {
+    if (!classIds.has(st.id)) continue;
+    if (!sheetData[st.id]) sheetData[st.id] = {};
+    sheetData[st.id][subject] = {
+      ca:   st.ca   !== undefined ? String(st.ca)   : '',
+      exam: st.exam !== undefined ? String(st.exam) : '',
+    };
+    applied++;
+  }
+  saveData();
+  closeImport();
+  renderTable();
+  updateStats();
+  toast('ok', `Imported ${subject} scores for ${applied} students`);
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
+let toastTimer;
+function toast(type, msg) {
+  clearTimeout(toastTimer);
+  const el   = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  const text = document.getElementById('toastMsg');
+  el.className = `toast show t-${type}`;
+  icon.className = type === 'ok' ? 'fas fa-circle-check' : 'fas fa-circle-exclamation';
+  text.textContent = msg;
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 3500);
+}
+
+</script>
+</body>
+</html>
