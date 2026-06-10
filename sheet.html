@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TCC — Admin Broadsheet 2025/2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c14;--s1:#141720;--s2:#1a1f2e;--s3:#232838;
+  --bd:#2d3245;--txt:#dde1f0;--t2:#7a8299;--t3:#4a5070;
+  --acc:#4f8ef7;--grn:#22c55e;--red:#ef4444;--amb:#f59e0b;
+  --fix0:#111420;--fix1:#13162a;--ev0:#161b26;--ev1:#14182a;--ev2:#161c2e;
+}
+html,body{height:100%;background:var(--bg);color:var(--txt);
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;overflow:hidden}
+
+/* HDR */
+.hdr{position:fixed;inset:0 0 auto 0;height:46px;z-index:100;
+  background:var(--s1);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;padding:0 14px;gap:12px}
+.brand{font-weight:900;font-size:15px;letter-spacing:2.5px;
+  background:linear-gradient(110deg,#fff,var(--acc));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.brand b{font-size:9px;font-weight:400;color:var(--t3);
+  display:block;letter-spacing:2px;text-transform:uppercase;margin-top:-2px}
+.vsep{width:1px;height:20px;background:var(--bd)}
+.tg{display:flex;align-items:center;gap:6px}
+.tg label{font-size:10px;color:var(--t3);letter-spacing:.5px;text-transform:uppercase}
+select{background:var(--bg);color:var(--txt);border:1px solid var(--bd);
+  border-radius:5px;padding:4px 8px;font-size:11px;font-family:inherit;cursor:pointer}
+select:focus{outline:none;border-color:var(--acc)}
+
+/* TABS */
+.tabbar{position:fixed;top:46px;inset-inline:0;height:36px;z-index:90;
+  background:var(--s1);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:3px;padding:0 10px;
+  overflow-x:auto;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tab{background:transparent;color:var(--t2);border:1px solid transparent;
+  border-radius:4px;padding:3px 10px;font-size:11px;font-weight:700;
+  cursor:pointer;white-space:nowrap;letter-spacing:.8px}
+.tab:hover{background:var(--s3);color:var(--txt)}
+.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+/* WORKSPACE */
+.ws{position:fixed;top:82px;inset-inline:0;bottom:0;overflow:hidden}
+
+/* PANEL */
+.panel{height:100%;display:flex;flex-direction:column}
+.panel[hidden]{display:none}
+
+/* PANEL BAR */
+.pbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:6px 12px;background:var(--s2);border-bottom:1px solid var(--bd)}
+.cls-badge{background:var(--acc);color:#fff;font-weight:800;font-size:12px;
+  padding:2px 9px;border-radius:3px;letter-spacing:.8px}
+.cls-meta{color:var(--t3);font-size:10px;flex:1}
+.acts{display:flex;align-items:center;gap:5px;margin-left:auto}
+
+/* save status */
+.save-status{font-size:10px;color:var(--t3);min-width:80px;text-align:right}
+.save-status.dirty{color:var(--amb)}
+.save-status.saved{color:var(--grn)}
+
+/* max inputs */
+.max-row{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--t3)}
+.max-row input{width:36px;background:var(--bg);color:var(--txt);border:1px solid var(--bd);
+  border-radius:3px;padding:2px 4px;text-align:center;font-size:10px;font-family:inherit}
+.max-row input:focus{outline:none;border-color:var(--acc)}
+
+.btn{padding:4px 10px;font-size:11px;font-weight:600;border-radius:3px;
+  cursor:pointer;letter-spacing:.4px;border:1px solid}
+.b-sv{background:var(--s3);color:var(--txt);border-color:var(--bd)}
+.b-sv:hover{background:var(--bd)}
+.b-cs{background:rgba(34,197,94,.12);color:var(--grn);border-color:rgba(34,197,94,.3)}
+.b-cs:hover{background:rgba(34,197,94,.22)}
+.b-cl{background:rgba(239,68,68,.12);color:var(--red);border-color:rgba(239,68,68,.3)}
+.b-cl:hover{background:rgba(239,68,68,.22)}
+
+/* SCROLL */
+.tscroll{flex:1;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--s3) transparent}
+.tscroll::-webkit-scrollbar{width:5px;height:5px}
+.tscroll::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+
+/* TABLE */
+table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%}
+thead{position:sticky;top:0;z-index:30}
+
+/* TH */
+th{background:var(--s2);color:var(--t2);font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;padding:5px 3px;
+  text-align:center;border-bottom:1px solid var(--bd);border-right:1px solid var(--bd);
+  white-space:nowrap}
+th.sh{color:var(--txt);background:#15192e;font-size:9.5px;
+  border-left:2px solid var(--bd)!important;padding:5px 6px}
+.h2 .sc{color:rgba(110,170,255,.8)}
+.h2 .se{color:rgba(170,130,255,.8)}
+.h2 .st{color:var(--t3)}
+th.sk,th.sp{background:#111b30!important;color:var(--acc)!important}
+
+/* STICKY COLS */
+th.c0,td.c0{position:sticky;left:0;z-index:20;width:32px;min-width:32px}
+th.c1,td.c1{position:sticky;left:32px;z-index:20;min-width:170px;width:170px;max-width:170px}
+thead th.c0,thead th.c1{z-index:40}
+
+/* TD */
+tbody tr{background:var(--s1)}
+tbody tr:nth-child(even){background:var(--ev0)}
+td{padding:2px 3px;text-align:center;vertical-align:middle;font-size:11px;
+  border-bottom:1px solid #1c2235;border-right:1px solid #1c2235}
+td.c0{background:var(--fix0);color:var(--t3);font-size:10px;font-weight:600}
+td.c1{background:var(--fix1);text-align:left;padding-left:6px;font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+tr:nth-child(even) td.c0{background:var(--ev1)}
+tr:nth-child(even) td.c1{background:var(--ev2)}
+td.tl{border-left:2px solid #252a40!important}
+
+/* INPUTS */
+input[type=number]{width:34px;background:rgba(79,142,247,.07);color:var(--txt);
+  border:1px solid transparent;border-radius:3px;padding:2px 1px;
+  text-align:center;font-size:11px;font-family:inherit;
+  -moz-appearance:textfield;appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+input[type=number]:focus{outline:none;background:rgba(79,142,247,.2);border-color:rgba(79,142,247,.65)}
+input.ca:focus{border-color:rgba(110,175,255,.7)}
+input.ex:focus{border-color:rgba(170,130,255,.7)}
+input.over{border-color:var(--red)!important;background:#2d1515!important}
+
+/* COMPUTED */
+td.tot{color:var(--t2);font-weight:600;min-width:26px}
+td.sum{background:#121c32;font-weight:700;color:var(--txt);min-width:40px}
+tr:nth-child(even) td.sum{background:#141e36}
+td.grd{min-width:32px;font-weight:800;font-size:11px}
+.gA1{background:#163a1a;color:#4ade80}
+.gB2{background:#18304e;color:#60a5fa}
+.gB3{background:#1a2e4a;color:#93c5fd}
+.gC4{background:#3a2e0c;color:#fde047}
+.gC5{background:#36280a;color:#fbbf24}
+.gC6{background:#312208;color:#f59e0b}
+.gD7{background:#38200e;color:#fb923c}
+.gE8{background:#381414;color:#f87171}
+.gF9{background:#280a0a;color:#fca5a5}
+
+/* TOAST */
+.toast{position:fixed;bottom:16px;right:16px;z-index:999;
+  background:var(--s2);border:1px solid var(--bd);border-radius:8px;
+  padding:9px 15px;font-size:12px;display:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast.show{display:block}
+.toast.ok{border-color:rgba(34,197,94,.5);color:var(--grn)}
+.toast.er{border-color:rgba(239,68,68,.5);color:var(--red)}
+
+@media print{
+  .hdr,.tabbar,.pbar{display:none!important}
+  .ws{position:static;overflow:visible}
+  .panel[hidden]{display:flex!important}
+  .tscroll{overflow:visible}
+  table{font-size:6pt}
+  th,td{background:#fff!important;color:#000!important;border-color:#ccc!important}
+  td.c0,td.c1{position:static!important}
+  input{border:1px solid #bbb!important;background:transparent!important;color:#000!important}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="brand">TENDERCARE <b>Admin Broadsheet</b></div>
+  <div class="vsep"></div>
+  <div class="tg">
+    <label for="tsel">Term</label>
+    <select id="tsel">
+      <option value="T1">2025/2026 &mdash; 1st Term</option>
+      <option value="T2" selected>2025/2026 &mdash; 2nd Term</option>
+      <option value="T3">2025/2026 &mdash; 3rd Term</option>
+    </select>
+  </div>
+</div>
+
+<nav class="tabbar" id="tabbar"></nav>
+<div class="ws" id="ws"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+HTMLEOF
+
+# Now write the script section separately (avoids heredoc quoting issues with JS)
+python3 - << 'PYEOF'
+script = r"""
+/* ── DATA ── */
+const DB={"JSS1A":{"s":[["TCH-2025-001","Abraham Comfort Princess"],["TCH-2025-002","Abraham Nanmwa"],["TCH-2025-003","Adebanjo Anjola"],["TCH-2025-004","Adegboye Adam"],["TCH-2025-005","Ademola Daniel"],["TCH-2025-006","Adeoye Ikimot"],["TCH-2025-007","Adeyemi Olamide"],["TCH-2025-008","Adiukwu Chimuanya"],["TCH-2025-009","Ayegba Anthony"],["TCH-2025-010","Chris Ukpah Rejoice"],["TCH-2025-011","Ehigie Jeffrey"],["TCH-2025-012","Enabulele Newton"],["TCH-2025-013","Hamzat Alaba"],["TCH-2025-014","Idowu Taiwo"],["TCH-2025-015","Jackson Grace"],["TCH-2025-016","Jimoh Sodiq"],["TCH-2025-017","Mohammed Abdul-salam"],["TCH-2025-018","Muritala Farhan"],["TCH-2025-019","Obaoye Adeola Ruth"],["TCH-2025-020","Oduwaye Abdul-salam"],["TCH-2025-021","Ogunlana Aishat"],["TCH-2025-022","Okwuabudike Michael"],["TCH-2025-023","Olukoga Akorede"],["TCH-2025-024","Oni Grace Oluwadarasimi"],["TCH-2025-025","Otuole Innocent"],["TCH-2025-026","Peter John"],["TCH-2025-027","Rafiu Aishat"],["TCH-2025-028","Soyode Emmanuel"],["TCH-2025-029","Yusuf Al-meen"]],"j":["English","Mathematics","Basic Science","CCA","CRS","History","Horticulture","Business Studies","DT","BT","PHE","Agriculture","IRS","Yoruba","Social & Cit Ed","French"]},"JSS1B":{"s":[["TCH-2025-030","Adeniyi Nifemi"],["TCH-2025-031","Adeniyi Basit"],["TCH-2025-032","Adeyemi Modesire"],["TCH-2025-033","Agbo Wonderful"],["TCH-2025-034","Akeju Emmanuel"],["TCH-2025-035","Akindutire Michael"],["TCH-2025-036","Asuluka Obioma"],["TCH-2025-037","Babarinde Testimony"],["TCH-2025-038","Dada Ayodeji"],["TCH-2025-039","Dickson Samson"],["TCH-2025-040","Idowu Kehinde"],["TCH-2025-041","Ikujuni Samuel"],["TCH-2025-042","Irinyemi Halleluyah"],["TCH-2025-043","Ishola Suliat"],["TCH-2025-044","Jewoola Olamide"],["TCH-2025-045","Jonathan Frednard"],["TCH-2025-046","Makinde Tofunmi"],["TCH-2025-047","Odulate Boluwatife"],["TCH-2025-048","Okezueze Ifechukwu"],["TCH-2025-049","Oni Fikayo"],["TCH-2025-050","Onibodo Quadri"],["TCH-2025-051","Owoade Praise"],["TCH-2025-052","Oyeniran Michelle"],["TCH-2025-053","Safiriyu Simisola"],["TCH-2025-054","Sandy Enoch"],["TCH-2025-055","Shokoya Imole"],["TCH-2025-056","Tijani Anjolaoluwa"],["TCH-2025-057","Ubi Richard Victoria"],["TCH-2025-058","Yusuff Salamat Semilore"]],"j":["English","Mathematics","Basic Science","CCA","CRS","History","Horticulture","Business Studies","DT","BT","PHE","Agriculture","IRS","Yoruba","Social & Cit Ed","French"]},"JSS2A":{"s":[["TCH-2025-059","Abey Phoebe"],["TCH-2025-060","Adeniyi Mubarak"],["TCH-2025-061","Agbabiaka Ella"],["TCH-2025-062","Alaka Faridat"],["TCH-2025-063","Aramide Hikimot"],["TCH-2025-064","Aremu Praise"],["TCH-2025-065","Ayoade Flourish"],["TCH-2025-066","Bakare Gabriel"],["TCH-2025-067","Bamiro David"],["TCH-2025-068","Biobaku Azraa"],["TCH-2025-069","Boladale Esther"],["TCH-2025-070","Edeniyi Ukharia"],["TCH-2025-071","Falope Kikiope"],["TCH-2025-072","Ida Wisdom"],["TCH-2025-073","Mudashiru Abidat"],["TCH-2025-074","Muh'awwal Alitorf"],["TCH-2025-075","Musa Isaac"],["TCH-2025-076","Neri Testimony"],["TCH-2025-077","Obaoye Dorcas"],["TCH-2025-078","Ogoyemi Josephine"],["TCH-2025-079","Olowu Jamal"],["TCH-2025-080","Olubiyi Godwin"],["TCH-2025-081","Opeyemi Rosheedat"],["TCH-2025-082","Oriabor Joy"],["TCH-2025-083","Orukpe Daniel"],["TCH-2025-084","Oyeboade Erioluwa"],["TCH-2025-085","Oyediji Israel"],["TCH-2025-086","Oyetunji Adejoke"],["TCH-2025-087","Oyewole Daniel"],["TCH-2025-088","Rafiu Rofiat"],["TCH-2025-089","Raji Joshua"],["TCH-2025-090","Tijani Olamiposi"]],"j":["English","Mathematics","Basic Science","CCA","CRS","History","Horticulture","Business Studies","DT","BT","PHE","Agriculture","IRS","Yoruba","Social & Cit Ed","French"]},"JSS2B":{"s":[["TCH-2025-091","Abolanle Nancy"],["TCH-2025-092","Adeboyo Taiwo"],["TCH-2025-093","Adeniran Isaac"],["TCH-2025-094","Adesuyi Ademola"],["TCH-2025-095","Akinade Darasimi"],["TCH-2025-096","Akinola Abdulhamid"],["TCH-2025-097","Alexander Chinaza"],["TCH-2025-098","Balogun Muminat"],["TCH-2025-099","Fagbola Oladerin Emmanualla"],["TCH-2025-100","Ganiu Aliyat"],["TCH-2025-101","Idris Faridat"],["TCH-2025-102","Ikechukwu Miracle"],["TCH-2025-103","Kamilu Saheed"],["TCH-2025-104","Muritala Rokibat"],["TCH-2025-105","Ochege Rhoda"],["TCH-2025-106","Ojochegbe Linda"],["TCH-2025-107","Olaniyi Mary"],["TCH-2025-108","Olatunbosun Daniel"],["TCH-2025-109","Ologunre Marvellous"],["TCH-2025-110","Onifade Ayomide"],["TCH-2025-111","Oseni Idayat"],["TCH-2025-112","Sakiru John"],["TCH-2025-113","Shofowora Nifemi"],["TCH-2025-114","Suli Fridaus"],["TCH-2025-115","Yakubu Moses"]],"j":["English","Mathematics","Basic Science","CCA","CRS","History","Horticulture","Business Studies","DT","BT","PHE","Agriculture","IRS","Yoruba","Social & Cit Ed","French"]},"JSS3A":{"s":[["TCH-2025-116","Abdul Rasheed Rodiat"],["TCH-2025-117","Adebayo Dorcas"],["TCH-2025-118","Adebayo Favour"],["TCH-2025-119","Adeniyi Darasimi"],["TCH-2025-120","Afolayan Joshua"],["TCH-2025-121","Akanji Favour"],["TCH-2025-122","Akinbiyi Glory"],["TCH-2025-123","Amusat Khalilulahi O"],["TCH-2025-124","Faruk Aransiola"],["TCH-2025-125","Balogun Jomiloju"],["TCH-2025-126","Emmanuel Ayowole"],["TCH-2025-127","Emmanuel Maxwell"],["TCH-2025-128","Emmanuel Priscilla"],["TCH-2025-129","Fatuki Oluwanifemi"],["TCH-2025-130","Folorunsho Precious"],["TCH-2025-131","Garba Albarka"],["TCH-2025-132","Ibhadore Godswill"],["TCH-2025-133","Irinyemi Jomiloju Praise"],["TCH-2025-134","Kolade Idera"],["TCH-2025-135","Nanmwa Victor"],["TCH-2025-136","Nathaniel David"],["TCH-2025-137","Nelson Sonia C.C"],["TCH-2025-138","Nyakos Nurudeen"],["TCH-2025-139","Ogunlana Abdullahi"],["TCH-2025-140","Okwuabudike Victoria"],["TCH-2025-141","Olatunji Al-meen"],["TCH-2025-142","Olowu Fausiyat"],["TCH-2025-143","Oluborode True Vine"],["TCH-2025-144","Oseni Abdulsamod"],["TCH-2025-145","Owoyele Ramadan"],["TCH-2025-146","Oyewole Israel"],["TCH-2025-147","Salawudeen Fawas"],["TCH-2025-148","Sunny Blessing"],["TCH-2025-149","Waheed Aduragbemi"],["TCH-2025-150","Wisdom Donald"],["TCH-2025-151","Yusuf Taiwo"],["TCH-2025-152","Yusuff Abdul Sattar"]],"j":["English","Mathematics","Basic Science","CCA","CRS","History","Horticulture","Business Studies","BT","Computer","NVE","PHE","Agriculture","IRS","Yoruba","French"]},"JSS3B":{"s":[["TCH-2025-153","Abdul Razak Somod"],["TCH-2025-154","Adebisi Aishat"],["TCH-2025-155","Adebisi Ayomide"],["TCH-2025-156","Adebisi Yusuf"],["TCH-2025-157","Adeniyi Korede"],["TCH-2025-158","Adewunmi Oluwademilade"],["TCH-2025-159","Agbo Favour"],["TCH-2025-160","Akinfe Christianah"],["TCH-2025-161","Ambrose Emmanuella"],["TCH-2025-162","Ariyo Moses"],["TCH-2025-163","Ayoade Doris"],["TCH-2025-164","Balogun Tobiloba"],["TCH-2025-165","Enabulele Israel"],["TCH-2025-166","Faluyi Israel"],["TCH-2025-167","Folorunsho Alexander"],["TCH-2025-168","Gabriel Peace"],["TCH-2025-169","Lawal Esther"],["TCH-2025-170","Medua Angel"],["TCH-2025-171","Nyakos Naimat"],["TCH-2025-172","Olajesu Kayode"],["TCH-2025-173","Olasunkanmi Ayobami"],["TCH-2025-174","Olukotun Feranmi"],["TCH-2025-175","Onafowokan Ridwan"],["TCH-2025-176","Opatimeyin David"],["TCH-2025-177","Oyeniyi David"],["TCH-2025-178","Popoola Aduragbemi"],["TCH-2025-179","Rotimi Eniola"],["TCH-2025-180","Samson Loveth"],["TCH-2025-181","Samuel Zainab"],["TCH-2025-182","Soyode Emmanuella"],["TCH-2025-183","Uduakhomo Peace"]],"j":["English","Mathematics","Basic Science","CCA","CRS","History","Horticulture","Business Studies","BT","Computer","NVE","PHE","Agriculture","IRS","Yoruba","French"]},"SS1 Science":{"s":[["TCH-2025-184","Abdullateef Abdulsalam"],["TCH-2025-185","Abimbola Israel"],["TCH-2025-186","Adebayo Ayomide"],["TCH-2025-187","Adesalu Kamal"],["TCH-2025-188","Adeshina Fawaz"],["TCH-2025-189","Ajayi Aminat"],["TCH-2025-190","Ajewole Darasimi"],["TCH-2025-191","Ajibola Rodiat"],["TCH-2025-192","Akinyogha Taiwo"],["TCH-2025-193","Akoshile Hameedah"],["TCH-2025-194","Akpoveta Daniel"],["TCH-2025-195","Alexander Chukwu"],["TCH-2025-196","Amos Savior"],["TCH-2025-197","Ashaye Damola"],["TCH-2025-198","Ayangbola Dammilola"],["TCH-2025-199","Bakare Amirat"],["TCH-2025-200","Bakare Nifemi"],["TCH-2025-201","Balogun Momeen"],["TCH-2025-202","Bamidele Goodluck"],["TCH-2025-203","Chukwuemeka Favour"],["TCH-2025-204","Durosimi Abdullateef"],["TCH-2025-205","Emmanuel Godiva"],["TCH-2025-206","Fatai Muinat"],["TCH-2025-207","Folorunsho Elijah"],["TCH-2025-208","Hassanat"],["TCH-2025-209","Hilary Favour"],["TCH-2025-210","Jimoh Yewande"],["TCH-2025-211","Julius-Caleb Okenwan"],["TCH-2025-212","Lawal Promise"],["TCH-2025-213","Momoh Divine"],["TCH-2025-214","Musa Nimotallahi"],["TCH-2025-215","Ogbueje Nannette"],["TCH-2025-216","Ogbonna Joshua"],["TCH-2025-217","Ojo Precious"],["TCH-2025-218","Okebiyi Blessing"],["TCH-2025-219","Okebugwu Michael"],["TCH-2025-220","Oladipo Oluwabukola"],["TCH-2025-221","Olalere Halim"],["TCH-2025-222","Olaniyan Emmanuel"],["TCH-2025-223","Olubiyi Olamide"],["TCH-2025-224","Oluwatoyin Eniola"],["TCH-2025-225","Oni Ezekiel"],["TCH-2025-226","Onwuegbule Wisdom"],["TCH-2025-227","Opaje Teniola"],["TCH-2025-228","Opeyemi Michael"],["TCH-2025-229","Opeyemi Sultan"],["TCH-2025-230","Oyesanya Israel"],["TCH-2025-231","Samuel Benjamin"],["TCH-2025-232","Sanusi Farahat"],["TCH-2025-233","Sunday Isaac"]],"j":["English","Mathematics","Physics","Chemistry","Biology","Further Math","Data Processing","Commerce","Marketing","Agriculture","Livestock","Economics","History","Cit & Heritage"]},"SS1 Actuarial":{"s":[["TCH-2025-234","Abdulmateen Saheed"],["TCH-2025-235","Arekwen Clement"],["TCH-2025-236","Ekum Honesty"],["TCH-2025-237","Kehinde Anjolaoluwa"],["TCH-2025-238","Khalid Lateef"],["TCH-2025-239","Oche Ojochegbe Michael"],["TCH-2025-240","Olajire Anuoluwapo"],["TCH-2025-241","Oni Peter"],["TCH-2025-242","Rafiu Kehinde"],["TCH-2025-243","Rafiu Taiwo"],["TCH-2025-244","Kolawole Rereoluwa"],["TCH-2025-245","James Goodluck"],["TCH-2025-246","Azeez Malik"],["TCH-2025-247","Aiwe Destiny"],["TCH-2025-248","Friday Destiny"],["TCH-2025-249","Akeju David"],["TCH-2025-250","Mohammed Fayade"],["TCH-2025-251","Adeyemo Ikimat"],["TCH-2025-252","Ajayi Fiyinfoluwa"],["TCH-2025-253","Bello Opeyemi"],["TCH-2025-254","Falope Oluwajomiloju"],["TCH-2025-255","Fowowe Abigail"],["TCH-2025-256","Idowu Amidat"],["TCH-2025-257","Ikujuni Oluwasikemi"],["TCH-2025-258","Livinus Chioma"],["TCH-2025-259","Olukoja Omowunmi"],["TCH-2025-260","Onojah Victoria"],["TCH-2025-261","Tijani Aishat"],["TCH-2025-262","Tujiki Anuoluwapo"],["TCH-2025-263","Idris Mariam"],["TCH-2025-264","Nosiru Halimat"],["TCH-2025-265","Adeyemi Mariam"],["TCH-2025-266","Akinyugha Kehinde"],["TCH-2025-267","Musa Emmanuella"],["TCH-2025-268","Awodiya Amazing-Grace"],["TCH-2025-269","Ofonime Success"]],"j":["English","Mathematics","Biology","Data Processing","Commerce","Marketing","Agriculture","Livestock","Economics","History","Cit & Heritage","Government","Yoruba","CRS","IRS","Accounting","Literature"]},"SS2 Science":{"s":[["TCH-2025-270","Abdullahi Malik"],["TCH-2025-271","Adeoye Rokeeb"],["TCH-2025-272","Adeyemi Adesewa"],["TCH-2025-273","Adeyemi Emmanuel"],["TCH-2025-274","Agbo Queen"],["TCH-2025-275","Akindutire Iretiola"],["TCH-2025-276","Alejo Samuel"],["TCH-2025-277","Babalola Rodiat"],["TCH-2025-278","Bakare Aliyat"],["TCH-2025-279","Eke Erica"],["TCH-2025-280","Emmanuel Annabel"],["TCH-2025-281","Enabulele Itohan"],["TCH-2025-282","Friday Godspower"],["TCH-2025-283","Igbenedion Folabomi"],["TCH-2025-284","Itama Daniel"],["TCH-2025-285","Jimoh Ganiyat"],["TCH-2025-286","Mohammed Awwal"],["TCH-2025-287","Mudashiru Usman"],["TCH-2025-288","Nelson Victor"],["TCH-2025-289","Oduola Olamide"],["TCH-2025-290","Okwabudike Mercy"],["TCH-2025-291","Olagbo Susan"],["TCH-2025-292","Olaniyi David"],["TCH-2025-293","Olushesi Basit"],["TCH-2025-294","Omotosho Faith"],["TCH-2025-295","Oyebanji Victoria"],["TCH-2025-296","Oyedeji Emmanuella"],["TCH-2025-297","Quadri Oluwadarasimi"],["TCH-2025-298","Sandy Karenapuch"],["TCH-2025-299","Sanyaolu Kehinde"],["TCH-2025-300","Sanyaolu Taiwo"],["TCH-2025-301","Sulaimon Alimoh"],["TCH-2025-302","Sunday Mary"]],"j":["English","Mathematics","Physics","Chemistry","Biology","Further Math","Data Processing","Commerce","Marketing","Agriculture","Livestock","Economics","History","Cit & Heritage"]},"SS2 Actuarial":{"s":[["TCH-2025-303","Abdulrazak Abdulrahman"],["TCH-2025-304","Abdusalam Timileyin"],["TCH-2025-305","Abisoye Gold"],["TCH-2025-306","Adebayo Isaiah"],["TCH-2025-307","Adeniyi Gbolahan"],["TCH-2025-308","Adenola Darasimi"],["TCH-2025-309","Agboola Daniel"],["TCH-2025-310","Azeez Wazilat"],["TCH-2025-311","Bakare Bolaji"],["TCH-2025-312","Chukwu Samuel"],["TCH-2025-313","Ebere Larry"],["TCH-2025-314","Eduniyi Gideon"],["TCH-2025-315","Ewenra Noah"],["TCH-2025-316","Ibadore Miracle"],["TCH-2025-317","Ipadeola Idris"],["TCH-2025-318","Ipadeola Quadri"],["TCH-2025-319","Jewoola Boluwatife"],["TCH-2025-320","Lawal Gabriel"],["TCH-2025-321","Mathew Glory"],["TCH-2025-322","Njoh Ifeoma"],["TCH-2025-323","Nwacke Maryann"],["TCH-2025-324","Ochege Sunday"],["TCH-2025-325","Okarfor Ifeoma"],["TCH-2025-326","Oladeji Ala-meen"],["TCH-2025-327","Osiba Temiloluwa"],["TCH-2025-328","Osunibi Gbolahan"],["TCH-2025-329","Oyebode Precious"],["TCH-2025-330","Peter Godwin"],["TCH-2025-331","Shobowale Isaac"],["TCH-2025-332","Shokoya Samuel"],["TCH-2025-333","Sulaimon Aishat"],["TCH-2025-334","Zulukadeen Rokeeb"]],"j":["English","Mathematics","Biology","Data Processing","Commerce","Marketing","Agriculture","Livestock","Economics","History","Cit & Heritage","Government","Yoruba","CRS","IRS","Accounting","Literature"]},"SS3 Science":{"s":[["TCH-2025-335","Angel"],["TCH-2025-336","Bamise"],["TCH-2025-337","Bright"],["TCH-2025-338","Dorcas"],["TCH-2025-339","Enoch"],["TCH-2025-340","Famous"],["TCH-2025-341","Fauziyyah"],["TCH-2025-342","Fawaz"],["TCH-2025-343","Fiyin"],["TCH-2025-344","Habitat"],["TCH-2025-345","Kaosara"],["TCH-2025-346","Khadija"],["TCH-2025-347","Mercy"],["TCH-2025-348","Michael"],["TCH-2025-349","Moyin"],["TCH-2025-350","Prosper"],["TCH-2025-351","Rita"],["TCH-2025-352","Rokibat"],["TCH-2025-353","Samuel"],["TCH-2025-354","Taiwo"],["TCH-2025-355","Temi"],["TCH-2025-356","Zainab"]],"j":["English","Mathematics","Physics","Chemistry","Biology","Further Math","Data Processing","Commerce","Marketing","Agriculture","Livestock","Economics","History","Cit & Heritage"]},"SS3 Actuarial":{"s":[["TCH-2025-357","Abdul Majeed Quadri"],["TCH-2025-358","Abdul Razak Kehinde"],["TCH-2025-359","Abuh God's Power"],["TCH-2025-360","Adebayo David"],["TCH-2025-361","Adeniran Moses"],["TCH-2025-362","Adesanya Emmanuel"],["TCH-2025-363","Adisa Fathia"],["TCH-2025-364","Ajibola Roheemot"],["TCH-2025-365","Amos Wisdom"],["TCH-2025-366","Asiemor Divine"],["TCH-2025-367","Enemali Ojotoeba"],["TCH-2025-368","Falope Darasimi"],["TCH-2025-369","Famakinwa Akorede"],["TCH-2025-370","Folorunsho Petra"],["TCH-2025-371","Muritala Rashidat"],["TCH-2025-372","Olalere Aishat"],["TCH-2025-373","Oyakan Emmanuel"],["TCH-2025-374","Sowole Azeem"],["TCH-2025-375","Tujiki David"],["TCH-2025-376","Yakubu Happiness"]],"j":["English","Mathematics","Biology","Data Processing","Commerce","Marketing","Agriculture","Livestock","Economics","History","Cit & Heritage","Government","Yoruba","CRS","IRS","Accounting","Literature"]}};
+
+const CLASS_ORDER=["JSS1A","JSS1B","JSS2A","JSS2B","JSS3A","JSS3B","SS1 Science","SS1 Actuarial","SS2 Science","SS2 Actuarial","SS3 Science","SS3 Actuarial"];
+const TAB_LABELS={"JSS1A":"JSS1A","JSS1B":"JSS1B","JSS2A":"JSS2A","JSS2B":"JSS2B","JSS3A":"JSS3A","JSS3B":"JSS3B","SS1 Science":"SS1 Sci","SS1 Actuarial":"SS1 Act","SS2 Science":"SS2 Sci","SS2 Actuarial":"SS2 Act","SS3 Science":"SS3 Sci","SS3 Actuarial":"SS3 Act"};
+
+/* ── GRADE: Nigerian WAEC on raw total out of maxTotal ── */
+function grade(total, maxTotal) {
+  if (!total || !maxTotal) return '';
+  const pct = (total / maxTotal) * 100;
+  if (pct >= 75) return 'A1';
+  if (pct >= 70) return 'B2';
+  if (pct >= 65) return 'B3';
+  if (pct >= 60) return 'C4';
+  if (pct >= 55) return 'C5';
+  if (pct >= 50) return 'C6';
+  if (pct >= 45) return 'D7';
+  if (pct >= 40) return 'E8';
+  return 'F9';
+}
+
+/* ── TOAST ── */
+let _tt;
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  clearTimeout(_tt);
+  el.className = 'toast show ' + (type || 'ok');
+  el.textContent = msg;
+  _tt = setTimeout(() => el.className = 'toast', 2800);
+}
+
+/* ── STORAGE KEY ── */
+function lsKey(cls) {
+  return 'tcbs|' + cls + '|' + document.getElementById('tsel').value;
+}
+
+/* ── GET MAX VALUES FROM PANEL ── */
+function getMaxCA(panel)   { const i = panel.querySelector('.max-ca');   return i ? (+i.value || 30) : 30; }
+function getMaxExam(panel) { const i = panel.querySelector('.max-exam'); return i ? (+i.value || 70) : 70; }
+
+/* ── SAVE ── */
+function saveLS(cls) {
+  const clsId = cls.replace(/ /g, '_');
+  const panel = document.getElementById('P' + clsId);
+  const tbl   = document.getElementById('T' + clsId);
+  if (!tbl) return;
+  const d = { ca: {}, ex: {}, maxCA: getMaxCA(panel), maxExam: getMaxExam(panel) };
+  tbl.querySelectorAll('input.ca').forEach(i => { if (i.value) d.ca[i.dataset.k] = i.value; });
+  tbl.querySelectorAll('input.ex').forEach(i => { if (i.value) d.ex[i.dataset.k] = i.value; });
+  try { localStorage.setItem(lsKey(cls), JSON.stringify(d)); } catch(e) {}
+  // update status
+  const ss = panel.querySelector('.save-status');
+  if (ss) { ss.textContent = 'Saved ' + new Date().toTimeString().slice(0,5); ss.className = 'save-status saved'; }
+}
+
+/* ── LOAD ── */
+function loadLS(cls) {
+  const clsId = cls.replace(/ /g, '_');
+  const panel = document.getElementById('P' + clsId);
+  const tbl   = document.getElementById('T' + clsId);
+  if (!tbl) return;
+  let d;
+  try { d = JSON.parse(localStorage.getItem(lsKey(cls))); } catch(e) {}
+  if (!d) { tbl.querySelectorAll('.tot,.sum').forEach(c => c.textContent = ''); tbl.querySelectorAll('.grd').forEach(c => { c.textContent = ''; c.className = 'grd'; }); return; }
+  // restore max values
+  if (d.maxCA   && panel) { const mc = panel.querySelector('.max-ca');   if (mc) mc.value = d.maxCA; }
+  if (d.maxExam && panel) { const me = panel.querySelector('.max-exam'); if (me) me.value = d.maxExam; }
+  tbl.querySelectorAll('input.ca').forEach(i => { i.value = (d.ca && d.ca[i.dataset.k]) || ''; });
+  tbl.querySelectorAll('input.ex').forEach(i => { i.value = (d.ex && d.ex[i.dataset.k]) || ''; });
+  tbl.querySelectorAll('tr.r').forEach(tr => calcRow(tr, panel));
+  const ss = panel && panel.querySelector('.save-status');
+  if (ss) { ss.textContent = 'Loaded'; ss.className = 'save-status saved'; }
+}
+
+/* ── CALC ROW: grades on subject-level total AND row sum ── */
+function calcRow(tr, panel) {
+  if (!panel) {
+    const ws = tr.closest('.panel');
+    panel = ws || tr.closest('.ws');
+  }
+  const maxCA   = getMaxCA(panel);
+  const maxExam = getMaxExam(panel);
+  const maxSubj = maxCA + maxExam;
+
+  let sum = 0, n = 0;
+  tr.querySelectorAll('input.ca').forEach(ca => {
+    const ex  = tr.querySelector('input.ex[data-s="' + ca.dataset.s + '"]');
+    const c   = +ca.value || 0;
+    const e   = +(ex && ex.value) || 0;
+    const t   = c + e;
+    const tel = tr.querySelector('.tt[data-s="' + ca.dataset.s + '"]');
+    if (tel) tel.textContent = t || '';
+    if (t > 0) { sum += t; n++; }
+  });
+
+  const maxPossible = n * maxSubj;  // only count subjects with entries
+  const se = tr.querySelector('.sum');
+  const ge = tr.querySelector('.grd');
+  if (se) se.textContent = sum || '';
+  if (ge) {
+    const g = sum ? grade(sum, maxPossible) : '';
+    ge.textContent = g;
+    ge.className   = 'grd' + (g ? ' g' + g : '');
+  }
+}
+
+/* ── BUILD PANEL (lazy, once per class) ── */
+function buildPanel(cls) {
+  const clsId = cls.replace(/ /g, '_');
+  const id    = 'P' + clsId;
+  if (document.getElementById(id)) return;
+
+  const data     = DB[cls];
+  const students = data.s;
+  const subjects = data.j;
+  const ns = subjects.length, n = students.length;
+  const tid = 'T' + clsId;
+
+  /* thead */
+  let r1 = '<tr class="h1"><th rowspan="2" class="c0">#</th><th rowspan="2" class="c1" style="text-align:left;padding-left:7px">STUDENT NAME</th>';
+  let r2 = '<tr class="h2">';
+  subjects.forEach(s => {
+    r1 += `<th colspan="3" class="sh">${s}</th>`;
+    r2 += '<th class="sc">CA</th><th class="se">EX</th><th class="st">TOT</th>';
+  });
+  r1 += '<th rowspan="2" class="sk">SUM</th><th rowspan="2" class="sp">GRD</th></tr>';
+  r2 += '</tr>';
+
+  /* tbody */
+  let tbody = '';
+  students.forEach(([sid, name], i) => {
+    const ks = sid.replace(/-/g, '');
+    let cells = '';
+    subjects.forEach((_, j) => {
+      const k = ks + '_' + j;
+      cells += `<td class="tl"><input type="number" class="ca" min="0" max="99" data-k="${k}c" data-s="${j}" autocomplete="off"></td>`
+             + `<td><input type="number" class="ex" min="0" max="99" data-k="${k}e" data-s="${j}" autocomplete="off"></td>`
+             + `<td class="tot tt" data-s="${j}"></td>`;
+    });
+    tbody += `<tr class="r" data-s="${ks}" data-sid="${sid}"><td class="c0">${i+1}</td><td class="c1" title="${sid}">${name.replace(/</g,'&lt;')}</td>${cells}<td class="sum"></td><td class="grd"></td></tr>`;
+  });
+
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+  panel.id = id;
+  panel.hidden = true;
+  panel.innerHTML = `
+<div class="pbar">
+  <span class="cls-badge">${cls}</span>
+  <span class="cls-meta">${n} students &bull; ${ns} subjects</span>
+  <div class="max-row">
+    CA&thinsp;<input class="max-ca" type="number" value="30" min="1" max="100" title="Max CA score">&nbsp;
+    Exam&thinsp;<input class="max-exam" type="number" value="70" min="1" max="100" title="Max exam score">
+  </div>
+  <div class="acts">
+    <span class="save-status"></span>
+    <button class="btn b-sv" onclick="doSave('${clsId}')">&#9889; Save</button>
+    <button class="btn b-cs" onclick="doCSV('${clsId}')">&#8595; CSV</button>
+    <button class="btn b-cl" onclick="doClear('${clsId}')">&#10005; Clear</button>
+  </div>
+</div>
+<div class="tscroll">
+  <table id="${tid}">
+    <thead>${r1}${r2}</thead>
+    <tbody>${tbody}</tbody>
+  </table>
+</div>`;
+
+  document.getElementById('ws').appendChild(panel);
+
+  /* ── INPUT: validate + recalc + debounced autosave ── */
+  let _saveTimer;
+  panel.addEventListener('input', function(e) {
+    const inp = e.target;
+    if (inp.tagName !== 'INPUT') return;
+    const isCA  = inp.classList.contains('ca');
+    const maxV  = isCA ? getMaxCA(panel) : getMaxExam(panel);
+    let v = +inp.value;
+    if (inp.value === '' || isNaN(v)) { inp.classList.remove('over'); }
+    else {
+      if (v < 0) { inp.value = v = 0; }
+      if (v > maxV) { inp.value = v = maxV; inp.classList.add('over'); }
+      else { inp.classList.remove('over'); }
+    }
+    const tr = inp.closest('tr.r');
+    if (tr) calcRow(tr, panel);
+
+    // mark dirty
+    const ss = panel.querySelector('.save-status');
+    if (ss && !ss.className.includes('dirty')) { ss.textContent = 'Unsaved'; ss.className = 'save-status dirty'; }
+
+    // debounced save: 600ms after last keystroke
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(() => saveLS(cls), 600);
+  });
+
+  // max-field changes: regrade all rows
+  panel.querySelector('.max-ca').addEventListener('change', () => {
+    panel.querySelectorAll('tr.r').forEach(tr => calcRow(tr, panel));
+  });
+  panel.querySelector('.max-exam').addEventListener('change', () => {
+    panel.querySelectorAll('tr.r').forEach(tr => calcRow(tr, panel));
+  });
+}
+
+/* ── SHOW PANEL ── */
+function showPanel(cls) {
+  buildPanel(cls);
+  document.querySelectorAll('.panel').forEach(p => p.hidden = true);
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  const panel = document.getElementById('P' + cls.replace(/ /g, '_'));
+  if (panel) { panel.hidden = false; loadLS(cls); }
+  const tab = document.querySelector('.tab[data-c="' + CSS.escape(cls) + '"]');
+  if (tab) { tab.classList.add('on'); tab.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+}
+
+/* ── ACTIONS ── */
+window.doSave = function(clsId) {
+  const cls = clsId.replace(/_/g, ' ');
+  saveLS(cls);
+  toast('Saved \u2713', 'ok');
+};
+
+window.doCSV = function(clsId) {
+  const cls     = clsId.replace(/_/g, ' ');
+  const term    = document.getElementById('tsel').options[document.getElementById('tsel').selectedIndex].text;
+  const data    = DB[cls];
+  const subjects = data.j;
+  const tbl     = document.getElementById('T' + clsId);
+  const panel   = document.getElementById('P' + clsId);
+  if (!tbl) return;
+
+  const maxCA   = getMaxCA(panel);
+  const maxExam = getMaxExam(panel);
+  const maxSubj = maxCA + maxExam;
+
+  // Row 1: subject groups
+  const h1 = ['S/N', 'Student ID', 'Student Name'];
+  subjects.forEach(s => { h1.push(s, '', ''); });
+  h1.push('Sum', 'Grade');
+
+  // Row 2: sub-headers
+  const h2 = ['', '', ''];
+  subjects.forEach(() => { h2.push('CA/' + maxCA, 'Exam/' + maxExam, 'Total/' + maxSubj); });
+  h2.push('', '');
+
+  const rows = [h1, h2];
+  tbl.querySelectorAll('tr.r').forEach((tr, i) => {
+    const sid  = tr.dataset.sid;
+    const name = tr.querySelector('.c1').textContent.trim();
+    const line = [i + 1, sid, name];
+    let sum = 0, n = 0;
+    subjects.forEach((_, j) => {
+      const ca  = tr.querySelector('input.ca[data-s="' + j + '"]');
+      const ex  = tr.querySelector('input.ex[data-s="' + j + '"]');
+      const tot = tr.querySelector('.tt[data-s="' + j + '"]');
+      const cv  = ca ? (+ca.value || 0) : 0;
+      const ev  = ex ? (+ex.value || 0) : 0;
+      const tv  = cv + ev;
+      if (tv > 0) { sum += tv; n++; }
+      line.push(cv || '', ev || '', tv || '');
+    });
+    const maxPossible = n * maxSubj;
+    const g = sum ? grade(sum, maxPossible) : '';
+    line.push(sum || '', g);
+    rows.push(line);
+  });
+
+  const bom = '\uFEFF';
+  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = 'TCC_' + clsId + '_' + term.replace(/[^a-zA-Z0-9]/g, '_') + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 800);
+  saveLS(cls);
+  toast('CSV downloaded \u2193', 'ok');
+};
+
+window.doClear = function(clsId) {
+  const cls = clsId.replace(/_/g, ' ');
+  if (!confirm('Clear all scores for ' + cls + '?\nThis cannot be undone.')) return;
+  const tbl = document.getElementById('T' + clsId);
+  if (tbl) {
+    tbl.querySelectorAll('input').forEach(i => { i.value = ''; i.classList.remove('over'); });
+    tbl.querySelectorAll('.tot,.sum').forEach(c => c.textContent = '');
+    tbl.querySelectorAll('.grd').forEach(c => { c.textContent = ''; c.className = 'grd'; });
+  }
+  try { localStorage.removeItem(lsKey(cls)); } catch(e) {}
+  const panel = document.getElementById('P' + clsId);
+  const ss = panel && panel.querySelector('.save-status');
+  if (ss) { ss.textContent = 'Cleared'; ss.className = 'save-status'; }
+  toast('Cleared ' + cls, 'ok');
+};
+
+/* ── INIT ── */
+(function() {
+  const tabbar = document.getElementById('tabbar');
+  CLASS_ORDER.forEach(cls => {
+    const btn = document.createElement('button');
+    btn.className = 'tab';
+    btn.dataset.c = cls;
+    btn.textContent = TAB_LABELS[cls];
+    btn.onclick = () => showPanel(cls);
+    tabbar.appendChild(btn);
+  });
+  showPanel(CLASS_ORDER[0]);
+  document.getElementById('tsel').addEventListener('change', function() {
+    const on = document.querySelector('.tab.on');
+    if (on) { loadLS(on.dataset.c); }
+  });
+})();
+"""
+
+with open('/home/claude/broadsheet-final.html', 'a') as f:
+    f.write('<script>\n')
+    f.write(script)
+    f.write('\n</script>\n</body>\n</html>')
+
+print("Done. Lines:", open('/home/claude/broadsheet-final.html').read().count('\n'))
+PYEOF
+Output
+Done. Lines: 504
+Done
+
+You are out of free messages until 2:00
