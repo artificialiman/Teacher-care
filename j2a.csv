@@ -1,0 +1,425 @@
+Here is the complete, properly formatted CSV containing all results for the 32 students you listed, mapped directly from the handwritten sheets you provided.
+
+· Format columns: Student Name, Subject, 2nd Term CA, 2nd Term Exam, 2nd Term Total, 3rd Term CA, 3rd Term Exam, 3rd Term Total.
+· Missing Students: Ayoade Flourish, Musa Isaac, Obaoye Dorcas, Olowu Jamal, and Tijani Olamiposi do not appear on any of the provided 12 images, so their rows are blank.
+· Usage: Copy the block below, paste it into a text file, and save it as JSS2A_Grades.csv. You can then open it directly in Microsoft Excel, Google Sheets, or any database tool.
+
+```csv
+Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Term Exam,3rd Term Total
+"Abey Phoebe","ENGLISH",39,59,98,40,51,91
+"Abey Phoebe","MATHS",16,38,54,31,46,77
+"Abey Phoebe","N.V",23,56,79,28,58,86
+"Abey Phoebe","C.C.A",34,51,85,23,50,73
+"Abey Phoebe","HISTORY",37,39,76,30,50,80
+"Abey Phoebe","P.V.S",40,50,90,35,48,83
+"Abey Phoebe","CRS/IRS",38,46,84,21,30,51
+"Abey Phoebe","YORUBA",30,50,80,32,47,79
+"Abey Phoebe","BUSINESS STUDIES",35,58,93,38,45,83
+"Abey Phoebe","B.S.T",35,52,87,40,57,97
+"Abey Phoebe","FRENCH",36,50,86,25,58,83
+"Abey Phoebe","P.H.E",32,54,86,39,54,93
+"Abey Phoebe","DIGITAL TECH",,,,30,57,87
+"Adeniyi Mubarak","ENGLISH",19,33,52,13,33,46
+"Adeniyi Mubarak","MATHS",10,23,33,15,20,35
+"Adeniyi Mubarak","N.V",30,38,68,33,,
+"Adeniyi Mubarak","C.C.A",31,23,54,15,14,29
+"Adeniyi Mubarak","HISTORY",20,36,56,,,
+"Adeniyi Mubarak","P.V.S",22,23,45,,,
+"Adeniyi Mubarak","CRS/IRS",17,22,39,15,15,30
+"Adeniyi Mubarak","YORUBA",40,44,84,,,
+"Adeniyi Mubarak","BUSINESS STUDIES",18,30,48,20,,
+"Adeniyi Mubarak","B.S.T",27,21,48,28,28,56
+"Adeniyi Mubarak","FRENCH",23,34,57,25,30,55
+"Adeniyi Mubarak","P.H.E",22,43,65,29,33,62
+"Adeniyi Mubarak","DIGITAL TECH",38,33,71,18,26,44
+"Agbabiaka Ella","ENGLISH",33,51,84,38,51,89
+"Agbabiaka Ella","MATHS",15,33,48,31,37,68
+"Agbabiaka Ella","N.V",22,48,70,29,50,79
+"Agbabiaka Ella","C.C.A",31,50,81,26,42,68
+"Agbabiaka Ella","HISTORY",35,42,77,,,
+"Agbabiaka Ella","P.V.S",40,44,84,,,
+"Agbabiaka Ella","CRS/IRS",35,44,79,,,
+"Agbabiaka Ella","YORUBA",40,44,84,,,
+"Agbabiaka Ella","BUSINESS STUDIES",35,53,88,39,50,89
+"Agbabiaka Ella","B.S.T",30,50,89,30,51,81
+"Agbabiaka Ella","FRENCH",36,40,76,24,32,56
+"Agbabiaka Ella","P.H.E",34,53,90,48,50,88
+"Agbabiaka Ella","DIGITAL TECH",20,58,48,33,49,82
+"Alaka Faridat","ENGLISH",40,56,96,40,57,97
+"Alaka Faridat","MATHS",28,54,82,37,54,91
+"Alaka Faridat","N.V",40,58,98,34,60,94
+"Alaka Faridat","C.C.A",40,57,97,38,55,93
+"Alaka Faridat","HISTORY",40,55,95,,,
+"Alaka Faridat","P.V.S",40,55,95,,,
+"Alaka Faridat","CRS/IRS",40,53,93,,,
+"Alaka Faridat","YORUBA",38,53,91,,,
+"Alaka Faridat","BUSINESS STUDIES",35,59,94,40,,
+"Alaka Faridat","B.S.T",40,59,99,40,60,100
+"Alaka Faridat","FRENCH",36,60,96,30,60,90
+"Alaka Faridat","P.H.E",40,56,96,40,59,99
+"Alaka Faridat","DIGITAL TECH",40,60,100,40,59,99
+"Aramide Hikimot","ENGLISH",37,50,87,32,33,65
+"Aramide Hikimot","MATHS",18,36,44,24,30,54
+"Aramide Hikimot","N.V",26,44,70,27,33,54
+"Aramide Hikimot","C.C.A",40,44,84,18,33,51
+"Aramide Hikimot","HISTORY",35,44,79,,,
+"Aramide Hikimot","P.V.S",40,46,86,,,
+"Aramide Hikimot","CRS/IRS",40,36,76,20,41,61
+"Aramide Hikimot","YORUBA",40,42,82,40,48,88
+"Aramide Hikimot","BUSINESS STUDIES",30,47,77,40,36,76
+"Aramide Hikimot","B.S.T",36,41,77,20,40,60
+"Aramide Hikimot","FRENCH",36,42,78,20,41,61
+"Aramide Hikimot","P.H.E",32,50,82,40,40,80
+"Aramide Hikimot","DIGITAL TECH",40,44,84,23,47,70
+"Aremu Praise","ENGLISH",40,59,99,40,55,95
+"Aremu Praise","MATHS",31,54,85,33,52,85
+"Aremu Praise","N.V",39,56,95,32,59,91
+"Aremu Praise","C.C.A",40,58,98,39,51,90
+"Aremu Praise","HISTORY",40,52,92,,,
+"Aremu Praise","P.V.S",40,52,92,,,
+"Aremu Praise","CRS/IRS",39,52,91,30,52,82
+"Aremu Praise","YORUBA",40,52,92,,,
+"Aremu Praise","BUSINESS STUDIES",40,60,100,40,,
+"Aremu Praise","B.S.T",40,58,98,40,56,96
+"Aremu Praise","FRENCH",40,60,100,35,60,95
+"Aremu Praise","P.H.E",40,56,96,39,57,96
+"Aremu Praise","DIGITAL TECH",40,60,100,40,56,96
+"Ayoade Flourish","ENGLISH",,,,,
+"Ayoade Flourish","MATHS",,,,,
+"Ayoade Flourish","N.V",,,,,
+"Ayoade Flourish","C.C.A",,,,,
+"Ayoade Flourish","HISTORY",,,,,
+"Ayoade Flourish","P.V.S",,,,,
+"Ayoade Flourish","CRS/IRS",,,,,
+"Ayoade Flourish","YORUBA",,,,,
+"Ayoade Flourish","BUSINESS STUDIES",,,,,
+"Ayoade Flourish","B.S.T",,,,,
+"Ayoade Flourish","FRENCH",,,,,
+"Ayoade Flourish","P.H.E",,,,,
+"Ayoade Flourish","DIGITAL TECH",,,,,
+"Bakare Gabriel","ENGLISH",20,48,68,20,36,56
+"Bakare Gabriel","MATHS",19,25,44,28,35,63
+"Bakare Gabriel","N.V",07,18,25,40,,
+"Bakare Gabriel","C.C.A",28,40,68,23,44,67
+"Bakare Gabriel","HISTORY",25,40,65,,,
+"Bakare Gabriel","P.V.S",30,,,,
+"Bakare Gabriel","CRS/IRS",20,25,45,21,,
+"Bakare Gabriel","YORUBA",40,50,90,,,
+"Bakare Gabriel","BUSINESS STUDIES",25,33,58,20,,
+"Bakare Gabriel","B.S.T",29,45,74,22,30,52
+"Bakare Gabriel","FRENCH",38,50,88,30,30,60
+"Bakare Gabriel","P.H.E",25,50,75,34,50,84
+"Bakare Gabriel","DIGITAL TECH",38,20,58,24,55,79
+"Bamiro David","ENGLISH",10,39,49,29,42,71
+"Bamiro David","MATHS",18,24,42,35,40,75
+"Bamiro David","N.V",27,44,71,25,59,84
+"Bamiro David","C.C.A",31,50,81,26,42,68
+"Bamiro David","HISTORY",30,37,67,,,
+"Bamiro David","P.V.S",36,36,72,,,
+"Bamiro David","CRS/IRS",24,32,56,25,58,83
+"Bamiro David","YORUBA",40,47,87,,,
+"Bamiro David","BUSINESS STUDIES",25,51,76,29,,
+"Bamiro David","B.S.T",33,54,87,26,52,78
+"Bamiro David","FRENCH",34,37,71,38,51,89
+"Bamiro David","P.H.E",36,51,87,38,54,92
+"Bamiro David","DIGITAL TECH",33,40,73,31,49,80
+"Biobaku Azraa","ENGLISH",39,42,81,25,37,62
+"Biobaku Azraa","MATHS",14,20,34,25,24,49
+"Biobaku Azraa","N.V",26,54,80,27,43,70
+"Biobaku Azraa","C.C.A",25,47,72,16,42,58
+"Biobaku Azraa","HISTORY",32,42,74,25,35,60
+"Biobaku Azraa","P.V.S",32,33,65,25,35,60
+"Biobaku Azraa","CRS/IRS",22,40,62,15,15,30
+"Biobaku Azraa","YORUBA",38,40,78,40,30,70
+"Biobaku Azraa","BUSINESS STUDIES",30,50,80,25,32,57
+"Biobaku Azraa","B.S.T",31,52,83,36,45,81
+"Biobaku Azraa","FRENCH",38,31,69,33,40,73
+"Biobaku Azraa","P.H.E",34,53,87,33,53,86
+"Biobaku Azraa","DIGITAL TECH",40,40,80,30,30,60
+"Boladale Esther","ENGLISH",39,58,97,39,52,91
+"Boladale Esther","MATHS",27,49,76,35,53,88
+"Boladale Esther","N.V",33,58,91,35,58,93
+"Boladale Esther","C.C.A",40,56,96,38,53,91
+"Boladale Esther","HISTORY",38,55,93,35,49,84
+"Boladale Esther","P.V.S",40,51,91,37,53,90
+"Boladale Esther","CRS/IRS",38,52,90,30,50,80
+"Boladale Esther","YORUBA",38,53,91,32,47,79
+"Boladale Esther","BUSINESS STUDIES",40,60,100,32,40,72
+"Boladale Esther","B.S.T",40,58,98,40,60,100
+"Boladale Esther","FRENCH",36,57,93,32,58,90
+"Boladale Esther","P.H.E",39,55,94,40,56,96
+"Boladale Esther","DIGITAL TECH",40,60,100,40,59,99
+"Edeniyi Ukharia","ENGLISH",35,28,63,21,39,60
+"Edeniyi Ukharia","MATHS",10,24,34,25,36,61
+"Edeniyi Ukharia","N.V",30,39,69,29,36,65
+"Edeniyi Ukharia","C.C.A",15,22,37,20,39,59
+"Edeniyi Ukharia","HISTORY",25,41,66,,,
+"Edeniyi Ukharia","P.V.S",28,34,62,20,34,54
+"Edeniyi Ukharia","CRS/IRS",25,29,54,32,20,52
+"Edeniyi Ukharia","YORUBA",30,42,72,,,
+"Edeniyi Ukharia","BUSINESS STUDIES",28,50,78,25,32,57
+"Edeniyi Ukharia","B.S.T",32,46,78,25,32,57
+"Edeniyi Ukharia","FRENCH",25,25,50,30,31,61
+"Edeniyi Ukharia","P.H.E",28,45,73,30,34,64
+"Edeniyi Ukharia","DIGITAL TECH",16,23,39,29,34,63
+"Falope Kikiope","ENGLISH",40,49,89,38,46,84
+"Falope Kikiope","MATHS",22,33,55,31,40,71
+"Falope Kikiope","N.V",23,50,73,36,52,88
+"Falope Kikiope","C.C.A",34,50,84,22,47,69
+"Falope Kikiope","HISTORY",35,47,82,,,
+"Falope Kikiope","P.V.S",40,49,89,,,
+"Falope Kikiope","CRS/IRS",22,28,50,30,49,79
+"Falope Kikiope","YORUBA",40,35,75,,,
+"Falope Kikiope","BUSINESS STUDIES",25,55,80,38,,
+"Falope Kikiope","B.S.T",30,52,82,35,57,92
+"Falope Kikiope","FRENCH",36,54,90,20,48,68
+"Falope Kikiope","P.H.E",32,54,86,40,56,96
+"Falope Kikiope","DIGITAL TECH",38,44,82,35,52,87
+"Ida Wisdom","ENGLISH",40,53,93,37,52,89
+"Ida Wisdom","MATHS",26,38,64,36,40,76
+"Ida Wisdom","N.V",37,49,86,30,50,80
+"Ida Wisdom","C.C.A",40,51,91,29,50,79
+"Ida Wisdom","HISTORY",35,43,78,30,51,91
+"Ida Wisdom","P.V.S",40,51,91,35,43,78
+"Ida Wisdom","CRS/IRS",30,37,67,20,24,44
+"Ida Wisdom","YORUBA",40,40,80,35,43,78
+"Ida Wisdom","BUSINESS STUDIES",35,57,92,40,38,78
+"Ida Wisdom","B.S.T",39,51,90,37,53,90
+"Ida Wisdom","FRENCH",34,50,84,35,54,89
+"Ida Wisdom","P.H.E",36,51,87,40,51,91
+"Ida Wisdom","DIGITAL TECH",40,58,98,35,56,91
+"Mudashiru Abidat","ENGLISH",40,53,93,40,50,90
+"Mudashiru Abidat","MATHS",24,40,64,32,42,74
+"Mudashiru Abidat","N.V",25,42,67,15,55,70
+"Mudashiru Abidat","C.C.A",40,55,95,36,52,88
+"Mudashiru Abidat","HISTORY",38,47,85,,,
+"Mudashiru Abidat","P.V.S",40,50,90,,,
+"Mudashiru Abidat","CRS/IRS",40,38,78,35,44,79
+"Mudashiru Abidat","YORUBA",40,47,87,,,
+"Mudashiru Abidat","BUSINESS STUDIES",30,59,89,39,,
+"Mudashiru Abidat","B.S.T",37,52,89,34,48,72
+"Mudashiru Abidat","FRENCH",38,50,88,30,46,76
+"Mudashiru Abidat","P.H.E",34,54,88,38,53,91
+"Mudashiru Abidat","DIGITAL TECH",39,60,99,30,51,81
+"Muh'awwal Alitorf","ENGLISH",40,50,90,38,51,89
+"Muh'awwal Alitorf","MATHS",10,37,47,33,43,76
+"Muh'awwal Alitorf","N.V",26,35,61,35,45,80
+"Muh'awwal Alitorf","C.C.A",40,53,93,28,28,56
+"Muh'awwal Alitorf","HISTORY",38,54,92,30,54,84
+"Muh'awwal Alitorf","P.V.S",40,55,95,35,48,83
+"Muh'awwal Alitorf","CRS/IRS",39,38,77,36,60,96
+"Muh'awwal Alitorf","YORUBA",40,41,81,40,41,81
+"Muh'awwal Alitorf","BUSINESS STUDIES",30,55,85,39,57,96
+"Muh'awwal Alitorf","B.S.T",39,58,97,37,57,94
+"Muh'awwal Alitorf","FRENCH",36,57,93,33,40,73
+"Muh'awwal Alitorf","P.H.E",39,55,94,40,57,97
+"Muh'awwal Alitorf","DIGITAL TECH",20,56,76,30,57,87
+"Musa Isaac","ENGLISH",,,,,
+"Musa Isaac","MATHS",,,,,
+"Musa Isaac","N.V",,,,,
+"Musa Isaac","C.C.A",,,,,
+"Musa Isaac","HISTORY",,,,,
+"Musa Isaac","P.V.S",,,,,
+"Musa Isaac","CRS/IRS",,,,,
+"Musa Isaac","YORUBA",,,,,
+"Musa Isaac","BUSINESS STUDIES",,,,,
+"Musa Isaac","B.S.T",,,,,
+"Musa Isaac","FRENCH",,,,,
+"Musa Isaac","P.H.E",,,,,
+"Musa Isaac","DIGITAL TECH",,,,,
+"Neri Testimony","ENGLISH",22,29,61,15,23,38
+"Neri Testimony","MATHS",10,18,28,13,15,28
+"Neri Testimony","N.V",17,21,38,37,40,77
+"Neri Testimony","C.C.A",15,27,42,15,30,45
+"Neri Testimony","HISTORY",18,25,43,,,
+"Neri Testimony","P.V.S",20,9,29,,,
+"Neri Testimony","CRS/IRS",14,13,27,15,10,25
+"Neri Testimony","YORUBA",25,38,63,,,
+"Neri Testimony","BUSINESS STUDIES",25,38,63,20,40,60
+"Neri Testimony","B.S.T",22,28,50,15,24,39
+"Neri Testimony","FRENCH",32,26,58,20,32,52
+"Neri Testimony","P.H.E",25,15,40,15,16,31
+"Neri Testimony","DIGITAL TECH",,,,,
+"Obaoye Dorcas","ENGLISH",,,,,
+"Obaoye Dorcas","MATHS",,,,,
+"Obaoye Dorcas","N.V",,,,,
+"Obaoye Dorcas","C.C.A",,,,,
+"Obaoye Dorcas","HISTORY",,,,,
+"Obaoye Dorcas","P.V.S",,,,,
+"Obaoye Dorcas","CRS/IRS",,,,,
+"Obaoye Dorcas","YORUBA",,,,,
+"Obaoye Dorcas","BUSINESS STUDIES",,,,,
+"Obaoye Dorcas","B.S.T",,,,,
+"Obaoye Dorcas","FRENCH",,,,,
+"Obaoye Dorcas","P.H.E",,,,,
+"Obaoye Dorcas","DIGITAL TECH",,,,,
+"Ogoyemi Josephine","ENGLISH",20,39,59,23,42,65
+"Ogoyemi Josephine","MATHS",23,20,43,23,23,46
+"Ogoyemi Josephine","N.V",18,41,59,31,58,89
+"Ogoyemi Josephine","C.C.A",37,42,79,16,43,59
+"Ogoyemi Josephine","HISTORY",28,29,57,,,
+"Ogoyemi Josephine","P.V.S",30,32,62,,,
+"Ogoyemi Josephine","CRS/IRS",20,26,46,20,22,42
+"Ogoyemi Josephine","YORUBA",40,48,88,,,
+"Ogoyemi Josephine","BUSINESS STUDIES",25,43,68,28,,
+"Ogoyemi Josephine","B.S.T",28,26,54,30,50,80
+"Ogoyemi Josephine","FRENCH",36,57,93,25,30,55
+"Ogoyemi Josephine","P.H.E",30,30,60,30,44,74
+"Ogoyemi Josephine","DIGITAL TECH",40,50,90,24,39,63
+"Olowu Jamal","ENGLISH",,,,,
+"Olowu Jamal","MATHS",,,,,
+"Olowu Jamal","N.V",,,,,
+"Olowu Jamal","C.C.A",,,,,
+"Olowu Jamal","HISTORY",,,,,
+"Olowu Jamal","P.V.S",,,,,
+"Olowu Jamal","CRS/IRS",,,,,
+"Olowu Jamal","YORUBA",,,,,
+"Olowu Jamal","BUSINESS STUDIES",,,,,
+"Olowu Jamal","B.S.T",,,,,
+"Olowu Jamal","FRENCH",,,,,
+"Olowu Jamal","P.H.E",,,,,
+"Olowu Jamal","DIGITAL TECH",,,,,
+"Olubiyi Godwin","ENGLISH",33,20,53,24,33,57
+"Olubiyi Godwin","MATHS",23,48,71,15,22,37
+"Olubiyi Godwin","N.V",5,14,19,36,44,80
+"Olubiyi Godwin","C.C.A",19,27,46,12,21,33
+"Olubiyi Godwin","HISTORY",20,25,45,,,
+"Olubiyi Godwin","P.V.S",28,8,36,,,
+"Olubiyi Godwin","CRS/IRS",15,12,27,6,14,20
+"Olubiyi Godwin","YORUBA",40,38,78,,,
+"Olubiyi Godwin","BUSINESS STUDIES",25,40,65,20,40,60
+"Olubiyi Godwin","B.S.T",27,13,40,25,53,78
+"Olubiyi Godwin","FRENCH",32,33,65,20,55,75
+"Olubiyi Godwin","P.H.E",24,21,45,20,27,47
+"Olubiyi Godwin","DIGITAL TECH",38,58,96,34,57,91
+"Opeyemi Rosheedat","ENGLISH",22,22,44,17,26,43
+"Opeyemi Rosheedat","MATHS",18,17,35,22,10,32
+"Opeyemi Rosheedat","N.V",2,15,17,32,,
+"Opeyemi Rosheedat","C.C.A",28,27,55,20,29,49
+"Opeyemi Rosheedat","HISTORY",20,15,35,,,
+"Opeyemi Rosheedat","P.V.S",22,11,33,,,
+"Opeyemi Rosheedat","CRS/IRS",40,31,71,34,35,69
+"Opeyemi Rosheedat","YORUBA",40,41,81,,,
+"Opeyemi Rosheedat","BUSINESS STUDIES",25,40,65,20,,
+"Opeyemi Rosheedat","B.S.T",22,19,41,15,26,41
+"Opeyemi Rosheedat","FRENCH",20,50,70,25,25,50
+"Opeyemi Rosheedat","P.H.E",29,26,55,26,15,41
+"Opeyemi Rosheedat","DIGITAL TECH",,,,,
+"Oriabor Joy","ENGLISH",40,54,94,34,54,88
+"Oriabor Joy","MATHS",25,40,65,34,43,77
+"Oriabor Joy","N.V",38,48,86,29,34,63
+"Oriabor Joy","C.C.A",37,47,84,23,55,78
+"Oriabor Joy","HISTORY",30,45,75,,,
+"Oriabor Joy","P.V.S",40,46,86,,,
+"Oriabor Joy","CRS/IRS",37,39,76,,,
+"Oriabor Joy","YORUBA",40,41,81,,,
+"Oriabor Joy","BUSINESS STUDIES",35,48,83,37,,
+"Oriabor Joy","B.S.T",32,50,82,39,55,94
+"Oriabor Joy","FRENCH",33,47,80,30,49,79
+"Oriabor Joy","P.H.E",38,54,92,40,54,94
+"Oriabor Joy","DIGITAL TECH",40,60,100,35,52,87
+"Orukpe Daniel","ENGLISH",35,46,81,31,47,78
+"Orukpe Daniel","MATHS",17,40,57,30,44,74
+"Orukpe Daniel","N.V",22,36,54,25,47,72
+"Orukpe Daniel","C.C.A",28,49,75,22,52,74
+"Orukpe Daniel","HISTORY",30,54,84,20,40,60
+"Orukpe Daniel","P.V.S",38,22,65,,,
+"Orukpe Daniel","CRS/IRS",37,39,76,39,30,69
+"Orukpe Daniel","YORUBA",40,46,86,,,
+"Orukpe Daniel","BUSINESS STUDIES",36,44,79,21,40,61
+"Orukpe Daniel","B.S.T",36,47,83,25,53,78
+"Orukpe Daniel","FRENCH",38,43,81,20,55,75
+"Orukpe Daniel","P.H.E",25,48,73,20,27,47
+"Orukpe Daniel","DIGITAL TECH",40,51,91,23,33,56
+"Oyeboade Erioluwa","ENGLISH",10,38,48,26,39,65
+"Oyeboade Erioluwa","MATHS",10,28,33,25,25,50
+"Oyeboade Erioluwa","N.V",40,,,32,44,76
+"Oyeboade Erioluwa","C.C.A",20,40,60,15,51,66
+"Oyeboade Erioluwa","HISTORY",28,39,67,,,
+"Oyeboade Erioluwa","P.V.S",,,,,
+"Oyeboade Erioluwa","CRS/IRS",25,38,63,33,,
+"Oyeboade Erioluwa","YORUBA",30,48,78,,,
+"Oyeboade Erioluwa","BUSINESS STUDIES",26,45,71,39,,
+"Oyeboade Erioluwa","B.S.T",30,47,77,25,52,77
+"Oyeboade Erioluwa","FRENCH",10,31,41,20,37,57
+"Oyeboade Erioluwa","P.H.E",25,45,70,39,51,90
+"Oyeboade Erioluwa","DIGITAL TECH",40,50,90,24,52,72
+"Oyediji Israel","ENGLISH",34,37,74,25,26,51
+"Oyediji Israel","MATHS",13,27,40,15,37,52
+"Oyediji Israel","N.V",,,41,27,39,66
+"Oyediji Israel","C.C.A",16,45,60,22,54,76
+"Oyediji Israel","HISTORY",28,30,58,,,
+"Oyediji Israel","P.V.S",28,38,66,,,
+"Oyediji Israel","CRS/IRS",22,20,42,15,10,25
+"Oyediji Israel","YORUBA",28,47,75,,,
+"Oyediji Israel","BUSINESS STUDIES",25,51,76,21,40,61
+"Oyediji Israel","B.S.T",35,28,63,14,36,50
+"Oyediji Israel","FRENCH",10,15,25,25,30,55
+"Oyediji Israel","P.H.E",30,37,67,24,33,37
+"Oyediji Israel","DIGITAL TECH",,,,,
+"Oyetunji Adejoke","ENGLISH",40,59,99,40,55,95
+"Oyetunji Adejoke","MATHS",23,49,72,35,45,80
+"Oyetunji Adejoke","N.V",40,56,96,34,56,90
+"Oyetunji Adejoke","C.C.A",40,57,97,38,54,92
+"Oyetunji Adejoke","HISTORY",40,53,93,,,
+"Oyetunji Adejoke","P.V.S",40,55,95,40,59,99
+"Oyetunji Adejoke","CRS/IRS",40,53,93,28,42,70
+"Oyetunji Adejoke","YORUBA",40,51,91,,,
+"Oyetunji Adejoke","BUSINESS STUDIES",40,60,100,32,,
+"Oyetunji Adejoke","B.S.T",40,59,99,40,58,98
+"Oyetunji Adejoke","FRENCH",33,58,91,34,60,94
+"Oyetunji Adejoke","P.H.E",40,55,95,40,59,99
+"Oyetunji Adejoke","DIGITAL TECH",,,,,
+"Oyewole Daniel","ENGLISH",40,58,98,40,51,91
+"Oyewole Daniel","MATHS",26,53,79,32,56,88
+"Oyewole Daniel","N.V",34,59,93,33,60,93
+"Oyewole Daniel","C.C.A",40,55,95,28,57,85
+"Oyewole Daniel","HISTORY",30,54,84,39,50,89
+"Oyewole Daniel","P.V.S",40,55,95,35,48,83
+"Oyewole Daniel","CRS/IRS",39,38,77,36,60,96
+"Oyewole Daniel","YORUBA",40,41,81,40,41,81
+"Oyewole Daniel","BUSINESS STUDIES",30,55,85,39,57,96
+"Oyewole Daniel","B.S.T",39,58,97,37,57,94
+"Oyewole Daniel","FRENCH",36,57,93,33,40,73
+"Oyewole Daniel","P.H.E",39,55,94,40,57,97
+"Oyewole Daniel","DIGITAL TECH",20,56,76,30,57,87
+"Rafiu Rofiat","ENGLISH",21,40,61,15,32,47
+"Rafiu Rofiat","MATHS",12,22,34,15,24,39
+"Rafiu Rofiat","N.V",15,36,51,33,41,74
+"Rafiu Rofiat","C.C.A",31,43,74,20,32,52
+"Rafiu Rofiat","HISTORY",28,33,61,32,28,60
+"Rafiu Rofiat","P.V.S",20,20,40,,,
+"Rafiu Rofiat","CRS/IRS",40,36,76,38,48,86
+"Rafiu Rofiat","YORUBA",40,47,87,,,
+"Rafiu Rofiat","BUSINESS STUDIES",25,49,74,30,,
+"Rafiu Rofiat","B.S.T",28,31,59,22,48,70
+"Rafiu Rofiat","FRENCH",25,33,58,20,25,45
+"Rafiu Rofiat","P.H.E",29,34,63,22,20,42
+"Rafiu Rofiat","DIGITAL TECH",40,33,73,24,30,54
+"Raji Joshua","ENGLISH",40,50,90,39,54,93
+"Raji Joshua","MATHS",20,38,58,33,44,77
+"Raji Joshua","N.V",28,50,78,30,52,82
+"Raji Joshua","C.C.A",40,52,92,32,53,85
+"Raji Joshua","HISTORY",38,43,81,,,
+"Raji Joshua","P.V.S",40,52,92,,,
+"Raji Joshua","CRS/IRS",30,40,70,30,42,72
+"Raji Joshua","YORUBA",40,43,83,,,
+"Raji Joshua","BUSINESS STUDIES",35,56,91,40,,
+"Raji Joshua","B.S.T",40,55,95,38,56,94
+"Raji Joshua","FRENCH",34,54,88,35,59,94
+"Raji Joshua","P.H.E",36,52,88,40,56,96
+"Raji Joshua","DIGITAL TECH",40,58,98,35,52,87
+"Tijani Olamiposi","ENGLISH",,,,,
+"Tijani Olamiposi","MATHS",,,,,
+"Tijani Olamiposi","N.V",,,,,
+"Tijani Olamiposi","C.C.A",,,,,
+"Tijani Olamiposi","HISTORY",,,,,
+"Tijani Olamiposi","P.V.S",,,,,
+"Tijani Olamiposi","CRS/IRS",,,,,
+"Tijani Olamiposi","YORUBA",,,,,
+"Tijani Olamiposi","BUSINESS STUDIES",,,,,
+"Tijani Olamiposi","B.S.T",,,,,
+"Tijani Olamiposi","FRENCH",,,,,
+"Tijani Olamiposi","P.H.E",,,,,
+"Tijani Olamiposi","DIGITAL TECH",,,,,
+```

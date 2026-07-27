@@ -1,0 +1,41 @@
+Here is the complete, corrected CSV for your JSS1B class, formatted for easy import into Excel or Google Sheets.
+
+I've included all 29 students from your list, applied the corrected totals I identified, and left blanks (,,) where no CA/Exam was written. Note: French is only filled for a few students, while Horticulture and Digital Tech are completely blank for everyone. Tijani Anjolaoluwa has zero data filled.
+
+```csv
+Name,Bus_CA,Bus_Exam,Bus_Tot,CRS_CA,CRS_Exam,CRS_Tot,Yor_CA,Yor_Exam,Yor_Tot,CCA_CA,CCA_Exam,CCA_Tot,Eng_CA,Eng_Exam,Eng_Tot,Fre_CA,Fre_Exam,Fre_Tot,Hor_CA,Hor_Exam,Hor_Tot,Dig_CA,Dig_Exam,Dig_Tot
+Adeniyi Nifemi,42,,,34,22,56,41,,,30,28,58,35,32,67,,,,,,,,,
+Adeniyi Basit,37,43,80,27,6,33,40,30,70,30,20,50,17,14,31,,,,,,,,,
+Adeyemi Modesire,32,43,75,27,9,36,38,36,74,20,39,59,32,43,75,25,30,55,,,,,
+Agbo Wonderful,45,,45,39,44,83,38,39,77,25,47,72,39,53,92,,,,,,,,,
+Akeju Emmanuel,32,41,73,10,13,23,21,36,57,30,19,49,32,35,67,,,,,,,,,
+Akindutire Michael,41,,,34,24,58,40,42,82,32,39,71,38,46,84,,,,,,,,,
+Asuluka Obioma,27,43,70,20,12,32,,23,,20,17,37,27,13,40,,,,,,,,,
+Babarinde Testimony,40,,,27,18,45,33,,,24,24,48,32,32,64,,,,,,,,,
+Dada Ayodeji,36,40,76,22,28,50,40,37,77,30,28,58,32,53,85,,,,,,,,,
+Dickson Samson,20,40,60,22,12,34,21,23,44,30,30,60,27,30,57,,,,,,,,,
+Idowu Kehinde,48,,,30,28,58,30,,,25,28,53,37,38,75,,,,,,,,,
+Ikujuni Samuel,41,,,28,18,46,44,,,33,25,58,38,40,78,,,,,,,,,
+Irinyemi Halleluyah,40,46,86,31,44,75,38,50,88,20,45,65,40,50,90,,,,,,,,,
+Ishola Suliat,40,50,90,40,48,88,40,54,94,25,53,78,41,53,94,35,50,85,,,,,
+Jewoola Olamide,39,43,82,21,39,60,38,35,73,15,43,58,39,46,85,34,30,64,,,,,
+Jonathan Frednard,30,44,74,22,13,35,38,31,69,30,16,46,25,25,50,20,20,40,,,,,
+Makinde Tofunmi,38,43,81,30,24,54,40,37,77,20,23,43,,,,,,,,,,,
+Odulate Boluwatife,29,46,75,27,33,60,40,40,80,20,48,68,40,51,91,,,,,,,,,
+Okezueze Ifechukwu,41,,,30,33,63,37,39,76,39,44,83,36,43,79,,,,,,,,,
+Oni Fikayo,40,41,81,21,33,54,40,36,76,26,33,59,30,37,67,20,30,50,,,,,
+Onibodo Quadri,25,40,65,25,11,36,,23,,,17,,32,43,75,,,,,,,,,
+Owoade Praise,37,43,80,26,35,61,40,30,70,30,40,70,31,47,78,,,,,,,,,
+Oyeniran Michelle,38,51,89,38,43,81,40,38,78,20,30,50,40,50,90,,,,,,,,,
+Safiriyu Simisola,43,,43,29,20,49,36,28,64,20,35,55,34,47,81,,,,,,,,,
+Sandy Enoch,35,44,79,28,30,58,40,40,80,20,33,53,36,46,82,40,40,80,,,,,
+Shokoya Imole,44,,,34,31,65,40,31,71,32,39,71,40,46,86,,,,,,,,,
+Tijani Anjolaoluwa,,,,,,,,,,,,,,,,,,,,,,,
+Ubi Richard Victoria,29,45,74,30,16,46,15,23,38,20,35,55,32,42,74,,,,,,,,,
+Yusuff Salamat Semilore,32,45,77,30,20,50,26,36,62,10,13,23,37,21,58,,,,,,,,,
+```
+
+Quick guidelines for importing:
+
+· Column headers are: Name → Business (CA, Exam, Total) → CRS/IRS → Yoruba → CCA → English → French → Horticulture → Digital Tech.
+· For any rows where you decide to grade manually later, you can just use the CA and Exam columns in your spreadsheet's formula bar (e.g., =SUM(B2:C2)) to auto-calculate totals for the missing entries.
