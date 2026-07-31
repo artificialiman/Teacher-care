@@ -1,8 +1,6 @@
-Here is the complete, properly formatted CSV containing all results for the 32 students you listed, mapped directly from the handwritten sheets you provided.
+Here is the complete, unified CSV containing all 33 students from your lists. It combines the previously extracted data (2nd and 3rd terms) with the newly added students (Ayoade Flourish, Musa Isaac, Obaoye Dorcas, Olowu Jamal, Adio Daniel) and includes all subjects (including Horticulture and National Value).
 
-· Format columns: Student Name, Subject, 2nd Term CA, 2nd Term Exam, 2nd Term Total, 3rd Term CA, 3rd Term Exam, 3rd Term Total.
-· Missing Students: Ayoade Flourish, Musa Isaac, Obaoye Dorcas, Olowu Jamal, and Tijani Olamiposi do not appear on any of the provided 12 images, so their rows are blank.
-· Usage: Copy the block below, paste it into a text file, and save it as JSS2A_Grades.csv. You can then open it directly in Microsoft Excel, Google Sheets, or any database tool.
+I have also included Tijani Olamiposi with empty data to maintain your complete roster. Copy the code block below, paste it into a text editor, and save it as JSS2A_Complete_Grades.csv.
 
 ```csv
 Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Term Exam,3rd Term Total
@@ -84,19 +82,19 @@ Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Te
 "Aremu Praise","FRENCH",40,60,100,35,60,95
 "Aremu Praise","P.H.E",40,56,96,39,57,96
 "Aremu Praise","DIGITAL TECH",40,60,100,40,56,96
-"Ayoade Flourish","ENGLISH",,,,,
-"Ayoade Flourish","MATHS",,,,,
-"Ayoade Flourish","N.V",,,,,
-"Ayoade Flourish","C.C.A",,,,,
-"Ayoade Flourish","HISTORY",,,,,
-"Ayoade Flourish","P.V.S",,,,,
-"Ayoade Flourish","CRS/IRS",,,,,
-"Ayoade Flourish","YORUBA",,,,,
-"Ayoade Flourish","BUSINESS STUDIES",,,,,
-"Ayoade Flourish","B.S.T",,,,,
-"Ayoade Flourish","FRENCH",,,,,
-"Ayoade Flourish","P.H.E",,,,,
-"Ayoade Flourish","DIGITAL TECH",,,,,
+"Ayoade Flourish","ENGLISH",40,51,91,,,
+"Ayoade Flourish","MATHS",32,44,76,,,
+"Ayoade Flourish","BUSINESS STUDIES",40,56,96,,,
+"Ayoade Flourish","NATIONAL VALUE",31,60,91,,,
+"Ayoade Flourish","HORTICULTURE",39,51,84,,,
+"Ayoade Flourish","CRS/IRS",28,48,76,,,
+"Ayoade Flourish","FRENCH",30,59,89,,,
+"Ayoade Flourish","YORUBA",40,53,93,,,
+"Ayoade Flourish","HISTORY",39,48,87,,,
+"Ayoade Flourish","C.C.A",39,49,88,,,
+"Ayoade Flourish","B.S.T",39,58,97,,,
+"Ayoade Flourish","P.H.E",40,63,93,,,
+"Ayoade Flourish","DIGITAL TECH",35,59,95,,,
 "Bakare Gabriel","ENGLISH",20,48,68,20,36,56
 "Bakare Gabriel","MATHS",19,25,44,28,35,63
 "Bakare Gabriel","N.V",07,18,25,40,,
@@ -214,19 +212,19 @@ Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Te
 "Muh'awwal Alitorf","FRENCH",36,57,93,33,40,73
 "Muh'awwal Alitorf","P.H.E",39,55,94,40,57,97
 "Muh'awwal Alitorf","DIGITAL TECH",20,56,76,30,57,87
-"Musa Isaac","ENGLISH",,,,,
-"Musa Isaac","MATHS",,,,,
-"Musa Isaac","N.V",,,,,
-"Musa Isaac","C.C.A",,,,,
-"Musa Isaac","HISTORY",,,,,
-"Musa Isaac","P.V.S",,,,,
-"Musa Isaac","CRS/IRS",,,,,
-"Musa Isaac","YORUBA",,,,,
-"Musa Isaac","BUSINESS STUDIES",,,,,
-"Musa Isaac","B.S.T",,,,,
-"Musa Isaac","FRENCH",,,,,
-"Musa Isaac","P.H.E",,,,,
-"Musa Isaac","DIGITAL TECH",,,,,
+"Musa Isaac","ENGLISH",39,56,95,,,
+"Musa Isaac","MATHS",36,58,94,,,
+"Musa Isaac","BUSINESS STUDIES",40,56,96,,,
+"Musa Isaac","NATIONAL VALUE",32,55,87,,,
+"Musa Isaac","HORTICULTURE",32,49,81,,,
+"Musa Isaac","CRS/IRS",25,53,78,,,
+"Musa Isaac","FRENCH",38,55,93,,,
+"Musa Isaac","YORUBA",38,46,84,,,
+"Musa Isaac","C.C.A",31,58,89,,,
+"Musa Isaac","HISTORY",40,47,87,,,
+"Musa Isaac","B.S.T",38,57,95,,,
+"Musa Isaac","P.H.E",40,56,96,,,
+"Musa Isaac","DIGITAL TECH",40,54,94,,,
 "Neri Testimony","ENGLISH",22,29,61,15,23,38
 "Neri Testimony","MATHS",10,18,28,13,15,28
 "Neri Testimony","N.V",17,21,38,37,40,77
@@ -240,19 +238,19 @@ Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Te
 "Neri Testimony","FRENCH",32,26,58,20,32,52
 "Neri Testimony","P.H.E",25,15,40,15,16,31
 "Neri Testimony","DIGITAL TECH",,,,,
-"Obaoye Dorcas","ENGLISH",,,,,
-"Obaoye Dorcas","MATHS",,,,,
-"Obaoye Dorcas","N.V",,,,,
-"Obaoye Dorcas","C.C.A",,,,,
-"Obaoye Dorcas","HISTORY",,,,,
-"Obaoye Dorcas","P.V.S",,,,,
-"Obaoye Dorcas","CRS/IRS",,,,,
-"Obaoye Dorcas","YORUBA",,,,,
-"Obaoye Dorcas","BUSINESS STUDIES",,,,,
-"Obaoye Dorcas","B.S.T",,,,,
-"Obaoye Dorcas","FRENCH",,,,,
-"Obaoye Dorcas","P.H.E",,,,,
-"Obaoye Dorcas","DIGITAL TECH",,,,,
+"Obaoye Dorcas","ENGLISH",36,43,79,,,
+"Obaoye Dorcas","MATHS",25,39,64,,,
+"Obaoye Dorcas","BUSINESS STUDIES",40,52,92,,,
+"Obaoye Dorcas","NATIONAL VALUE",32,60,92,,,
+"Obaoye Dorcas","HORTICULTURE",31,35,66,,,
+"Obaoye Dorcas","CRS/IRS",25,21,46,,,
+"Obaoye Dorcas","FRENCH",30,50,80,,,
+"Obaoye Dorcas","YORUBA",38,52,90,,,
+"Obaoye Dorcas","C.C.A",26,48,74,,,
+"Obaoye Dorcas","HISTORY",38,46,84,,,
+"Obaoye Dorcas","B.S.T",40,46,86,,,
+"Obaoye Dorcas","P.H.E",40,51,91,,,
+"Obaoye Dorcas","DIGITAL TECH",34,,34,,,
 "Ogoyemi Josephine","ENGLISH",20,39,59,23,42,65
 "Ogoyemi Josephine","MATHS",23,20,43,23,23,46
 "Ogoyemi Josephine","N.V",18,41,59,31,58,89
@@ -266,19 +264,19 @@ Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Te
 "Ogoyemi Josephine","FRENCH",36,57,93,25,30,55
 "Ogoyemi Josephine","P.H.E",30,30,60,30,44,74
 "Ogoyemi Josephine","DIGITAL TECH",40,50,90,24,39,63
-"Olowu Jamal","ENGLISH",,,,,
-"Olowu Jamal","MATHS",,,,,
-"Olowu Jamal","N.V",,,,,
-"Olowu Jamal","C.C.A",,,,,
-"Olowu Jamal","HISTORY",,,,,
-"Olowu Jamal","P.V.S",,,,,
-"Olowu Jamal","CRS/IRS",,,,,
-"Olowu Jamal","YORUBA",,,,,
-"Olowu Jamal","BUSINESS STUDIES",,,,,
-"Olowu Jamal","B.S.T",,,,,
-"Olowu Jamal","FRENCH",,,,,
-"Olowu Jamal","P.H.E",,,,,
-"Olowu Jamal","DIGITAL TECH",,,,,
+"Olowu Jamal","ENGLISH",32,44,76,,,
+"Olowu Jamal","MATHS",30,41,71,,,
+"Olowu Jamal","BUSINESS STUDIES",33,47,80,,,
+"Olowu Jamal","NATIONAL VALUE",13,35,53,,,
+"Olowu Jamal","HORTICULTURE",20,43,63,,,
+"Olowu Jamal","CRS/IRS",30,52,82,,,
+"Olowu Jamal","P.H.E",32,41,73,,,
+"Olowu Jamal","DIGITAL TECH",25,33,58,,,
+"Olowu Jamal","FRENCH",20,20,40,,,
+"Olowu Jamal","YORUBA",25,32,57,,,
+"Olowu Jamal","B.S.T",26,31,57,,,
+"Olowu Jamal","C.C.A",20,47,67,,,
+"Olowu Jamal","HISTORY",20,22,42,,,
 "Olubiyi Godwin","ENGLISH",33,20,53,24,33,57
 "Olubiyi Godwin","MATHS",23,48,71,15,22,37
 "Olubiyi Godwin","N.V",5,14,19,36,44,80
@@ -409,6 +407,19 @@ Student Name,Subject,2nd Term CA,2nd Term Exam,2nd Term Total,3rd Term CA,3rd Te
 "Raji Joshua","FRENCH",34,54,88,35,59,94
 "Raji Joshua","P.H.E",36,52,88,40,56,96
 "Raji Joshua","DIGITAL TECH",40,58,98,35,52,87
+"Adio Daniel","ENGLISH",29,34,61,,,
+"Adio Daniel","MATHS",20,21,41,,,
+"Adio Daniel","BUSINESS STUDIES",20,40,60,,,
+"Adio Daniel","NATIONAL VALUE",10,44,54,,,
+"Adio Daniel","HORTICULTURE",20,30,50,,,
+"Adio Daniel","CRS/IRS",26,21,46,,,
+"Adio Daniel","FRENCH",20,30,50,,,
+"Adio Daniel","YORUBA",28,34,62,,,
+"Adio Daniel","C.C.A",25,30,55,,,
+"Adio Daniel","HISTORY",20,32,52,,,
+"Adio Daniel","B.S.T",20,39,59,,,
+"Adio Daniel","P.H.E",31,46,77,,,
+"Adio Daniel","DIGITAL TECH",19,28,47,,,
 "Tijani Olamiposi","ENGLISH",,,,,
 "Tijani Olamiposi","MATHS",,,,,
 "Tijani Olamiposi","N.V",,,,,
