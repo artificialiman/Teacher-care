@@ -31,6 +31,10 @@ opposite).
   password — intentional interim shape, not a bug. **Holding**, by
   explicit instruction ("I'll figure out a proper auth/security policy
   soon, for now we are firmly within the antifail mindset").
+  result must not be tampered with... pushing can only be done when atleast 40 percent of the class have CA/Exam and Total filled.
+student life is a cta on home.
+any file you completely build shoulb be pushed or presented immediately while you still continue with your flow to avoid getting stuck with a large chunk of work like my other agents.
+  
 
   ## per page workflow for tendercare web/portal/teacher
   home:
