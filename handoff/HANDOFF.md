@@ -1,44 +1,82 @@
 # Handoff — Tendercare crest branding + interim logins + code fixes
 
-Everything here is an unapplied `git diff` patch. Nothing has been pushed —
-apply, review, commit, and push from wherever you have real repo access
-(these were built read-only against fresh clones, no write access existed
-from that session).
+**Status: applied, pushed, and live as of this update.** The three
+patches below were originally built read-only against fresh clones in
+an earlier session. A later session applied all three, adapted the
+portal one further (see "Since this handoff" below), and ran the
+Supabase-side setup against the real project — none of this is
+still pending.
+
+See `INVARIANTS.md` in this same folder for the full standing contract
+this work is checked against — read that first, especially before
+starting anything new.
 
 ## Folder structure
 
 ```
-/mnt/user-data/outputs/
+handoff/
 ├── HANDOFF.md                          ← this file
-├── SETUP-logins.md                     ← manual steps after applying the patches
-├── tendercare-web-nav-crest.patch      → apply to tendercare-web
-├── tendercare-teacher-full.patch       → apply to tendercare-teacher
-├── tendercare-portal-full.patch        → apply to tendercare-portal
-└── tendercare-crest-preview/           ← visual proof, not code — reference only
-    ├── 1-home-directory.png            portal directory page, crest + watermark
-    ├── 2-result-sheet-screen.png       portal result sheet, on-screen render
-    ├── 3-result-sheet-pdf-export.png   same sheet, actual headless-Chromium PDF export
-    ├── 4-result-sheet-actual.pdf       the real PDF file (open it directly)
-    ├── 6-web-nav-crest.png             web nav, both light-on-hero and scrolled states
-    └── 7-teacher-landing-page.png      teacher app's new landing page
+├── INVARIANTS.md                       ← the standing contract — read first
+├── SETUP-logins.md                     ← Supabase-side steps (now DONE — see status note in that file)
+├── tendercare-web-nav-crest.patch      → applied to tendercare-web
+├── tendercare-teacher-full.patch       → applied to tendercare-teacher
+├── tendercare-portal-full.patch        → applied to tendercare-portal (then adapted, see below)
+└── tendercare-crest-preview/           ← visual proof from the original patch-writing session
+    ├── 1-home-directory.png
+    ├── 2-result-sheet-screen.png
+    ├── 3-result-sheet-pdf-export.png
+    ├── 4-result-sheet-actual.pdf
+    ├── 6-web-nav-crest.png
+    └── 7-teacher-landing-page.png
 ```
 
-## Apply order
+`report-pipeline/` (sibling to this folder, at the repo root) is new
+since the original handoff — schema, Jinja2 template, and
+`generate.py` for static per-student report pages. See its own
+README.
 
-No cross-repo dependency at the patch level, but the **teacher app's SQL
-migrations must be applied in numeric order** (0001 → 0002 → 0003 → 0004)
-before that app's login/roster code will work against a live Supabase
-project. Nothing here has been run against a real database — see
-"Not yet verified" below.
+## What's actually live now
+
+- `tendercare-web` — nav-crest patch applied (commit `c394458`). Also
+  added a "Stewardship" placeholder section on the About page for
+  invariant #1 (stakeholder/family bios) — not part of the original
+  patch.
+- `tendercare-teacher` — full patch applied (commit `6f51592`):
+  `/login`, session-gated `/roster`, the RLS role-sync migration, the
+  atomic `create_student()` function. Also added a real watermark
+  background on the homepage (the patch itself only had a small icon)
+  and a working remarks editor on the roster page (invariant #2).
+- `tendercare-portal` — full patch applied (commit `5eb0059`), then
+  adapted further: the patch's result page still queried Supabase live
+  for scores, which contradicts the "results are static, not a
+  network query" invariant. `/result/[id]` now serves a static
+  generated file from `static/reports/` instead, once the password
+  check passes.
+- **Migrations `0003` and `0004` are applied to the real Supabase
+  project** (`iaokbdpqmopubeuhbadv`) — this was the one thing the
+  original patch-writing session explicitly couldn't verify (no live
+  Postgres available then). Confirmed working: `app_metadata.role` is
+  correctly synced for both accounts below, checked directly against
+  `auth.users`, not assumed.
+- **Both staff/admin auth accounts exist and are confirmed working**:
+  `staff@tendercare.local` / `password`, `admin@tendercare.local` /
+  `tender`.
+- **376 active students have the shared password (`12345678`) set** in
+  `portal_credentials`, bcrypt-hashed — set directly via SQL rather
+  than running `scripts/set_shared_student_password.ts` from a
+  terminal, but the same hash format and same result. That script is
+  still the right tool for changing the shared password later.
+
+## Apply order (for reference — already done, see above)
+
+Teacher app's SQL migrations needed numeric order (0001 → 0002 → 0003
+→ 0004) before login/roster code would work — already satisfied.
 
 ```bash
 cd tendercare-web      && git apply tendercare-web-nav-crest.patch
 cd tendercare-teacher  && git apply tendercare-teacher-full.patch
 cd tendercare-portal   && git apply tendercare-portal-full.patch
 ```
-
-Then follow `SETUP-logins.md` for the Supabase-side manual steps (creating
-the two staff/admin auth users, running the student-password script).
 
 ## What each patch contains
 
@@ -80,20 +118,21 @@ the two staff/admin auth users, running the student-password script).
 
 ## Not yet verified
 
-- **No live Postgres.** The `0003`/`0004` migrations, the RLS role check,
-  and the advisory-lock logic in `create_student()` are correct by careful
-  reading, not by running against a real database — there was none
-  available. Apply the migrations to a real (or scratch) Supabase project
-  and exercise `/roster`'s add-student flow, ideally with two concurrent
-  requests, before trusting the concurrency fix in production.
-- **No real Supabase project connected anywhere in the suite yet** — this
-  was already true before this session (see `tendercare-web/handoff/
-  whats-left-for-tendercare-svelte-migration.md`), still true now.
 - Screenshots/PDF in `tendercare-crest-preview/` were rendered from
   standalone HTML mirroring the real component CSS, via headless
-  Chromium — not screenshots of the actual deployed apps (none are
-  deployed yet). They're a faithful proxy, not a substitute for checking
-  the real build once it's live.
+  Chromium — not screenshots of the actual deployed apps. Still true:
+  no live deployment URL has been checked against these images in the
+  session that applied everything. Worth a real comparison pass,
+  especially given INVARIANTS.md item #14 (crest/stamp survival on
+  PDF export) is explicitly flagged there as needing verification
+  against the *new* report template, not assumed carried over from
+  this preview.
+- The advisory-lock concurrency fix in `create_student()` has been
+  applied to a live database, but not exercised with two genuinely
+  concurrent add-student requests — the logic has been read carefully
+  and the migration applied successfully, but the race condition it
+  fixes hasn't been actively reproduced-then-fixed against real
+  concurrent traffic.
 
 ## Explicitly out of scope / not done
 
@@ -105,3 +144,8 @@ the two staff/admin auth users, running the student-password script).
 - Real per-staff and per-student auth (replacing the two-shared-password
   interim setup) — deliberately deferred; the person wants to design that
   auth strategy themselves before it gets built.
+- Everything in INVARIANTS.md tagged **Not started**: weekly feed
+  auto-deletion, automatic promotion (#9), repeat/pardon (#10),
+  portrait/highlight provision (#11), yearbook rollover (#12), a
+  student "bio" schema field, and an actual admin *app* for password
+  generation (a script exists; a UI doesn't).
