@@ -32,6 +32,35 @@ opposite).
   explicit instruction ("I'll figure out a proper auth/security policy
   soon, for now we are firmly within the antifail mindset").
 
+  ## per page workflow for tendercare web/portal/teacher
+  home:
+ss2 and jss 2 become priority yearbook after september 1 reset date
+new ss1 and jss1 are prioty picture for wherever  images is needed across the rest of the app
+change student life to check result and link it to portal site., remove the result and portal buttons from nav [or change it to archive/alumni almanac... check result will do that job well
+we can either host or embed from a dedicated admin media upload side that will be linked whenever i feel like
+
+sports page: 
+generally okay but need as moving/swiping/scrolling images effect to make up for lack of  video [size and bandwidth constraints]. it also needs to allow gifs.
+
+awards page:
+should have the names of the 3 highest averages per class arm
+ 
+feed:
+this should act as a notification board for admin/full result upload activities like result upload dates, class averages, new media or media change, new teacher roles, new parttime teachers and youth-corpers etc. cleared every year on reset date... so its not open for students to add comment, just reactions and the number just be inflated [ if a student reactss register it as 3]
+
+about;
+leave proper placeholder for whatsapp link, social media feed embeds
+handle for full time, part time and corp member staff.[determined by admin assignment or staff choice on their platform.
+
+TEACHER site
+3 types of teachers: parttime, fulltime, youth-corper
+they can be class and subject teachers at the same time,  a teacher can select their specified subject [ only those who offer it will be shown to said staff hence]
+all same priviledges until i figure out the actual lines to draw
+this site is primarily for editing trabscripts/scores and tracking averages, editing remarks/range
+
+so everything is listening for changes
+none of this discrediits current invariants and doctrine. im still in my antifail doctrine mode.
+
 ## Numbered invariants
 
 **1. Permanent stakeholder / family office / admin bio on the site.**
