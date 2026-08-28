@@ -31,6 +31,23 @@ in `UTMEDaily/Tendercare/Directory`.
 - `output/` -- what `generate.py --all` produced from the above. This
   is exactly what's now bundled into `tendercare-portal/static/reports/`.
 
+## Class completeness gate
+
+A term never renders with real scores until at least 40% of that
+student's class_arm has that term fully complete (every subject has
+both CA and exam filled). Below the threshold, `generate.py` writes
+that term as "not yet digitized" regardless of what the JSON says --
+this is a publish gate on the generator's output, not a restriction on
+what can be entered in a student's file. Re-running the generator
+after more of the class is filled in picks the term up automatically
+the moment it crosses 40%; nothing needs to be manually unlocked.
+
+This was verified against a synthetic 6-student class (not just read
+by eye): 2/5 = 40% correctly published, 2/6 = 33% correctly blocked,
+and the blocked case was confirmed in the actual rendered HTML output
+(real CA/exam numbers suppressed, "Record not yet digitized" shown
+instead), not just in the console warning.
+
 ## What this doesn't do
 
 It doesn't regenerate all 267 existing UTMEDaily report files, and it
