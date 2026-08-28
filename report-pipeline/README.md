@@ -48,6 +48,29 @@ and the blocked case was confirmed in the actual rendered HTML output
 (real CA/exam numbers suppressed, "Record not yet digitized" shown
 instead), not just in the console warning.
 
+## Top-3 per class-arm (awards page)
+
+`compute_awards.py` produces `output/top3.json` for tendercare-web's
+awards page: the top-3 students by average, per class-arm, for that
+class's most recent term that clears the same 40% completeness gate
+`generate.py` uses -- reused via import, not reimplemented, so there's
+one publish threshold across the whole pipeline, not a looser one for
+"who gets named on the awards page" than for "whose scores are
+visible." A class with no published term yet gets no entry, not a
+guess.
+
+`python3 compute_awards.py` after `generate.py --all` (or independently
+-- it loads students/ itself). The output is meant to be copied into
+tendercare-web as a static data file at build time, same as every
+other score-derived artifact -- never queried live.
+
+Verified with a synthetic 6-student class (5 complete at genuinely
+different score levels via distinct per-subject multipliers, 1
+undigitized): correctly ranked by real average, correctly excluded the
+undigitized student from ranking while still counting them toward the
+class-size denominator for the gate, correctly returned only 3 despite
+5 being eligible.
+
 ## What this doesn't do
 
 It doesn't regenerate all 267 existing UTMEDaily report files, and it
