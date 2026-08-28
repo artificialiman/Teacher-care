@@ -142,6 +142,41 @@ The app's primary purpose: editing transcripts/scores, tracking
 averages, editing remarks/range. **Not started** beyond the current
 single `staff` role and the remarks editor already built.
 
+**Teacher app should absorb Teacher-care's old admin/home functionality
+entirely** — take over everything the old static admin/broadsheet
+pages (`TEACHER-CARE Admin.html`, `admin-broadsheet.html`, `db.html`,
+`student-database.html`, etc.) did, rebuilt with proper brand UI (logo
+watermark included), not a like-for-like port. **Not started** — needs
+a proper read-through of what those old pages actually do before
+building, not a guess from filenames.
+
+**Remarks must not be manually typed by staff — auto-assigned from the
+student's average.** The remarks editor UI built earlier (a modal for
+staff to type Class Teacher's/Principal's comment) is the wrong
+shape — it's "tedious unnecessary work for staff or admin." Instead,
+once a student's CA/Exam/Total are complete for a term, their remark
+should be computed automatically from their average, using the same
+band boundaries as `remark_for()` in the report-pipeline (Distinction/
+Excellent/Very Good/etc.) — living in a script or the database, not
+typed per student. **In progress** — see the migration this session
+adds.
+
+**Feed listeners** — `tendercare-teacher` should set up listeners that
+post notifications to the web feed based on the activities already
+spec'd under Feed above (result uploads, class averages, media
+changes, new teacher roles, part-time/corps-member arrivals). **Not
+started** — needs the feed's actual backing table to exist first
+(currently localStorage on tendercare-web, per the Feed entry above).
+
+**Student names should load in as hardcoded, teacher/class-editable
+data — not a live query on every page load.** Same antifail shape as
+results: fast, static, no network round-trip just to see a roster, but
+still editable per class by a teacher, similar in spirit to the old
+Teacher-care UX (`students_db.js`'s per-class hardcoded `{id, name}`
+structure). **Not started** — needs a real design for how an edit
+gets from "teacher changes a name" to "the hardcoded/static version
+updates," not just flipping the query off.
+
 **Cross-cutting** — "everything is listening for changes": realtime
 reactivity is the target, not manual-refresh/stale data, wherever this
 suite reads from Supabase. Not yet audited against this standard.
@@ -156,11 +191,12 @@ any agent should fabricate. Real content is the biggest "secret" of
 the build and goes in manually.
 
 **2. Teacher-side editing of student bio/info/remarks.**
-**Done** for remarks — `tendercare-teacher`'s roster page has a working
-remarks editor (Class Teacher's / Principal's Comment), gated by the
-existing `staff`-role RLS policy on the `remarks` table, scoped to the
-current term. **Not started** for a student "bio" field — no such
-column exists in the schema yet.
+**Superseded** for remarks — the manual editor built earlier (a modal
+for staff to type Class Teacher's/Principal's comment) is the wrong
+shape; remarks should be auto-assigned from the student's average, not
+typed per student (see the per-page workflow section above). **Not
+started** for a student "bio" field — no such column exists in the
+schema yet.
 
 **3. Media/bulletin info on the main website.**
 **Done** as a baseline (feed/sports/awards pages carry real content),
