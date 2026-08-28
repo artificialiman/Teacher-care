@@ -1,0 +1,139 @@
+{
+  "overall_average": {
+    "label": "Top Overall Average",
+    "classes": {
+      "JSS1A": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-001",
+            "name": "EXAMPLE STUDENT (JSS1A) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "JSS1B": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-2025-032",
+            "name": "Adeyemi Modesire",
+            "remark": "Good",
+            "portrait_url": null
+          }
+        ]
+      },
+      "JSS2A": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-002",
+            "name": "EXAMPLE STUDENT (JSS2A) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "JSS2B": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-003",
+            "name": "EXAMPLE STUDENT (JSS2B) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "JSS3A": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-004",
+            "name": "EXAMPLE STUDENT (JSS3A) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "JSS3B": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-005",
+            "name": "EXAMPLE STUDENT (JSS3B) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "SS1 Actuarial": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-006",
+            "name": "EXAMPLE STUDENT (SS1 Actuarial) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "SS2 Actuarial": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-008",
+            "name": "EXAMPLE STUDENT (SS2 Actuarial) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "SS2 Science": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-007",
+            "name": "EXAMPLE STUDENT (SS2 Science) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "SS3 Actuarial": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-010",
+            "name": "EXAMPLE STUDENT (SS3 Actuarial) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      },
+      "SS3 Science": {
+        "academic_year": "2025/2026",
+        "term_name": "Third",
+        "winners": [
+          {
+            "student_id": "TCH-0000-009",
+            "name": "EXAMPLE STUDENT (SS3 Science) \u2014 DEMO DATA, NOT A REAL RECORD",
+            "remark": "Distinction",
+            "portrait_url": null
+          }
+        ]
+      }
+    }
+  }
+}

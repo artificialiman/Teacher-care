@@ -11,8 +11,11 @@ let a restatement drift into chat history only.
 > role fully taken over by `tendercare-teacher`. This doc stays here
 > because it's the shared contract *about* the three live repos, not
 > because `Teacher-care` is one of them. See the root `README.md` in
-> this repo for what's actually still active here (`report-pipeline/`
-> — itself an open question, not settled) versus purely historical.
+> this repo for what's actually still active here -- as of this
+> update, nothing: `report-pipeline/` has moved to
+> `tendercare-teacher/scripts/report-pipeline/`, resolving what used to
+> be an open question here. Everything else in this repo is purely
+> historical.
 
 Status tags: **Done**, **Partial** (schema/mechanism exists, missing a
 piece), **Not started**, **Contradicted** (current code does the
@@ -29,8 +32,9 @@ opposite).
   page view. **Done** as of the portal rewrite — `/result/[id]` now
   serves a static generated file instead of querying `students`/`scores`.
 - Result transcripts are static and hardcoded into the repo — generated
-  ahead of time (schema + Jinja2 template + `generate.py`, see
-  `Teacher-care/report-pipeline/`), not rendered from a live query.
+  ahead of time (schema + Jinja2 template + `generate.py`; see
+  `tendercare-teacher/scripts/report-pipeline/`, moved there from
+  Teacher-care), not rendered from a live query.
   **Done** for the mechanism and 12 example files; **not done** for
   populating every real student — that's a data problem (real per-
   student class history + CSV term data), not a code problem.
@@ -89,7 +93,7 @@ are coming beyond the single top-3-overall one (per-subject, per-skill)
 
 **Mechanism: done and tested. Real award data: not populated yet** —
 same "data problem, not a code problem" situation as the rest of
-`report-pipeline/students/`, which still only has 12 demo/sample files.
+`tendercare-teacher/scripts/report-pipeline/students/`, which still only has 12 demo/sample files.
 
 - `compute_awards.py` reuses `generate.py`'s 40% class-completeness
   gate via import — one publish threshold for the whole pipeline, not

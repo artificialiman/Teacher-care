@@ -37,9 +37,10 @@ handoff/
     └── 7-teacher-landing-page.png
 ```
 
-`report-pipeline/` (sibling to this folder, at the repo root) is new
-since the original handoff — schema, Jinja2 template, and
-`generate.py` for static per-student report pages. See its own
+`report-pipeline/` has moved -- it now lives at
+`tendercare-teacher/scripts/report-pipeline/`, resolving what used to
+be an open question about where it belonged. Schema, Jinja2 template,
+and `generate.py` for static per-student report pages. See its own
 README.
 
 ## What's actually live now
@@ -158,7 +159,7 @@ full reasoning on each:
   once those categories are actually defined (deliberately not guessed
   at here). Shipped with an honest empty `classes: {}` — no real class
   has a published term yet; only 12 demo/sample files exist in
-  `report-pipeline/students/`, 10 of them explicitly labeled fake.
+  `tendercare-teacher/scripts/report-pipeline/students/`, 10 of them explicitly labeled fake.
 
   **A real bug was caught and fixed while testing this, not left for
   someone else to find**: SvelteKit's prerenderer treats a missing
