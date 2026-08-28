@@ -1,27 +1,44 @@
 #!/usr/bin/env python3
 """
-Top-3-per-class-arm academic performers, for tendercare-web's awards page.
+Per-class-arm academic awards, for tendercare-web's awards page.
 
-Reuses generate.py's class-completeness gate rather than reimplementing
-it: a class-arm only produces a top-3 list once it has a term that
-clears the same 40%-complete threshold that gates individual result
-sheets. No separate, looser bar for "who gets named on the awards page"
-than for "whose actual scores are visible" -- same rule either way.
+Reuses generate.py's class-completeness gate and grade/remark logic
+rather than reimplementing either: a class-arm only produces an award
+list once it has a term that clears the same 40%-complete threshold
+that gates individual result sheets, and standing is shown as a
+qualitative remark band ("Excellent", "Very Good", ...) via the same
+REMARKS table generate.py uses for individual subjects -- never the raw
+number. This is deliberate, not an oversight: an awards page names who
+did well, it doesn't publish anyone's actual average. Anyone wanting a
+specific number still has to go through the gated, individually-
+accessed result sheet, not a public leaderboard.
 
-For each class_arm, finds its most recent PUBLISHED (academic_year,
-term_name) -- the latest one clearing the 40% gate -- and ranks that
-class's students by their average for that specific term. A class with
-no published term yet (the common case until real score data is
-migrated in) gets no entry, not a fabricated one.
+Each entry carries student_id (not just name) so tendercare-web can
+show that student's portrait, looked up by ID -- e.g.
+`{base}/img/portraits/{student_id}.jpg`, with a placeholder fallback
+for whichever students don't have one uploaded yet (portraits are a
+separate, manually-provisioned asset -- see the admin-media-upload note
+in the invariants doc -- not something this script can generate).
+
+EXTENSIBLE BY CATEGORY
+-----------------------
+Output is structured as `categories.<category_id>` rather than a flat
+per-class dict, because "top 3 by overall average" is meant to be the
+first of several award categories, not the only one -- per-subject and
+per-skill awards are coming once those categories are actually defined
+(deliberately not guessed at here). `overall_average` below is the
+reference implementation: a new category function should follow the
+same shape (gate-checked, remark-banded, portrait-by-ID, no raw
+numbers) and get registered in CATEGORIES at the bottom. Nothing about
+the class-completeness gate or the remark-not-number rule is specific
+to "overall average" -- both should carry over to whatever categories
+get added.
 
 Usage:
-    python3 compute_awards.py            # writes output/top3.json
-
-Output is a plain JSON file, meant to be copied into tendercare-web as
-a static data file at build time -- same "hardcoded into repo, not
-queried live" rule as everything else score-derived.
+    python3 compute_awards.py            # writes output/awards.json
 """
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 from generate import (
@@ -30,6 +47,7 @@ from generate import (
     load_all_students,
     compute_class_term_stats,
     term_is_complete,
+    remark_for,
 )
 
 TERM_ORDER = {"First": 1, "Second": 2, "Third": 3}
@@ -59,7 +77,8 @@ def latest_published_term(class_arm: str, class_stats: dict):
 def student_average_for_term(student: dict, academic_year: str, term_name: str):
     """This student's average for exactly this (academic_year, term_name),
     or None if they don't have a complete entry for it -- an incomplete
-    student can't be ranked even if their class overall published."""
+    student can't be ranked even if their class overall published. Used
+    only for internal ranking -- never exposed directly in output."""
     for year in student.get("years", []):
         if year["academic_year"] != academic_year:
             continue
@@ -74,9 +93,12 @@ def student_average_for_term(student: dict, academic_year: str, term_name: str):
     return None
 
 
-def compute_top3(all_students: list, class_stats: dict) -> dict:
+def category_overall_average(all_students: list, class_stats: dict) -> dict:
+    """Reference category: top 3 by overall average, per class-arm.
+    See module docstring for what a new category function should
+    preserve (gate, remark-not-number, portrait-by-ID)."""
     class_arms = sorted({s["class_arm"] for s in all_students})
-    result = {}
+    classes = {}
     for class_arm in class_arms:
         latest = latest_published_term(class_arm, class_stats)
         if latest is None:
@@ -89,16 +111,33 @@ def compute_top3(all_students: list, class_stats: dict) -> dict:
                 continue
             avg = student_average_for_term(student, academic_year, term_name)
             if avg is not None:
-                ranked.append({"name": student["full_name"], "average": avg})
+                ranked.append((avg, student))
 
-        ranked.sort(key=lambda r: r["average"], reverse=True)
+        ranked.sort(key=lambda pair: pair[0], reverse=True)
         if ranked:
-            result[class_arm] = {
+            classes[class_arm] = {
                 "academic_year": academic_year,
                 "term_name": term_name,
-                "top3": ranked[:3],
+                "top3": [
+                    {
+                        "student_id": student["student_id"],
+                        "name": student["full_name"],
+                        "remark": remark_for(avg),
+                    }
+                    for avg, student in ranked[:3]
+                ],
             }
-    return result
+    return {"label": "Overall Academic Average", "classes": classes}
+
+
+# Register new categories here once their criteria are defined. Each
+# should return {"label": ..., "classes": {...}} in the same shape as
+# category_overall_average, or a different top-level shape if the
+# category isn't class-scoped (a school-wide award, say) -- this
+# dict is the only place that needs to change to add one.
+CATEGORIES = {
+    "overall_average": category_overall_average,
+}
 
 
 def main():
@@ -107,20 +146,34 @@ def main():
         print("No student JSON files found in students/")
         return
     class_stats = compute_class_term_stats(all_students)
-    top3 = compute_top3(all_students, class_stats)
+
+    categories_out = {}
+    for category_id, fn in CATEGORIES.items():
+        categories_out[category_id] = fn(all_students, class_stats)
+
+    payload = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "categories": categories_out,
+    }
 
     OUTPUT.mkdir(exist_ok=True)
-    out_path = OUTPUT / "top3.json"
-    out_path.write_text(json.dumps(top3, indent=2))
+    out_path = OUTPUT / "awards.json"
+    out_path.write_text(json.dumps(payload, indent=2))
 
-    if not top3:
-        print("No class-arm has a published term yet -- top3.json written empty ({}).")
-        print("This is expected until real score data replaces the current demo set.")
+    total_published_classes = sum(
+        len(cat["classes"]) for cat in categories_out.values() if "classes" in cat
+    )
+    if total_published_classes == 0:
+        print("No class-arm has a published term in any category yet -- awards.json")
+        print("written with empty categories. Expected until real score data")
+        print("replaces the current demo set.")
     else:
-        print(f"wrote {out_path}: {len(top3)} class-arm(s) with a published top-3")
-        for class_arm, data in top3.items():
-            names = ", ".join(f"{r['name']} ({r['average']})" for r in data["top3"])
-            print(f"  {class_arm} ({data['academic_year']} {data['term_name']}): {names}")
+        print(f"wrote {out_path}")
+        for category_id, cat in categories_out.items():
+            print(f"  {category_id} ({cat['label']}):")
+            for class_arm, data in cat.get("classes", {}).items():
+                names = ", ".join(f"{s['name']} ({s['remark']})" for s in data["top3"])
+                print(f"    {class_arm} ({data['academic_year']} {data['term_name']}): {names}")
 
 
 if __name__ == "__main__":

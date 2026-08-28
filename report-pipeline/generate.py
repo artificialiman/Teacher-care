@@ -56,6 +56,12 @@ GRADE_BANDS = [
     (45, "D7", "gd7"), (40, "E8", "ge8"), (0, "F9", "gf9"),
 ]
 
+REMARKS = {
+    "A1": "Excellent", "B2": "Very Good", "B3": "Good",
+    "C4": "Credit", "C5": "Credit", "C6": "Credit",
+    "D7": "Pass", "E8": "Pass", "F9": "Fail",
+}
+
 CLASS_PUBLISH_THRESHOLD = 0.40
 
 
@@ -64,6 +70,13 @@ def grade_for(total):
         if total >= floor:
             return label, css
     return "F9", "gf9"
+
+
+def remark_for(total):
+    """Qualitative band only (e.g. 'Excellent') -- for any consumer that
+    shouldn't expose the underlying number, like the awards page."""
+    label, _ = grade_for(total)
+    return REMARKS[label]
 
 
 def term_is_complete(term: dict) -> bool:

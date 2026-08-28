@@ -48,28 +48,35 @@ and the blocked case was confirmed in the actual rendered HTML output
 (real CA/exam numbers suppressed, "Record not yet digitized" shown
 instead), not just in the console warning.
 
-## Top-3 per class-arm (awards page)
+## Awards page — per-class-arm, extensible by category
 
-`compute_awards.py` produces `output/top3.json` for tendercare-web's
-awards page: the top-3 students by average, per class-arm, for that
-class's most recent term that clears the same 40% completeness gate
-`generate.py` uses -- reused via import, not reimplemented, so there's
-one publish threshold across the whole pipeline, not a looser one for
-"who gets named on the awards page" than for "whose scores are
-visible." A class with no published term yet gets no entry, not a
-guess.
+`compute_awards.py` produces `output/awards.json` for tendercare-web's
+awards page. Reuses generate.py's `compute_class_term_stats()` and the
+same 40% class-completeness gate via import -- one publish threshold
+across the whole pipeline, not a looser one for "who gets named on the
+awards page" than for "whose scores are visible."
 
-`python3 compute_awards.py` after `generate.py --all` (or independently
--- it loads students/ itself). The output is meant to be copied into
-tendercare-web as a static data file at build time, same as every
-other score-derived artifact -- never queried live.
+Two things this deliberately does NOT do, both per instruction:
+- **Never exposes a raw average.** Standing is shown as a qualitative
+  remark band ("Excellent", "Very Good", ...) via the same `REMARKS`
+  table `generate.py` uses for individual subjects (`remark_for()`),
+  not the number itself. An awards page names who did well; it doesn't
+  publish a leaderboard of actual averages.
+- **Shows student_id, not just a name**, so tendercare-web can look up
+  that student's portrait by ID (e.g.
+  `{base}/img/portraits/{student_id}.jpg`) -- portraits themselves are
+  a separate, manually-provisioned asset, not something this script
+  generates.
 
-Verified with a synthetic 6-student class (5 complete at genuinely
-different score levels via distinct per-subject multipliers, 1
-undigitized): correctly ranked by real average, correctly excluded the
-undigitized student from ranking while still counting them toward the
-class-size denominator for the gate, correctly returned only 3 despite
-5 being eligible.
+Output is structured as `categories.<category_id>` rather than a flat
+per-class dict, because "top 3 by overall average"
+(`category_overall_average`) is meant to be the first of several award
+categories, not the only one -- per-subject and per-skill awards are
+coming once those categories are actually defined. That function is the
+reference implementation for adding a new one: same gate, same
+remark-not-number rule, same portrait-by-ID shape. See `CATEGORIES` at
+the bottom of the file -- that dict is the only place that needs to
+change to register a new category.
 
 ## What this doesn't do
 
