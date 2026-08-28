@@ -116,7 +116,56 @@ cd tendercare-portal   && git apply tendercare-portal-full.patch
   one shared password for every active student, reading the real value
   from an environment variable at run time (never committed as plaintext)
 
-## Not yet verified
+## Since this handoff (this session)
+
+Three items, each built, tested against real edge cases (not just "it
+compiles"), and pushed immediately per file — see commit messages for
+full reasoning on each:
+
+- **`tendercare-web` nav/home rework** (`85e07e7`) — "Student Life" CTA
+  on the home page now reads "Check Result" and links to the portal's
+  student-portal login; Results/Portal removed from nav entirely (both
+  desktop and the mobile drawer) since Check Result now covers that
+  job. Footer updated to match.
+
+- **40% class-completeness publish gate** (`Teacher-care` `6bf6007`,
+  README section "Class completeness gate") — a term in
+  `generate.py`'s output only ever renders with real scores once at
+  least 40% of that student's class_arm has that same term fully
+  complete. Below the threshold, it renders as "not yet digitized"
+  regardless of what the JSON says — a publish gate on the
+  generator's *output*, not a restriction on what can be entered.
+  Verified with a synthetic 6-student class: 2/5 (40%) published,
+  2/6 (33%) blocked, confirmed in the actual rendered HTML (real
+  scores suppressed), not just the console warning.
+
+- **Awards page — top-3 per class-arm, extensible by category**
+  (`Teacher-care` `22a221d`, `tendercare-web` `8dad837`) —
+  `compute_awards.py` reuses the same 40% gate via import (one
+  threshold across the pipeline, not two). Per correction mid-build:
+  entries show a portrait looked up by student ID
+  (`{base}/img/portraits/{student_id}.jpg`) and a qualitative remark
+  band ("Excellent", "Very Good", ...) — **never the raw average** —
+  and the output is structured as `categories.<category_id>` so
+  per-subject/per-skill awards can be added later without restructuring,
+  once those categories are actually defined (deliberately not guessed
+  at here). Shipped with an honest empty `classes: {}` — no real class
+  has a published term yet; only 12 demo/sample files exist in
+  `report-pipeline/students/`, 10 of them explicitly labeled fake.
+
+  **A real bug was caught and fixed while testing this, not left for
+  someone else to find**: SvelteKit's prerenderer treats a missing
+  `<img src>` the same as a broken link, and with the site's
+  `handleHttpError: 'fail'` (tightened once every internal route
+  existed), a missing portrait — nearly every student right now, since
+  portraits aren't provisioned — would have hard-failed the *entire
+  site's* build the moment `awards.json` had real entries. Fixed with a
+  `handleHttpError` function that selectively ignores 404s under
+  `/img/portraits/` specifically; verified in both directions (a
+  populated award entry with a missing portrait builds fine; a
+  deliberately broken non-portrait link still fails the build).
+
+
 
 - Screenshots/PDF in `tendercare-crest-preview/` were rendered from
   standalone HTML mirroring the real component CSS, via headless

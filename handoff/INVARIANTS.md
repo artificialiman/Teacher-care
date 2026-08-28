@@ -77,6 +77,34 @@ are coming beyond the single top-3-overall one (per-subject, per-skill)
 — categories aren't defined yet, so the generator should be built
 *extensible* for them now rather than hardcoded to one category.
 
+### Awards system — concrete build (`Teacher-care` `22a221d`, `tendercare-web` `8dad837`)
+
+**Mechanism: done and tested. Real award data: not populated yet** —
+same "data problem, not a code problem" situation as the rest of
+`report-pipeline/students/`, which still only has 12 demo/sample files.
+
+- `compute_awards.py` reuses `generate.py`'s 40% class-completeness
+  gate via import — one publish threshold for the whole pipeline, not
+  a separate/looser one for who gets named on the awards page.
+- Output is `categories.<category_id>.classes.<class_arm>.top3`, each
+  entry `{student_id, name, remark}` — no numeric average anywhere in
+  the output. `category_overall_average()` is the reference
+  implementation (gate-checked, remark-banded, portrait-by-ID) for
+  whatever categories get defined later; `CATEGORIES` at the bottom of
+  the file is the one place to register a new one.
+- `tendercare-web`'s awards page loops over every category present
+  rather than assuming just one, and shows a small circular portrait
+  (`{base}/img/portraits/{student_id}.jpg`) next to each name.
+- Shipped with an honest empty `classes: {}` in `awards.json` — no
+  fabricated placeholder winners.
+- Caught and fixed a real bug during testing: SvelteKit's prerenderer
+  fails the whole site's build on a missing `<img src>`, same as a
+  broken link — and almost every student is missing a portrait right
+  now. Fixed via a `handleHttpError` function in `tendercare-web`'s
+  `vite.config.ts` that selectively ignores 404s under
+  `/img/portraits/` specifically; verified a genuinely broken
+  non-portrait link still fails the build correctly.
+
 **Feed** — becomes a notification board for admin/result activity
 (upload dates, class averages, media changes, new teacher roles,
 part-time staff/corps-member arrivals), cleared every year on the
