@@ -31,39 +31,80 @@ opposite).
   password — intentional interim shape, not a bug. **Holding**, by
   explicit instruction ("I'll figure out a proper auth/security policy
   soon, for now we are firmly within the antifail mindset").
-  result must not be tampered with... pushing can only be done when atleast 40 percent of the class have CA/Exam and Total filled.
-student life is a cta on home.
-any file you completely build shoulb be pushed or presented immediately while you still continue with your flow to avoid getting stuck with a large chunk of work like my other agents.
-  
+- Results must never be tampered with once entered, and a class's
+  results can only be pushed/published once at least 40% of that class
+  has CA, Exam, *and* Total filled for a given term — the existing
+  publish gate in `generate.py` already enforces exactly this. **Done**,
+  reconfirmed directly by instruction, not just inferred from earlier
+  design work.
 
-  ## per page workflow for tendercare web/portal/teacher
-  home:
-ss2 and jss 2 become priority yearbook after september 1 reset date
-new ss1 and jss1 are prioty picture for wherever  images is needed across the rest of the app
-change student life to check result and link it to portal site., remove the result and portal buttons from nav [or change it to archive/alumni almanac... check result will do that job well
-we can either host or embed from a dedicated admin media upload side that will be linked whenever i feel like
+## Per-page workflow — tendercare-web / -portal / -teacher
 
-sports page: 
-generally okay but need as moving/swiping/scrolling images effect to make up for lack of  video [size and bandwidth constraints]. it also needs to allow gifs.
+Captured here verbatim-in-substance so it isn't lost to chat history.
+Nothing here overrides the doctrine above — explicitly reconfirmed:
+"none of this discredits current invariants and doctrine, still in
+antifail doctrine mode."
 
-awards page:
-should have the names of the 3 highest averages per class arm
- 
-feed:
-this should act as a notification board for admin/full result upload activities like result upload dates, class averages, new media or media change, new teacher roles, new parttime teachers and youth-corpers etc. cleared every year on reset date... so its not open for students to add comment, just reactions and the number just be inflated [ if a student reactss register it as 3]
+**Home** — Student Life's CTA slot is deliberately replaced by "Check
+Result" linking to the portal's student-portal login (**Done**,
+confirmed express instruction, not to be reverted). Results/Portal nav
+buttons removed since Check Result covers that job — alternative
+considered was repurposing them into an Archive/Alumni Almanac link
+instead of removing outright; not decided, **not started** either way.
 
-about;
-leave proper placeholder for whatsapp link, social media feed embeds
-handle for full time, part time and corp member staff.[determined by admin assignment or staff choice on their platform.
+**Yearbook rollover, precise mechanics** (refines invariant #12): after
+the September 1st reset, **SS2 and JSS2 become the new priority
+yearbook classes** — not the graduating class itself. Separately, **new
+SS1 and JSS1 become the priority source for stock/illustrative images**
+used anywhere else across the site that needs a generic student photo.
+Two distinct rules, not one. **Not started.**
 
-TEACHER site
-3 types of teachers: parttime, fulltime, youth-corper
-they can be class and subject teachers at the same time,  a teacher can select their specified subject [ only those who offer it will be shown to said staff hence]
-all same priviledges until i figure out the actual lines to draw
-this site is primarily for editing trabscripts/scores and tracking averages, editing remarks/range
+**Portrait/media hosting** (refines invariant #11): media can either be
+hosted directly or embedded from a separate, dedicated admin media-
+upload tool, linked in whenever that's ready — left deliberately
+flexible, not a forced single approach. **Not started.**
 
-so everything is listening for changes
-none of this discrediits current invariants and doctrine. im still in my antifail doctrine mode.
+**Sports page** — generally fine as-is, but needs a moving/swiping/
+scrolling image effect to compensate for no video (bandwidth/size
+constraint), and must support GIFs. **Not started.**
+
+**Awards page** — ranking criterion is real averages (internal only);
+what's actually *displayed* is portrait (by student ID) and a remark
+matching that average's band — never the raw number itself. Ranking
+computed correctly, exposure deliberately restricted. See "Awards
+system" section below for the concrete build. More award categories
+are coming beyond the single top-3-overall one (per-subject, per-skill)
+— categories aren't defined yet, so the generator should be built
+*extensible* for them now rather than hardcoded to one category.
+
+**Feed** — becomes a notification board for admin/result activity
+(upload dates, class averages, media changes, new teacher roles,
+part-time staff/corps-member arrivals), cleared every year on the
+reset date. Not open for student comments — reactions only, and each
+reaction registers as 3 toward the displayed count (inflated, not
+literal). **Not started** — current feed still runs on localStorage
+with open commenting, the opposite of this spec.
+
+**About** — needs a placeholder for a WhatsApp link and social-media
+feed embeds (in addition to the Stewardship bio placeholder already
+built), and needs to handle full-time/part-time/youth-corps-member
+staff distinctions, determined either by admin assignment or by staff
+self-selection on their own platform. **Not started** beyond the
+Stewardship section already in place.
+
+**Teacher app** — three staff types (part-time, full-time, youth
+corps-member); a person can be both a class teacher and a subject
+teacher simultaneously; a teacher selects their specific subject from
+only the subjects actually offered (not an open list). All three types
+carry the same privileges for now — permission tiers between them are
+explicitly undecided ("until I figure out the actual lines to draw").
+The app's primary purpose: editing transcripts/scores, tracking
+averages, editing remarks/range. **Not started** beyond the current
+single `staff` role and the remarks editor already built.
+
+**Cross-cutting** — "everything is listening for changes": realtime
+reactivity is the target, not manual-refresh/stale data, wherever this
+suite reads from Supabase. Not yet audited against this standard.
 
 ## Numbered invariants
 
@@ -83,8 +124,9 @@ column exists in the schema yet.
 
 **3. Media/bulletin info on the main website.**
 **Done** as a baseline (feed/sports/awards pages carry real content),
-but see items 11–13 below, which extend this with concrete portrait/
-yearbook mechanics not yet built.
+but see items 11–13 below, and the per-page workflow section above,
+which extend this with concrete portrait/yearbook/awards mechanics not
+yet fully built.
 
 **4. Automatic promotion/archiving for classes/terms/graduands.**
 **Not started**, now specified concretely by items 9–10 and 12 below —
