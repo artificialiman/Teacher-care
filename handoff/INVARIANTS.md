@@ -6,6 +6,14 @@ This is the canonical list. Anyone (any agent, any session) working on
 treat it as a contract, not a suggestion. Update this file — don't
 let a restatement drift into chat history only.
 
+> Note: this file physically lives in `Teacher-care`, but `Teacher-care`
+> itself is reference-only — not part of the live architecture, its
+> role fully taken over by `tendercare-teacher`. This doc stays here
+> because it's the shared contract *about* the three live repos, not
+> because `Teacher-care` is one of them. See the root `README.md` in
+> this repo for what's actually still active here (`report-pipeline/`
+> — itself an open question, not settled) versus purely historical.
+
 Status tags: **Done**, **Partial** (schema/mechanism exists, missing a
 piece), **Not started**, **Contradicted** (current code does the
 opposite).

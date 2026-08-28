@@ -1,5 +1,12 @@
 # Handoff — Tendercare crest branding + interim logins + code fixes
 
+> **This repo (`Teacher-care`) is reference-only, not part of the live
+> architecture.** Its role has been fully taken over by
+> `tendercare-teacher`. This handoff describes patches that were applied
+> *to `tendercare-web`/`tendercare-teacher`/`tendercare-portal`* — the
+> work product lives in those repos, not here. See the root `README.md`
+> for what this repo actually is now.
+
 **Status: applied, pushed, and live as of this update.** The three
 patches below were originally built read-only against fresh clones in
 an earlier session. A later session applied all three, adapted the

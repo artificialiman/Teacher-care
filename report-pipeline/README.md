@@ -1,5 +1,14 @@
 # Report-card generation pipeline
 
+> **Location note:** this folder currently lives in `Teacher-care`,
+> which is otherwise reference-only (not part of the live
+> architecture — see the repo's root `README.md`). This folder is the
+> exception: it's active tooling, not historical reference, and its
+> output is what `tendercare-portal`/`tendercare-web` actually serve.
+> Whether it should move into `tendercare-teacher` or `tendercare-portal`
+> instead of continuing to live in a "reference-only" repo is flagged,
+> not decided.
+
 Generates each student's static, hardcoded transcript page from a plain
 JSON file -- no database, no network call, at generation time or at
 view time. This is what backs `tendercare-portal`'s `/result/[id]`
