@@ -146,15 +146,17 @@ single `staff` role and the remarks editor already built.
 entirely** — take over everything the old static admin/broadsheet
 pages (`TEACHER-CARE Admin.html`, `admin-broadsheet.html`, `db.html`,
 `student-database.html`, etc.) did, rebuilt with proper brand UI (logo
-watermark included), not a like-for-like port. **Partial** — the
-brand/watermark half is done: `tendercare-teacher` now imports the
-shared `tendercare.css` at the root layout (it never did before,
-confirmed directly, unlike the other two apps), and a watermark now
-exists on login, roster, and the homepage — the one app in the suite
-missing it entirely. **Not started**: the actual admin/broadsheet
-*functionality* (score entry, broadsheet views, DB-management UI) —
-still needs a proper read-through of what those old pages actually do
-before building, not a guess from filenames.
+watermark included), not a like-for-like port. **Partial** — home is
+done: rebuilt against the real dashboard files (`index.html`/
+`indexy.html`, near-identical variants) — welcome header, stats grid,
+feature grid, all with real Supabase data instead of the old fake/
+per-teacher-assignment stats that don't apply to the current shared-
+staff-role system. Login now redirects to this dashboard, not straight
+to roster, matching the old app's real flow. Brand/watermark import is
+also done (`tendercare.css` now loaded at the root layout, watermark
+on login/roster/home). **Not started**: the broadsheet/score-entry
+functionality itself — explicitly out of scope for this round, not to
+be built from the broadsheet files without separate instruction.
 
 **Add-student ID assignment: fixed.** `create_student()`'s year prefix
 was a literal `'TCH-2025-'` string constant, confirmed against the live
