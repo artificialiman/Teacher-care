@@ -6,250 +6,332 @@ paused session:
 
  
 
+
 Claude finished the response
-https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/tendercare-alumni.html 
-https://github.com/artificialiman/Werksharp/blob/main/manual-shell/tendercare-teacher.html 
-this the kind of flow im looking for in the teacher app and alumni webpage
-wire it up properly
-  https://raw.githubusercontent.com/artificialiman/Teacher-care/refs/heads/main/handoff/ADD-STUDENT-AND-BRAND-SPEC.md read the bottom part of this doc ESPECIALLY as you recalibrate yourself and improve the tendercare-teacher UI/X
+be advised, this is our current context
+https://raw.githubusercontent.com/artificialiman/Teacher-care/refs/heads/main/handoff/pausa.md 
+familiarize yourself with the repos using our usual token
 
 
-Searched the web, read 2 memories, edited 2 memories
-Searched the web, read 2 memories, edited 2 memories
-Recalled 4 memories
-Tendercare Svelte Migration, Grantapp Ai, Tcc Student Records, Design System
-https://raw.githubusercontent.com/artificialiman/Teacher-care/refs/heads/main/handoff/ADD-STUDENT-AND-BRAND-SPEC.md
+Read 2 memories, edited 2 memories, ran 2 commands
+Read 2 memories, edited 2 memories, ran 2 commands
+Reviewing unusual content embedded in the user preferences field.
+
+Weighing whether to use or store a shared credential safely.
+
+Checking existing project notes before recording new architecture details.
+
+
+https://raw.githubusercontent.com/artificialiman/Teacher-care/refs/heads/main/handoff/pausa.md
 raw.githubusercontent.com
 
-https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/tendercare-alumni.html
-raw.githubusercontent.com
-
-
-Failed to fetch https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/tendercare-teacher.html
-Werksharp/manual-shell/tendercare-teacher.html at main · artificialiman/Werksharp
-github.com
-
-Recalled 2 memories
-Preferences, Recent Work
-Updated memory
-Preferences
-How Obasesam wants Claude to respond
-Updated memory
-Areas
-›
-Tendercare Svelte Migration
-Migrating the entire Tendercare suite (public site/yearbook/archive, teacher dashboard, result/transcript portal) from vanilla HTML/JS to a Svelte pipeline across three repos
-Interrogated invariants across data permissions, content lifecycle, and system architecture.
-
-A few things up front, then the interrogation you asked for.
-
-On the token: that PAT is now sitting in this chat's history in plaintext. I'll use it for the pushes we agree on this session, but you should treat it as burned — rotate/revoke it in GitHub settings once we're done, and in future just tell me to use "your usual token" or connect GitHub as a proper credential rather than pasting it inline. I won't write it into memory.
-
-What I've actually read, not skimmed: tendercare-teacher.html (all ~1000 lines — TEACHERS/HARDCODED_STUDENTS, the hash router, the score-sheet focus/repaint logic, the roster add/remove/portrait/remark handlers), tendercare-alumni.html in full, and the handoff spec at Teacher-care/handoff/ADD-STUDENT-AND-BRAND-SPEC.md. Noted and not re-litigating: the spec already resolved the year-prefix bug (TCH-2025- hardcoded → derive from now(), open sub-decision on whether the sequence resets per year), and already resolved departed-student handling ("move to alumni archive, don't build yet, just note it" — consistent with tendercare-alumni.html's transfer/graduand split, which is real and working). I'm treating those as settled, not asking about them again.
-
-Now the invariants, one at a time, where the wording leaves more than one honest reading:
-
-1. Stakeholder/family-office/admin bio, "permanent... in the site."
-In the site — which site? The public tendercare-web homepage only, or does it also need a fixed presence in the teacher app and the results portal? "Permanent" — immutable by anyone but you, or just persistent (survives promotion/archiving cycles, never auto-purged)?
-
-2. Teacher-side edit of teacher/student bio, info, remarks.
-tendercare-teacher.html's /roster already does name, portrait, remark, active-flag. Does "info" extend further — date of birth, guardian contact, class-arm transfer — or is remark+portrait+roster-membership the actual ceiling? And is a teacher editing another teacher's bio in scope, or only their own?
-
-3. Add media/bulletin info to the main website.
-What media types — images, PDF notices, plain text posts, embedded video? Who can post — admin/stakeholder only, or any staff? Critically: is this bulletin feed the same store as invariant #6's weekly-purged "feed activity," or a separate permanent channel? If they're the same store, a bulletin item would get deleted after a week, which seems wrong for something like an admission notice.
-
-4. Automatic promotion/archiving.
-What's the trigger — end of term (×3/year), end of session (×1/year), or an explicit admin action? Does it also drive the graduand/transfer split into tendercare-alumni.html automatically (SS3 completion → graduand with avg_total; any other removal → transfer), or does that split stay a manual teacher action via the Remove button and promotion is a separate, purely class-progression mechanism (JSS1A→JSS2A etc.)?
-
-5. Permanent logo SVG watermark/letterhead.
-The crest <symbol> in tendercare-teacher.html and tendercare-alumni.html is byte-identical path data — good, single source of truth. Confirm: this becomes one shared Svelte component (Crest.svelte, per the spec's own recommendation) imported everywhere, including the hardcoded result-transcript template, rather than copy-pasted per app?
-
-6. Weekly auto-deletion of feed activity.
-"Feed activity" as distinct from bulletin (#3) and from results (never touched) — what actually lives here? Recent-score-entry notifications, login events, roster-change logs? This is the one invariant where I genuinely can't infer scope from either reference file — neither has a feed at all yet.
-
-7. "Anything over 10KB needs a good reason for the DB."
-Is this a design constraint I apply when deciding what's a Supabase row vs. a repo file (e.g., a portrait upload — I saw /roster currently base64-encodes portraits into memory — clearly can't go in Postgres as a blob; does it go to Supabase Storage, or does "no DB" mean it doesn't go to Supabase at all, i.e., repo-committed or not persisted)? Or is it a literal enforced check somewhere in code?
-
-8. Result transcripts hardcoded, repo-side, admin-generated passwords gating IDs.
-The spec confirms Supabase holds the live roster (students table, create_student()), and results are static JSON synced into the repo — Supabase is authoring/roster only, never queried for results, matching your "not it" rule exactly. The open piece: the admin app that bulk-generates passwords for the whole school — do those passwords live in Supabase (auth table) or are they also repo/hardcoded, generated once per term and baked into the static portal build alongside the transcripts?
-
-One structural question underneath all of this: are we building three new Svelte repos (a tendercare-web, tendercare-teacher, tendercare-portal) fed by the existing Teacher-care Supabase project, with Teacher-care/UTMEDaily/Testy staying as-is per your earlier note that those are internal-testing repos, not the production target — or are we converting one of those three in place?
-
-I've saved everything you've stated as fixed (all eight invariants, the anti-Supabase-for-results/auth stance, repo permissions) to memory already — the above is only the part that's still ambiguous enough that guessing would waste a push.
-
-
-Message collapsed
-
-Searched the web, ran 6 commands, viewed 2 files
-Searched the web, ran 6 commands, viewed 2 files
-https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/no-gate.html
-raw.githubusercontent.com
-
-https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/NOTES.md
-raw.githubusercontent.com
-
-https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/index%20(2).html
-raw.githubusercontent.com
-
-https://raw.githubusercontent.com/artificialiman/Werksharp/refs/heads/main/manual-shell/app.html
-raw.githubusercontent.com
-
-
-Failed to fetch https://github.com/artificialiman/Teacher-care/commit/bae9d13434cb0ebc2c745d31c5161f24b3d5ba1
-
-artificialiman Teacher-care commit bae9d13434cb0ebc2c745d31c5161f24b3d5ba1
-8 results
-
-Revolutionizing Pedagogy: The Transformative Influence of Artificial Intelligence on Educators’ Practices | Springer Nature Link
-link.springer.com
-
-Teacher Guide to Artificial Intelligence in Education | Michigan Virtual
-michiganvirtual.org
-Artificial intelligence in classroom management: A systematic review on educational purposes, technical implementations, and ethical considerations - ScienceDirect
-www.sciencedirect.com
-Frontiers | Teacher’s Perceptions of Using an Artificial Intelligence-Based Educational Tool for Scientific Writing
-www.frontiersin.org
-Frontiers | Artificial intelligence and teacher competence: a scoping review of assessment, analytics, and professional development
-www.frontiersin.org
-Artificial intelligence in the context of teacher education: emerging themes and critical issues: European Journal of Teacher Education: Vol 48, No 5
-www.tandfonline.com
-Artificial intelligence in teaching and teacher professional development: A systematic review - ScienceDirect
-www.sciencedirect.com
-Should Schools Use Artificial Intelligence Tools for Student Learning? | The Pulse
-news.valleychildrens.org
-
-Failed to fetch https://github.com/artificialiman/Teacher-care/commit/bae9d13434cb0ebc2c745d31c5161f24b3d5ba1
-
-Failed to fetch https://github.com/artificialiman/Teacher-care/commit/bae9d13434cb0ebc2c745d31c5161f24b3d5ba11
-
-github.com artificialiman Teacher-care commit bae9d13434cb0ebc2c745d31c5161f24b3d5ba11
-6 results
-
-
-Commit with confidence with new teacher training from GitHub - The GitHub Blog
-github.blog
-Teachers - GitHub Education · GitHub
-github.com
-GitHub - NB-Group/Intelligent-Classroom-System: Based on artificial intelligence technology intelligent classroom system · GitHub
-github.com
-GitHub - Priyamakeshwari/TeachGPT: An AI Powered teacher that can help you learn your topics faster before exam · GitHub
-github.com
-GitHub - anaistack/ai-teacher-test: Source code and data for the EDM 2022 paper · GitHub
-github.com
-GitHub - THU-MAIC/OpenMAIC: Open Multi-Agent Interactive Classroom — Get an immersive, multi-agent learning experience in just one click
-github.com
-Pivoted to GitHub API retrieval for inaccessible repository content.
-
-
-Fetch commit metadata for the 'recent' commit via GitHub API
-
-Authenticate with PAT and fetch commit details
-
-Print the diff patch of commit 1
-
-Fetch full current INVARIANTS.md
-
-Read invariants.md
-
-Read invariants.md
-
-Fetch commit2 (instructions)
-
-Print diff of commit2
 Recalled memory
 Areas
 ›
 Tendercare Svelte Migration
-Migrating the entire Tendercare suite (public site/yearbook/archive, teacher dashboard, result/transcript portal) from vanilla HTML/JS to a Svelte pipeline across three repos
+Tendercare Svelte migration — tendercare-web (public site), tendercare-teacher, tendercare-portal replacing the old Testy/Teacher-care sites; read when working on any of these three repos or their Vercel deploys
+Recalled 2 memories
+Preferences, Grantapp Shell
+Updated memory
+Preferences
+How Manchi wants Claude to behave in responses
 Updated memory
 Areas
 ›
 Tendercare Svelte Migration
-Migrating the entire Tendercare suite (public site/yearbook/archive, teacher dashboard, result/transcript portal) from vanilla HTML/JS to a Svelte pipeline across three repos
-Synthesized repo architecture and reconciled conflicting documentation tensions.
-
-I've read all five: no-gate.html, index (2).html, app.html, NOTES.md, and — via the two commits — the live INVARIANTS.md and the latest ADD-STUDENT-AND-BRAND-SPEC.md diff. That last one resolves almost everything I was asking about last turn. Here's where things actually stand, corrected:
-
-The real story across the four HTML files. index (2).html is the origin: one dark-glass-themed file, hardcoded local password auth ("password" for any of 20 teachers), the full 376-student roster, mailto: submission to artificialiman111@gmail.com. Someone then translated that into app.html — same purple/cream/serif brand as your teacher-care/alumni references, but wired to real Supabase Auth: JWT sign-in, authedFetch() against live REST/RPC endpoints for roster, staff, access-code, and feed. NOTES.md documents that build and is honest about what's real ("point this at a real Supabase project and roster/staff work today") versus invented (access-code and feed call RPCs and tables that don't exist). You flagged that file as "this misunderstood me" — and I think I see why: wiring the teacher app to Supabase's actual Auth product contradicts your antifail stance. no-gate.html is the correction — same visual shell, but every Supabase call and the auth gate itself are stripped out, replaced with plain hardcoded in-memory arrays. That's the direction consistent with what you told me today.
-
-What INVARIANTS.md settles, that I was wrong to still be asking about. The three-repo split — tendercare-web, tendercare-teacher, tendercare-portal, SvelteKit + Supabase — is already built and live, not a decision still ahead of us. Teacher-care itself is now explicitly reference-only; its report pipeline has fully moved to tendercare-teacher/scripts/report-pipeline/. The year-prefix ID bug is fixed (derives from academic year, rolls over Sept 1, sequence resets yearly). Remarks are no longer manually typed — a DB trigger auto-assigns them from the student's average the moment a term completes, and the old manual editor is gone. Results are static-generated via generate.py/Jinja2 with a 40%-completeness publish gate, already enforced. So I was re-litigating settled ground last turn — that's corrected now.
-
-What's actually still open, confirmed by the doc itself — this is the live task: the invariants entry for "teacher app absorbs old admin/home functionality" says home/dashboard is done, but explicitly "Not started: the broadsheet/score-entry functionality itself — explicitly out of scope for this round." That's exactly the Attendance-Edit/Score-Entry rebuild you're dissatisfied with in the spec doc. Also genuinely not started: weekly/yearly feed job (no cron exists anywhere), auto-promotion on Sept 1, repeat/pardon, portrait upload provision, yearbook rollover mechanics, and the admin password-generator app (currently just a terminal script, set_shared_student_password.ts).
-
-Two things INVARIANTS.md itself doesn't agree with, worth you resolving rather than me guessing:
-
-Its architecture section says Supabase is fine for "cheap credential checks" alongside roster/remarks CRUD — that sits oddly next to your "auth is not it" from earlier today. My read: a plain table-lookup password check (a select against a credentials table) is fine; standing up Supabase's actual Auth product with JWT sessions — what app.html did — is the part that's not it. Is that the right split, or do you want zero Supabase touch at all on the login gate, matching no-gate.html exactly?
-Invariant #6 says feed activity should auto-delete weekly; the per-page workflow section a few paragraphs later describes the feed as clearing yearly, at the Sept 1 reset. Which one's current?
-I've saved the corrected picture to memory, with a pointer to re-fetch INVARIANTS.md fresh in any future session rather than trusting a snapshot, since it's clearly a living doc you update mid-work. I haven't written any code yet — say the word on those two questions (or tell me to just pick the more conservative reading and go) and I'll start on the score-entry/attendance rebuild against no-gate.html's hardcoded shape.
-
-the yearly is a school wide promotion date... every student moves up a class and annoucements likewise refresh... weekly refresh is feed specific
-the admin site is where graduand go after that yearly refresh, yearbook and bio... removed/transfered students also end up there
-for the ui/x just wire it exactly like that manual shell teacher html... since all your previous attempts were not satisfactory i had to have an agent focus on giving me what you see there
-do you get?
+Tendercare Svelte migration — tendercare-web (public site), tendercare-teacher, tendercare-portal replacing the old Testy/Teacher-care sites; read when working on any of these three repos or their Vercel deploys
+Reviewing repository access and confirming contract invariants.
 
 
-Ran a command, viewed a file
-Ran a command, viewed a file
-Architected phased implementation strategy for teacher app component migration.
+List Teacher-care repo structure and handoff folder
+
+Fetch canonical INVARIANTS.md content
+Reviewing existing documentation to avoid duplicate tracking.
+
+Cross-checking user's summary against the canonical file.
+
+Isolating the few decisions still genuinely undecided.
+
+I pulled pausa.md, then went into Teacher-care/handoff/INVARIANTS.md directly with the token, plus the repo's file listing. Quick note before anything else: that token is a live credential, so I'm using it in-session for git/API calls but not writing it into memory — you'll need to hand it to me again in a fresh conversation.
+
+What I found changes the ask a bit. The invariants you just restated to me already exist as a maintained, numbered contract (14 items, each with a status tag — Done, Partial, Not started, Contradicted) sitting in that INVARIANTS.md file, along with an Architecture section and a page-by-page workflow section. It's not a loose set of chat statements I need to reconstruct — a previous session already built it into a real document, and it's more precise than what got summarized back to me. A few examples of things it already resolves that I'd otherwise have had to ask you about:
+
+The hardcoded exam-sheet approach isn't just a preference — it's already implemented as schema + Jinja2 template + a generate.py script, sitting in tendercare-teacher/scripts/report-pipeline/.
+Remarks are no longer a manually-typed field for staff — a database trigger auto-assigns the remark the moment a student's term completes, matching the same band boundaries the report generator uses.
+The September 1st rollover has two separate, distinct rules, not one: SS2/JSS2 become the new priority yearbook classes, while new SS1/JSS1 become the priority source for generic stock/illustrative photos elsewhere on the site.
+A real ID-assignment bug was already caught and fixed — the year prefix was a literal 'TCH-2025-' string, which would have mis-dated every student created from now on.
+So the document is doing the "robust contract" job you asked me to build toward — it's already there and being kept current. What's left isn't re-establishing the invariants; it's the handful of things the document itself flags as still undecided. Those are the real open questions:
+
+Home page nav — Results/Portal buttons were removed in favor of a single "Check Result" link. An alternative was floated (repurposing them into an Archive/Alumni Almanac link) but never decided. Keep them gone, or build that repurposed version?
+Portrait/media hosting — deliberately left open between direct hosting and a separate dedicated admin media-upload tool. Which one do you actually want built, or is neither in scope yet?
+Awards categories — only top-3-overall is built; per-subject and per-skill categories are planned but undefined. Define any of those now, or hold at one category?
+Staff permission tiers — part-time, full-time, and youth corps-member staff currently carry identical privileges by default, explicitly pending a decision on where the lines should go. Still fine to ship the repeat/pardon and portrait work without that decision made?
+Student "bio" field — invariant #2 calls for teacher-editable student bio, but no such column exists in the schema yet, separate from remarks (which are now auto-generated, not editable). Is that a real gap to close, or was "bio" meant loosely to cover what remarks already do?
+The paused work itself — pausa.md shows repeat/pardon toggles, a portrait_url column, and migration 0005 mid-flight, with roster.ts and the roster page partially edited. Resume and finish exactly that, or fold it into a different module plan?
+Separately — Testy and the UTMEDaily/Tendercare/Directory path: INVARIANTS.md says Teacher-care itself is now reference-only, fully superseded by the three live Svelte repos. Are Testy and the UTMEDaily directory in the same boat — legacy/reference, permitted to push to but not where active work happens — or are they still live alongside tendercare-web/-teacher/-portal?
 
 
-Clone tendercare-teacher repo to inspect current structure
 
-Read tendercare-teacher
-Got it — yearly = school-wide promotion (every class moves up, announcements refresh), weekly = feed only. Departed students (graduands from the yearly promotion, plus anyone removed/transferred) land on the admin/alumni site — yearbook and bio — matching tendercare-alumni.html. And the teacher app gets wired exactly to tendercare-teacher.html's flow and visuals, not reinterpreted. Understood — saving this and moving to building rather than asking more.
+Message collapsed
 
+Ran 9 commands, viewed 9 files, created 3 files · 3 notes
+Ran 9 commands, viewed 9 files, created 3 files · 3 notes
+Building an alumni almanac feature on the web app.
 
-Viewed 10 files, ran 5 commands, edited 2 memories · 2 notes
-Viewed 10 files, ran 5 commands, edited 2 memories · 2 notes
-Updating memory
-Areas
-›
-Tendercare Svelte Migration
-Memory update retried.
+Planning ID recycling logic and staged, incremental commits.
+
 Updated memory
 Areas
 ›
 Tendercare Svelte Migration
-Migrating the entire Tendercare suite (public site/yearbook/archive, teacher dashboard, result/transcript portal) from vanilla HTML/JS to a Svelte pipeline across three repos
+Tendercare Svelte migration — tendercare-web (public site), tendercare-teacher, tendercare-portal replacing the old Testy/Teacher-care sites; read when working on any of these three repos or their Vercel deploys
 
-Read routes
+Clone tendercare-web and inspect structure
 
-Read lib
+Read Nav.svelte
 
-Read +layout.svelte
+Read config.ts
+
+Read +page.svelte
+Inspecting the site's layout for linked sections and cards.
+
 
 Read +page.svelte
 
-Read supabase.ts
-
 Read +page.svelte
+Building an alumni feature based on the hardcoded yearbook pattern.
 
-Read roster.ts
+Designing a data-driven alumni page with real class names.
 
-Read +page.svelte
 
-List migration files to understand full schema
+Read awards.json
+Populating alumni data using genuinely published yearbook information.
+
+
+Alumni data file, seeded honestly with the real Class of 2025 already published on the yearbook page — no fabricated classes or IDs
+
+Alumni Almanac page — lists graduated classes by year, sourced from alumni.json, with a public-facing note on the ID recycling window
+Now wiring the nav — this is the "repurposed" link replacing the removed Results/Portal buttons:
+
+
+Repurpose the removed Results/Portal nav slot into the Alumni Almanac link, per the resolved decision
+Nav.svelte
++16
+-15
+
+Check available scripts before attempting a build/check
+
+Install deps to run a real build check
+
+Type-check the new alumni page and nav change
+Fixing that type error:
+
+
+Fix TS index-signature error found by svelte-check on the JSON import
++page.svelte
++5
+-3
+
+Point the loop at the typed classes map instead of the raw JSON import
++page.svelte
++1
+-1
+
+Re-check types and run a full production build
+Clean type-check and a real production build with the new alumni route prerendered. Now committing and pushing this file by file, as requested:
+
+
+Commit and push each file separately, as requested
+Designing an ID recycling mechanism and admin page plan.
+
+
+Clone tendercare-teacher to see schema/migrations and handoff conventions before writing the design doc
+Investigating whether a database migration was already applied.
+
 
 Read 0001_core_schema.sql
 
-Read 0002_rls_policies.sql
-Good — RLS already covers scores fully for the staff role (any authenticated staff can manage any score, no per-teacher scoping since auth is still shared-account). Schema is ready; only the UI is missing. Let me check what subjects/classes actually exist in seed data before building the picker.
+Read 0004_atomic_student_id.sql
+
+Read 0007_fix_student_id_year.sql
+Working out how student ID numbers get assigned and reused.
+
+Flagging a design conflict before writing any migration code.
+
+Weighing options for reusing IDs without breaking history.
 
 
-Check seed data for subjects/classes/terms
-Architected score management system leveraging live database queries.
+Clone Teacher-care to add the design doc to the shared handoff location
+
+Design doc: alumni ID recycling mechanism (with an open architectural question flagged, not silently resolved) and the admin analytics page plan
+
+Commit and push the design doc
+Updating memory with this session's durable outcomes.
+
+Pushed three separate commits to tendercare-web and one to Teacher-care, each self-contained:
+
+tendercare-web
+
+alumni.json — honest data seed (no fabricated names), using the real Class of 2025 roster already published on your yearbook page, structured with graduated_on and id_recycle_eligible_on per class year
+/alumni/ route — Alumni Almanac page, grouped by graduating year, in the site's existing visual language
+Nav.svelte — repurposed the empty Results/Portal slot into the Alumni link, as decided
+Ran svelte-check and a full production build before pushing anything — clean, zero errors, alumni route prerenders correctly.
+
+One thing I didn't build, on purpose — needs your call:
+
+Your IDs already reset to 001 every September 1st per academic year (TCH-2025-…, TCH-2026-…), which means no ID number is ever actually scarce across cohorts — a 2027 admission never competes with a 2025 slot. So "recycle the ID" can mean two different things with very different risk:
+
+Literal reuse — a real new JSS1 student gets issued the exact string that used to belong to a graduate. That requires archiving all of that graduate's scores/remarks/feed history off the live tables first, or their five years of academic record sits under the same primary key as a stranger's new one.
+Free the slot, not the string — a graduated student just gets flipped inactive (already how your soft-delete works everywhere), their ID stays permanently theirs on their real history, and the next JSS1 student gets a normal fresh ID anyway.
+I wrote up both paths and the admin-page plan in Teacher-care/handoff/ALUMNI-ID-RECYCLING-AND-ADMIN-PLAN.md rather than guessing and writing a migration that could actually merge a graduate's records with a stranger's. If there's a real reason you need the literal string back — e.g. a fixed batch of pre-printed ID cards that can't just keep incrementing — say so and I'll build the archive-then-reissue version. Otherwise the free-the-slot version is basically already covered once the promotion job (invariant #9) exists.
+
+Admin page plan is in that same doc: staff/role CRUD, class-average trend lines, enrollment/promotion funnel, feed-activity history (since weekly deletion means the raw feed won't hold it), and award-category coverage — deliberately not built yet since it shouldn't be the first thing exposing real student averages without a login wall in front of it.
+
+ID should never reset... reset in that context means promotion
+the students with their id automatically promote to the next class
+but alumni/transfer genuinely reset to new class/transfers-in
+
+build the admin page into its own two button homepage aswelll... lots of infographics because thats why we have a supabase/vercel architechture
+
+ill handle login and general antitheft as my second doctrine locally [where cybersecurity is top priority]
 
 
-List CSS custom properties available in the shared stylesheet
+Viewed 2 files, loaded tools, used Supabase integration
+Viewed 2 files, loaded tools, used Supabase integration
+Untangling what id reset actually means in context.
 
-Check radius and shadow tokens
-Now I'll build the Score Entry feature: a lib/scores.ts data layer plus /score (picker) and /score/sheet (the broadsheet) routes, matching tendercare-teacher.html's exact flow and the white-paper crosshair-highlight design.
+Distinguishing promotion, alumni resets, and transfer-in ID cases.
+
+Designing an alumni archive to support real ID recycling.
+
+Planning an admin homepage with analytics, minus login.
+
+Checking live database access before applying real changes.
 
 
-Score-entry data layer: subjects/classes pickers and CA/Exam upsert against the real scores table
-
-Create route directories for score entry
-
-Score entry picker page — subject then class, matches manual-shell #/score flow
+Read +page.svelte
+Reviewing the existing teacher dashboard build.
 
 
+Read 0003_staff_auth_roles.sql
+Designing staff and role management for the auth system.
+
+
+Found tools
+
+Found tools
+
+
+List projects
+
+
+List migrations
+Good — live matches the repo. Let me build the alumni-recycling migration now, carefully, per the corrected model (recycled IDs go to transfers-in/new admits, promotion never touches an ID).
+
+
+Used Supabase integration, created 7 files, ran 7 commands · 9 notes
+Used Supabase integration, created 7 files, ran 7 commands · 9 notes
+
+
+Execute SQL
+Designing a database migration to track student graduation status.
+
+Designing archive and ID-recycling logic for graduated students.
+
+
+Migration: alumni graduation marker, archive table, and admin-controlled ID recycling — corrected model per direct instruction: IDs never change on promotion, only alumni/transfer-in events touch the ID pool
+
+
+Execute SQL
+Table/column DDL is clean. Now applying the full migration for real:
+
+
+
+Apply migration
+Untangling a function overload conflict causing ambiguous errors.
+
+
+
+Apply migration
+Applied cleanly. Let me verify with a check and run the security advisor:
+
+
+
+Execute SQL
+
+
+Execute SQL
+Good — old two-arg version is gone, only the new three-arg one exists. Let's also check advisors and enable RLS on the new table:
+
+
+
+Get project advisors
+
+Check existing RLS policy pattern to match style
+Adding a matching admin-only policy for the new archive table:
+
+
+
+Apply migration
+Now let me add the corresponding files to the repo (source of truth alongside the applied migration) and push:
+
+
+Repo copy of the RLS policy migration applied above, matching Supabase's own naming
+
+Commit and push the two migration files separately
+Building an admin homepage with navigation buttons and visuals.
+
+
+Read supabase.ts
+Designing a staff database with roles and assignments.
+
+
+Staff table — admin manages who exists, staff type, and class-teacher/subject assignment, per direct instruction ("admin will be the one to add/delete staff and assign roles")
+
+
+Apply migration
+Now let's build the SvelteKit pages. First, checking styles for available CSS variables:
+
+
+Ran command
+Building admin pages with lightweight client-side charts.
+
+
+Lightweight reusable SVG bar chart — no charting dependency needed, fits the site's low-bandwidth-first approach
+
+Admin homepage — two-button landing per direct instruction, matching the site's existing crest/watermark dashboard style
+Now the analytics page with real Supabase-driven infographics:
+
+
+Admin analytics page — real infographics pulled from live Supabase data: enrollment by class, repeat/pardon, staff by type, class averages, feed activity, alumni tracking
+Now the staff CRUD page:
+
+
+Admin staff & roles page — add/deactivate staff, assign type/subject/class-teacher status
+Now let's add a nav link from the dashboard home and type-check/build the whole thing:
+
+
+Add an Admin entry to the teacher dashboard's feature grid, linking to the new two-button admin homepage
++page.svelte
++13
+-7
+
+Check env setup and package scripts before installing/building
+
+Set up local env (not committed) and install deps
+
+Type-check new admin pages
+Investigating a pre-existing accessibility issue across the codebase.
+
+
+Read Crest.svelte
+Investigating a duplicate accessibility attribute in SVG markup.
+
+
+Find all call sites passing the redundant/invalid aria-hidden prop to Crest
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
