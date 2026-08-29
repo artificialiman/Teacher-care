@@ -18,6 +18,13 @@ See `INVARIANTS.md` in this same folder for the full standing contract
 this work is checked against — read that first, especially before
 starting anything new.
 
+For the add-student ID logic, the static-file sync mechanism, and the
+`tendercare-teacher` brand/watermark gap specifically, see
+`ADD-STUDENT-AND-BRAND-SPEC.md` in this same folder — written so an
+agent with no push access and no DB access can act on it directly,
+every fact in it verified against the real code/database rather than
+inferred.
+
 ## Folder structure
 
 ```

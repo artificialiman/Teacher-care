@@ -148,7 +148,11 @@ pages (`TEACHER-CARE Admin.html`, `admin-broadsheet.html`, `db.html`,
 `student-database.html`, etc.) did, rebuilt with proper brand UI (logo
 watermark included), not a like-for-like port. **Not started** — needs
 a proper read-through of what those old pages actually do before
-building, not a guess from filenames.
+building, not a guess from filenames. The brand/watermark half of this
+has groundwork already done — see `ADD-STUDENT-AND-BRAND-SPEC.md`
+section 3: `tendercare-teacher` never imports the shared `tendercare.css`
+at all (unlike the other two apps), confirmed directly, with the exact
+CSS/asset to reuse already pulled out rather than left to rediscover.
 
 **Remarks must not be manually typed by staff — auto-assigned from the
 student's average.** The remarks editor UI built earlier (a modal for
@@ -175,7 +179,10 @@ still editable per class by a teacher, similar in spirit to the old
 Teacher-care UX (`students_db.js`'s per-class hardcoded `{id, name}`
 structure). **Not started** — needs a real design for how an edit
 gets from "teacher changes a name" to "the hardcoded/static version
-updates," not just flipping the query off.
+updates," not just flipping the query off. See
+`ADD-STUDENT-AND-BRAND-SPEC.md` in this folder — the sync script it
+recommends for `report-pipeline/students/` is very likely the same
+piece of infrastructure this needs, not a second mechanism to build.
 
 **Cross-cutting** — "everything is listening for changes": realtime
 reactivity is the target, not manual-refresh/stale data, wherever this
