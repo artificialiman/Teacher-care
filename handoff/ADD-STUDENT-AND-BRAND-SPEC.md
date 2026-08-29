@@ -172,10 +172,10 @@ A script — `sync_students_from_supabase.py`, living next to
    marks it inactive in some way that `generate.py`/`compute_awards.py`
    already respect — needs a decision on which, since a hard delete
    loses any scores that were already entered for that student, and a
-   soft-delete-equivalent needs a field the schema doesn't have yet.
+   soft-delete-equivalent needs a field the schema doesn't have yet. [just move such names to the bottom of an alumin archive, dont build that yer just note it]
 4. Is idempotent — running it twice in a row with no roster changes
    produces zero diffs, so it's safe to run on a schedule or on every
-   `tendercare-teacher` deploy without babysitting it.
+   `tendercare-teacher` deploy without babysitting it. [if its inexpensive then actively listen and update]
 
 This keeps the sync itself simple, testable in isolation (mock the
 Supabase response, assert on the files written), and consistent with
@@ -238,10 +238,7 @@ Verified directly:
 
 ### What matching the brand concretely means here
 
-1. Copy `tendercare.css` into `tendercare-teacher/src/lib/styles/`
-   (same file, byte-for-byte, as already sits in `tendercare-web` and
-   `tendercare-portal` — don't re-derive it) and import it in
-   `+layout.svelte`, same pattern as the other two apps.
+1. Chnage the color pallete and flow/ux to match advised funtions
 2. Apply the crest watermark to `tendercare-teacher`'s own pages, not
    just wherever the earlier patch happened to add it — using the same
    `.watermark-crest`/`.corner-logo` CSS shown above and the same
@@ -256,3 +253,4 @@ the CSS rules already exist twice over (in `tendercare-web` and in
 `report-pipeline`'s template); this is a matter of bringing
 `tendercare-teacher` up to the same standard the other two apps and the
 static result sheets already meet.
+[THE SCORE ENTRY UI SHOULD HAVE A UI FUNCTION THAT HIGHLIGHTS CURRENTLY EDITRED ROW AND COLUMN ALL THE WAY THROUGH, this is where itll beat excel... ALSO THE TOTALS CALCULATE AUTOMATICALLY FROM CA + EXAM] THE UI ON THE FORM SHOULD PREFERABLY BE WHITE LIKE PAPER.
