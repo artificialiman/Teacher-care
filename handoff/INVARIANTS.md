@@ -146,24 +146,40 @@ single `staff` role and the remarks editor already built.
 entirely** — take over everything the old static admin/broadsheet
 pages (`TEACHER-CARE Admin.html`, `admin-broadsheet.html`, `db.html`,
 `student-database.html`, etc.) did, rebuilt with proper brand UI (logo
-watermark included), not a like-for-like port. **Not started** — needs
-a proper read-through of what those old pages actually do before
-building, not a guess from filenames. The brand/watermark half of this
-has groundwork already done — see `ADD-STUDENT-AND-BRAND-SPEC.md`
-section 3: `tendercare-teacher` never imports the shared `tendercare.css`
-at all (unlike the other two apps), confirmed directly, with the exact
-CSS/asset to reuse already pulled out rather than left to rediscover.
+watermark included), not a like-for-like port. **Partial** — the
+brand/watermark half is done: `tendercare-teacher` now imports the
+shared `tendercare.css` at the root layout (it never did before,
+confirmed directly, unlike the other two apps), and a watermark now
+exists on login, roster, and the homepage — the one app in the suite
+missing it entirely. **Not started**: the actual admin/broadsheet
+*functionality* (score entry, broadsheet views, DB-management UI) —
+still needs a proper read-through of what those old pages actually do
+before building, not a guess from filenames.
+
+**Add-student ID assignment: fixed.** `create_student()`'s year prefix
+was a literal `'TCH-2025-'` string constant, confirmed against the live
+function body — every student created, in any year, would have gotten
+a 2025 ID forever. **Done** — corrected to derive the *academic* year
+(rolls over Sept 1, matching the promotion job's boundary, not Jan 1 —
+verified against the live clock: today is 2026-08-29, three days
+before that rollover, and a naive calendar-year derivation would have
+broken this starting right now, not just "someday"). Sequence resets
+per academic year (documented as a reversible default, not a locked
+decision). Applied to the live Supabase project and verified in a
+rolled-back transaction before that, not just read by eye.
 
 **Remarks must not be manually typed by staff — auto-assigned from the
 student's average.** The remarks editor UI built earlier (a modal for
-staff to type Class Teacher's/Principal's comment) is the wrong
-shape — it's "tedious unnecessary work for staff or admin." Instead,
-once a student's CA/Exam/Total are complete for a term, their remark
-should be computed automatically from their average, using the same
-band boundaries as `remark_for()` in the report-pipeline (Distinction/
-Excellent/Very Good/etc.) — living in a script or the database, not
-typed per student. **In progress** — see the migration this session
-adds.
+staff to type Class Teacher's/Principal's comment) was the wrong
+shape — it's "tedious unnecessary work for staff or admin." **Done** —
+a trigger on the `scores` table now recomputes a student's remark the
+moment their term completes (every subject their class takes has both
+CA and Exam filled), using the same band boundaries as `remark_for()`
+in the report-pipeline generator, kept deliberately in sync rather than
+reinvented. The manual editor UI is gone, replaced with a read-only
+badge. Verified in a rolled-back transaction: 75-average input produced
+exactly "Distinction"; an incomplete term produced nothing; un-
+completing a subject correctly cleared a stale remark.
 
 **Feed listeners** — `tendercare-teacher` should set up listeners that
 post notifications to the web feed based on the activities already
@@ -177,12 +193,17 @@ data — not a live query on every page load.** Same antifail shape as
 results: fast, static, no network round-trip just to see a roster, but
 still editable per class by a teacher, similar in spirit to the old
 Teacher-care UX (`students_db.js`'s per-class hardcoded `{id, name}`
-structure). **Not started** — needs a real design for how an edit
-gets from "teacher changes a name" to "the hardcoded/static version
-updates," not just flipping the query off. See
-`ADD-STUDENT-AND-BRAND-SPEC.md` in this folder — the sync script it
-recommends for `report-pipeline/students/` is very likely the same
-piece of infrastructure this needs, not a second mechanism to build.
+structure). **Partial** — `sync_students_from_supabase.py` now exists
+(`tendercare-teacher/scripts/report-pipeline/`), closing the gap where
+`report-pipeline/students/` had zero connection to the live 376-student
+roster: for each active student missing a file, writes a skeleton
+matching the schema, never overwrites an existing file, flags (without
+yet acting on) students no longer active rather than silently going
+stale. Verified end-to-end against the real 376-student roster, not
+just read by eye. **Still not started**: the roster *display* itself
+(`/roster` in `tendercare-teacher`) still queries Supabase live on
+every page load — this script feeds the static result-generation
+pipeline, it doesn't yet change what the roster page itself does.
 
 **Cross-cutting** — "everything is listening for changes": realtime
 reactivity is the target, not manual-refresh/stale data, wherever this
