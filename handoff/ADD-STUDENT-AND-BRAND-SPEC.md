@@ -253,4 +253,7 @@ the CSS rules already exist twice over (in `tendercare-web` and in
 `report-pipeline`'s template); this is a matter of bringing
 `tendercare-teacher` up to the same standard the other two apps and the
 static result sheets already meet.
-[THE SCORE ENTRY UI SHOULD HAVE A UI FUNCTION THAT HIGHLIGHTS CURRENTLY EDITRED ROW AND COLUMN ALL THE WAY THROUGH, this is where itll beat excel... ALSO THE TOTALS CALCULATE AUTOMATICALLY FROM CA + EXAM] THE UI ON THE FORM SHOULD PREFERABLY BE WHITE LIKE PAPER.
+[THE SCORE ENTRY UI SHOULD HAVE A UI FUNCTION THAT HIGHLIGHTS CURRENTLY EDITED ROW AND COLUMN ALL THE WAY THROUGH, this is where itll beat excel... ALSO THE TOTALS CALCULATE AUTOMATICALLY FROM CA + EXAM] THE UI ON THE FORM SHOULD PREFERABLY BE WHITE LIKE PAPER.
+
+WHAT I AM CURRENTLY NOT SATISFIED BY IS THE UX And Flow of the.
+TEACHERS are supposed to select between Attendance edit [which is where they add/remove students to that particular class, add/remove portrait to each student... or score entry [this should mirror the teacher-care score entry broadsheet, with the addition of highlighting current edited box horizontally/vertically... subjects should remain in view always so that scores arent entered to the wrong subject]
