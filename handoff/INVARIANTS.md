@@ -21,6 +21,15 @@ Status tags: **Done**, **Partial** (schema/mechanism exists, missing a
 piece), **Not started**, **Contradicted** (current code does the
 opposite).
 
+> Reconciled against the actual repo state (not just prior chat/doc
+> summaries) on 2026-09-19 — `tendercare-web`, `tendercare-teacher`,
+> `tendercare-portal` all cloned fresh and checked directly (migrations,
+> route files, RLS). All three repos' last commit is 2026-09-03; nothing
+> has landed since. The one thing this pass could NOT verify: whether
+> `run_promotion()` (item 9) has actually been *run* for the 2026/2027
+> rollover — that needs live DB access (`promotion_already_run()` or the
+> `terms` table), not just the repo. See item 9 for the full note.
+
 ## Architecture — decided, not open for reinterpretation
 
 - Three-repo split (`tendercare-web`, `tendercare-teacher`,
@@ -60,9 +69,11 @@ antifail doctrine mode."
 **Home** — Student Life's CTA slot is deliberately replaced by "Check
 Result" linking to the portal's student-portal login (**Done**,
 confirmed express instruction, not to be reverted). Results/Portal nav
-buttons removed since Check Result covers that job — alternative
-considered was repurposing them into an Archive/Alumni Almanac link
-instead of removing outright; not decided, **not started** either way.
+buttons: **Done, resolved** — repurposed into an Alumni Almanac link
+(`tendercare-web` nav + `/alumni` route + `alumni.json`, seeded
+honestly from the real published Class of 2025 roster, no fabricated
+names/IDs) rather than removed outright. Verified live in the repo
+(`tendercare-web` `adc34fb`, 2026-09-03).
 
 **Yearbook rollover, precise mechanics** (refines invariant #12): after
 the September 1st reset, **SS2 and JSS2 become the new priority
@@ -141,6 +152,25 @@ explicitly undecided ("until I figure out the actual lines to draw").
 The app's primary purpose: editing transcripts/scores, tracking
 averages, editing remarks/range. **Not started** beyond the current
 single `staff` role and the remarks editor already built.
+
+**Update, staff table + admin section (`tendercare-teacher`, migrations
+`0010`-`0013`):** a real `staff` table now exists — `staff_type`
+constrained to the three values above, admin-managed per the confirmed
+permission model (item 8's admin-only create/remove, no agent-scripted
+decision-making). `staff_type` is stored but not read anywhere else in
+the codebase yet — verified directly (`grep` across every migration
+finds no second reference) — so "same privileges for now" still holds
+exactly as stated; the table adds the data, not the differentiation.
+A full admin section also landed, not previously in this doc: a
+two-button admin homepage, a staff CRUD page (add/deactivate, assign
+type/subject/class-teacher status), and an analytics page (enrollment
+by class, repeat/pardon counts, staff by type, class averages, feed
+activity, alumni tracking) using a lightweight dependency-free SVG bar
+chart. Linked from the teacher dashboard's feature grid. **Done**, not
+yet reconciled into this doc's numbered invariants because it's new
+scope (the admin dashboard spec) rather than a refinement of an
+existing one — worth its own invariant entry if this doc gets a
+renumbering pass.
 
 **Teacher app should absorb Teacher-care's old admin/home functionality
 entirely** — take over everything the old static admin/broadsheet
@@ -221,12 +251,14 @@ any agent should fabricate. Real content is the biggest "secret" of
 the build and goes in manually.
 
 **2. Teacher-side editing of student bio/info/remarks.**
-**Superseded** for remarks — the manual editor built earlier (a modal
-for staff to type Class Teacher's/Principal's comment) is the wrong
-shape; remarks should be auto-assigned from the student's average, not
-typed per student (see the per-page workflow section above). **Not
-started** for a student "bio" field — no such column exists in the
-schema yet.
+**Superseded** for remarks — auto-assigned from the student's average,
+not typed per student (see per-page workflow above). **Partial** for
+bio — the `bio` column now exists on `students`
+(`tendercare-teacher` migration `0008_alumni_id_recycling.sql`, scope
+confirmed directly by instruction), but it's schema-only: not yet
+wired into any roster UI for a teacher to actually read or edit it.
+Verified directly against `src/routes/roster/+page.svelte` and
+`src/lib/roster.ts` — no reference to `bio` in either.
 
 **3. Media/bulletin info on the main website.**
 **Done** as a baseline (feed/sports/awards pages carry real content),
@@ -267,21 +299,49 @@ rather than a script run from a terminal) exists yet.
 
 ## Added — promotion, portraits, yearbook, print
 
-**9. Automatic promotion.** Every student is automatically promoted to
-the next class on September 1st each year. **Not started.**
+**9. Automatic promotion.** **Done, mechanism-complete** —
+`run_promotion()` (`tendercare-teacher` migrations `0012`, `0014`,
+`0015`) handles the full shape confirmed by direct instruction:
+JSS1/JSS2 promote within their arm, JSS3 lands in a real holding class
+(`SS1 Unassigned`, auto-created on first use) rather than an automatic
+Science/Actuarial guess, SS1/SS2 promote within their department, SS3
+graduates via `mark_student_graduated()`. New arm/department targets
+are auto-created if they don't exist yet. Same function also rolls the
+academic term forward (`0014`) and guards against a second run in the
+same cycle (`0015`, `promotion_already_run()` lets the Attendance page
+retract its own trigger button once used). Staff-triggered, not a
+cron — a "Run Promotion" button on `tendercare-teacher`'s Attendance
+page (`src/routes/attendance/+page.svelte`) calls it via RPC.
+**Genuinely unverified: whether it has actually been run for the
+2026/2027 rollover.** Repo activity across all three live repos stops
+at 2026-09-03 with no further commits since — the mechanism landed two
+days after the September 1 target and nothing in any repo confirms
+execution after that. Check `promotion_already_run()` or the `terms`
+table directly (no live DB access from this pass) — or simply whether
+the Attendance page's promotion button is still showing.
+Post-promotion department assignment (JSS3 leavers sitting in
+`SS1 Unassigned`) has its own confirmed UI: `assignDepartment()` /
+Science/Actuarial/Repeat/Remove flow, wired into
+`tendercare-teacher`'s roster page.
 
-**10. Repeat / pardon.** A student can be assigned to repeat a class
-(overriding the automatic promotion in #9 for that student), and that
-repeat assignment can later be pardoned — reversed, restoring normal
-promotion. **Not started.** Needs its own state on the student record
-(distinct from the soft-delete `active` flag already there), not a
-side effect of the promotion job itself.
+**10. Repeat / pardon.** **Done.** `students.repeating`,
+`repeat_assigned_at`, `repeat_pardoned_at` (`tendercare-teacher`
+migration `0005_repeat_pardon_portrait.sql`) — its own state, distinct
+from the soft-delete `active` flag as required, history-preserving (a
+pardon clears `repeating` but never `repeat_assigned_at`). Wired into
+the roster UI: an "Assign repeat"/"Pardon repeat" toggle per student,
+a repeat-target class selector, a "Repeating" badge. `run_promotion()`
+(item 9) correctly skips any student with `repeating = true`.
 
-**11. Portrait/highlight provision on the main site.** `tendercare-web`
-needs a real provision for accepting new student portraits and
-highlights (even just as embedded links, not necessarily a full upload
-pipeline) — tied specifically to that student's class yearbook page.
-**Not started.**
+**11. Portrait/highlight provision on the main site.** **Partial** —
+the storage half exists (`students.portrait_url`, same migration `0005`
+as item 10, deliberately a link not an uploaded file, per this
+invariant's own "even just as embedded links" allowance). **Not done:**
+`tendercare-web`'s yearbook page doesn't read it — verified directly,
+no reference to `portrait_url` anywhere in
+`src/routes/yearbook/+page.svelte`, which still presents portraits via
+the old static `/img/portraits/{id}.jpg` convention. The column has no
+consumer yet.
 
 **12. Yearbook rollover.** On September 1st each year, the *priority*
 yearbook class (whichever one is featured/foregrounded) updates to
