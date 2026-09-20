@@ -27,13 +27,33 @@ fabrication with a real kid's name on it.
 
 ## Lane 1 — Yearbook, portraits, About page (`tendercare-web` only)
 
-**Files:** `src/routes/yearbook/`, `src/routes/about/`,
-`src/routes/portal-adjacent` result/roster display where portraits
-surface, `src/lib/` any new data file this needs. Do not touch
-`src/routes/sports/`, `src/routes/feed/`, or anything in
-`tendercare-teacher`.
+**Status: mostly done, pushed to `obase` on `tendercare-web`
+(`77eefb0`, `0b2e34a`). Not merged — awaiting review.**
 
-**Important finding, read before starting:** the current
+Done: the yearbook rollover (a genuinely new data-driven `/yearbook`
+template + `scripts/generate_yearbook_json.py`, the old Class-of-2025
+page relocated intact to `/yearbook/class-of-2025/`), and the About
+page's WhatsApp link, social placeholders, and staff-type badges.
+
+**Deliberately not done, not a missed task:** the other two portrait-
+consumption scopes invariant #13 calls for (the result roster and the
+auth/login gate) both live outside `tendercare-web` and, more
+specifically, touch `tendercare-teacher`'s `generate.py` — the script
+that computes real academic transcripts. That's higher-stakes than
+this lane's other work and deserves its own pass with room to verify
+against real data, not a rushed addition tacked onto an otherwise
+clean set of commits. Whoever picks this up next: start from
+`generate.py` and the per-student JSON shape it reads/writes in
+`report-pipeline/students/`, add `portrait_url` to that shape, thread
+it through to whatever `tendercare-portal` renders.
+
+**Files:** `src/routes/yearbook/`, `src/routes/about/`,
+`src/lib/data/`, `scripts/`. Do not touch `src/routes/sports/`,
+`src/routes/feed/`, or anything in `tendercare-teacher` (see the note
+above for the one place that's a real exception, for the *next*
+lane-1 pass, not this one).
+
+**Important finding, read before continuing this lane:** the current
 `/yearbook` page is NOT data-driven. It's ~40 individually
 hand-authored student cards (real names, real hand-written quotes,
 hardcoded "Class of 2025") — closer to a printed yearbook laid out by
@@ -118,11 +138,16 @@ exactly, not a generic activity-feed interpretation:
 
 ## Lane 3 — Sports (additive only), student bio UI (`tendercare-web` sports + `tendercare-teacher` roster)
 
+**Status: done, pushed to `obase` on both repos
+(`tendercare-teacher` `744a081`, `tendercare-web` `3a96ab1`). Not
+merged — awaiting review.**
+
+Two unrelated small tasks bundled into one lane because neither is
+large enough alone and neither touches Lane 1 or Lane 2's files.
+
 **Files:** `tendercare-web/src/routes/sports/+page.svelte`,
 `tendercare-teacher/src/routes/roster/+page.svelte`,
-`tendercare-teacher/src/lib/roster.ts`. Two unrelated small tasks
-bundled into one lane because neither is large enough alone and
-neither touches Lane 1 or Lane 2's files.
+`tendercare-teacher/src/lib/roster.ts`.
 
 **Sports — explicit instruction: add, don't remove.** The existing
 video-modal system (hero section, house-results, timeline, the works)
