@@ -27,8 +27,8 @@ fabrication with a real kid's name on it.
 
 ## Lane 1 — Yearbook, portraits, About page (`tendercare-web` only)
 
-**Status: mostly done, pushed to `obase` on `tendercare-web`
-(`77eefb0`, `0b2e34a`). Not merged — awaiting review.**
+**Status: done and merged to `main` on `tendercare-web`
+(merge commit `8c3cf6e`).**
 
 Done: the yearbook rollover (a genuinely new data-driven `/yearbook`
 template + `scripts/generate_yearbook_json.py`, the old Class-of-2025
@@ -104,6 +104,19 @@ Also in this lane:
 
 ## Lane 2 — Feed as a real notification board (`tendercare-teacher` backend + `tendercare-web` display)
 
+**Status note (not independently verified as thoroughly as Lanes 1/3
+above): another agent has pushed real work here directly to `main`**
+— `tendercare-teacher` migrations `0016_feed_notification_board.sql`,
+`0017_feed_listeners.sql` ("Lane 2 backend: feed as a real
+notification board"), and `tendercare-web`'s feed page now reads real
+`feed_posts` instead of `localStorage` ("Lane 2 display: replace
+localStorage feed with real feed_posts read"). That same agent also
+fixed a real staff/admin auth bug along the way (a missing Custom
+Access Token Hook causing universal 401s — `0018`-`0020`), unrelated
+to feed specifically but worth knowing about if auth behavior comes up
+again. Whoever picks this up next: check what's actually there against
+the spec below before assuming either "still open" or "fully done."
+
 **Files:** `tendercare-teacher/supabase/migrations/` (new migration),
 `tendercare-teacher/src/lib/` (feed-posting listeners),
 `tendercare-web/src/routes/feed/`. This is the one lane that
@@ -138,9 +151,9 @@ exactly, not a generic activity-feed interpretation:
 
 ## Lane 3 — Sports (additive only), student bio UI (`tendercare-web` sports + `tendercare-teacher` roster)
 
-**Status: done, pushed to `obase` on both repos
-(`tendercare-teacher` `744a081`, `tendercare-web` `3a96ab1`). Not
-merged — awaiting review.**
+**Status: done and merged to `main` on both repos
+(`tendercare-teacher` merge `eeaf3bf`, `tendercare-web` merge
+`8c3cf6e`).**
 
 Two unrelated small tasks bundled into one lane because neither is
 large enough alone and neither touches Lane 1 or Lane 2's files.
